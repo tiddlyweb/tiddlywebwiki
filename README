@@ -2,4 +2,15 @@ The agglomeration of the necessary TiddlyWeb and TiddlyWiki
 plugins required to make the TiddlyWebWiki vertical: a 
 collaborative wiki environment using TiddlyWeb and TiddlyWiki.
 
+Requires:
+
+  wikklytextrender
+    a TiddlyWeb plugin that renders tiddlywiki syntax to HTML,
+    using wikklytext.
+  wikklytext
+    Python package that uses tiddlywiki syntax. Available via
+    easy_install.
+  BeautifulSoup
+    Parser for HTML for reading TiddlyWiki "stuff".
+
 
