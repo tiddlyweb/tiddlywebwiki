@@ -13,4 +13,10 @@ Requires:
   BeautifulSoup
     Parser for HTML for reading TiddlyWiki "stuff".
 
+To tiddlywebconfig.py add:
+
+config = {
+        'system_plugins': ['tiddlywebwiki.plugin'],
+        'twanager_plugins': ['tiddlywebwiki.plugin'],
+        }
 
