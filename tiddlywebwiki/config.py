@@ -35,6 +35,3 @@ config = {
             'text/x-tiddlywiki': 'wikklytextrender',
             },
         }
-
-
-

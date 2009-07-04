@@ -1,7 +1,7 @@
 
 from tiddlyweb.manage import make_command, usage
-from tiddlyweb.importer import import_wiki_file
-from tiddlyweb.instancer import instance, _make_bag, _make_recipe
+from tiddlywebwiki.importer import import_wiki_file
+from tiddlywebwiki.instancer import instance, _make_bag, _make_recipe
 
 @make_command()
 def imwiki(args):

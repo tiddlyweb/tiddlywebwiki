@@ -1,6 +1,7 @@
-The agglomeration of the necessary TiddlyWeb and TiddlyWiki
-plugins required to make the TiddlyWebWiki vertical: a 
-collaborative wiki environment using TiddlyWeb and TiddlyWiki.
+This is a Python package providing the agglomeration of the necessary
+TiddlyWeb and TiddlyWiki plugins required to make the TiddlyWebWiki vertical:
+
+   a collaborative wiki environment using TiddlyWeb and TiddlyWiki.
 
 Requires:
 
