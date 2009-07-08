@@ -1,2 +1,2 @@
-include tiddlywebwiki/empty.html README
+include tiddlywebwiki/empty.html README Makefile
 recursive-include test *
