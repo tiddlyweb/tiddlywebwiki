@@ -1,0 +1,2 @@
+include tiddlywebwiki/empty.html README
+recursive-include test *
