@@ -7,6 +7,7 @@ import tiddlywebwiki.instancer
 import tiddlywebwiki.twanager
 from tiddlywebwiki.config import config as twwconfig
 
+
 def init(config):
     for key in twwconfig:
         try:
@@ -23,4 +24,3 @@ def init(config):
     tiddlywebwiki.instancer.init(config)
     tiddlywebwiki.twanager.init(config)
     # XXX and add selector for POST a wiki
-
