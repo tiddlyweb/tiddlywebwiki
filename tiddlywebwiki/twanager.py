@@ -20,7 +20,7 @@ def imwiki(args):
 
 
 @make_command()
-def twinstance(args):
+def instance(args):
     """Create a tiddlyweb instance with default plugins in the named directory: <dir>"""
     instance(args)
     _make_bag('common')
