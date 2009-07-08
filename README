@@ -1,20 +1,31 @@
 This is a Python package providing the agglomeration of the necessary
 TiddlyWeb and TiddlyWiki plugins required to make the TiddlyWebWiki vertical:
 
-   a collaborative wiki environment using TiddlyWeb and TiddlyWiki.
+   A collaborative wiki environment using TiddlyWeb and TiddlyWiki.
 
 Requires:
 
   wikklytextrender
     a TiddlyWeb plugin that renders tiddlywiki syntax to HTML,
-    using wikklytext.
+    using wikklytext. Available at:
+    http://github.com/tiddlyweb/tiddlyweb-plugins/tree/master/wikklytextrender
   wikklytext
     Python package that uses tiddlywiki syntax. Available via
     easy_install.
   BeautifulSoup
-    Parser for HTML for reading TiddlyWiki "stuff".
+    Parser for HTML for reading TiddlyWiki "stuff". Also available
+    via easy_install.
 
-To tiddlywebconfig.py add:
+If tidldywebwiki is installed as a Python package via easy_install,
+wikklytext and BeautifulSoup should be installed for you. wikklytextrender,
+for now, will need to be installed by hand.
+
+If you are installing from source run:
+
+   python setup.py install
+
+In a TiddlyWeb instance in which you want to use tiddlywebwiki to
+tiddlywebconfig.py add:
 
 config = {
         'system_plugins': ['tiddlywebwiki.plugin'],

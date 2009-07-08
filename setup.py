@@ -15,7 +15,7 @@ setup(name = 'tiddlywebwiki',
         author_email = 'cdent@peermore.com',
         packages = ['tiddlywebwiki'],
         platforms = 'Posix; MacOS X; Windows',
-        install_requires = ['tiddlyweb', 'BeautifulSoup'], # + wikklytextrender
+        install_requires = ['tiddlyweb', 'BeautifulSoup', 'wikklytext'], # + wikklytextrender
         include_package_data = True,
         )
 
