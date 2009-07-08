@@ -6,7 +6,6 @@ file into which Tiddlers are pushed when creating
 outgoing TiddlyWiki representations from TiddlyWeb. This
 can be an absolute path or relative to the startup 
 directory of the server.
-
 """
 
 try:
@@ -14,6 +13,7 @@ try:
     BASE_TIDDLYWIKI = resource_filename('tiddlywebwiki', 'empty.html')
 except ImportError:
     BASE_TIDDLYWIKI = 'tiddlywebwiki/empty.html'
+
 
 config = {
         'base_tiddlywiki': BASE_TIDDLYWIKI, 

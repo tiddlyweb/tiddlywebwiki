@@ -15,8 +15,9 @@ from tiddlyweb.serializations import SerializationInterface
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.web.util import server_base_url, tiddler_url,\
-        encode_name, html_encode
+        encode_name, html_encode, escape_attribute_value
 from wikklytextrender import wikitext_to_wikklyhtml
+
 
 SPLITTER = '</div>\n<!--POST-STOREAREA-->\n'
 
@@ -214,12 +215,19 @@ the content of this wiki</a>.
                 'server.type="tiddlyweb" server.host="%s" '
                 'server.recipe="%s" server.bag="%s" server.permissions="%s" '
                 'modified="%s" created="%s" tags="%s" %s>\n'
-                '<pre>%s</pre>\n</div>\n'
-                % (tiddler.title, tiddler.title, tiddler.revision,
-                        tiddler.modifier, tiddler.bag, host, recipe_name,
-                        tiddler.bag, self._tiddler_permissions(tiddler),
-                        tiddler.modified, tiddler.created,
-                        self.tags_as(tiddler.tags),
+                '<pre>%s</pre>\n</div>\n' %
+                    (escape_attribute_value(tiddler.title),
+                        escape_attribute_value(tiddler.title),
+                        tiddler.revision,
+                        escape_attribute_value(tiddler.modifier),
+                        escape_attribute_value(tiddler.bag),
+                        host,
+                        escape_attribute_value(recipe_name),
+                        escape_attribute_value(tiddler.bag),
+                        self._tiddler_permissions(tiddler),
+                        tiddler.modified,
+                        tiddler.created,
+                        escape_attribute_value(self.tags_as(tiddler.tags)),
                         self._tiddler_fields(tiddler.fields),
                         html_encode(tiddler_output)))
 
@@ -277,6 +285,6 @@ the content of this wiki</a>.
         a div attribute.
         """
         output = []
-        for key in fields:
-            output.append('%s="%s"' % (key, fields[key]))
+        for key, val in fields.items():
+            output.append('%s="%s"' % (key, escape_attribute_value(val)))
         return ' '.join(output)
