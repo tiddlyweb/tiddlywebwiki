@@ -1,3 +1,7 @@
+0.3 Thu Jul  9 13:27:41 BST 2009
+
+    * Properly escape " in HTML attributes.
+
 0.2 Wed Jul  8 13:13:54 BST 2009
 
     * First packaging and release to pypi.
