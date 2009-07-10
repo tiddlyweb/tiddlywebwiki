@@ -63,7 +63,7 @@ def _generate_config(config=None):
     intro = '%s\n%s' % ('# A basic configuration.',
         "# Run 'pydoc tiddlyweb.config' for details on configuration items.")
     default_config = {
-        'secret': '%s' % _generate_secret()
+        'secret': _generate_secret()
     }
     default_config.update(config or {})
 
