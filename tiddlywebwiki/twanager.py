@@ -1,11 +1,13 @@
-
+from tiddlyweb.model.bag import Bag
 from tiddlyweb.manage import make_command, usage
 from tiddlywebwiki.importer import import_wiki_file
-from tiddlywebwiki.instancer import instance, _make_bag, _make_recipe
+from tiddlywebwiki.instancer import instance as create_instance
+from tiddlywebwiki.instancer import _store_bag, _make_recipe
+
 
 @make_command()
 def imwiki(args):
-    """Import a Tiddlywiki html file into a bag: <filename> <bag>"""
+    """Import tiddlers from a Tiddlywiki document into a bag: <filename> <bag>"""
     store = _store()
 
     try:
@@ -21,16 +23,29 @@ def imwiki(args):
 
 @make_command()
 def instance(args):
-    """Create a tiddlyweb instance with default plugins in the named directory: <dir>"""
-    instance(args)
-    _make_bag('common')
-    _make_recipe('default', bag_names + ['common'])
+    """Create a TiddlyWebWiki instance in the given directory: <dir>"""
+    create_instance(args)
+
+    bag = Bag('system')
+    bag.policy.write = ['R:ADMIN']
+    bag.policy.create = ['R:ADMIN']
+    bag.policy.delete = ['R:ADMIN']
+    bag.policy.manage = ['R:ADMIN']
+    bag.policy.accept = ['R:ADMIN']
+    _store_bag(bag)
+
+    bag = Bag('common')
+    bag.policy.delete = ['R:ADMIN']
+    _store_bag(bag)
+
+    recipe = _make_recipe('default', ['system', 'common'])
 
 
 def _store():
     """Get our Store from config."""
     return Store(config['server_store'][0],
             environ={'tiddlyweb.config': config})
+
 
 def init(config_in):
     global config

@@ -19,11 +19,12 @@ import random
 import sha
 import time
 
-from tiddlywebwiki.fromsvn import import_list
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
-from tiddlyweb.manage import make_command
 from tiddlyweb.store import Store
+from tiddlyweb.manage import make_command
+from tiddlywebwiki.fromsvn import import_list
+
 
 CONFIG_NAME = 'tiddlywebconfig.py'
 
@@ -40,8 +41,7 @@ def _generate_secret():
 
 
 EMPTY_CONFIG = """# A basic config, make your own changes here.
-# Run 'pydoc tiddlyweb.config' for information on changing the
-# defaults.
+# Run 'pydoc tiddlyweb.config' for information on changing the defaults.
 config = {
     'secret': '%s',
 }
@@ -50,23 +50,25 @@ config = {
 
 @make_command()
 def instance(args):
-    """Create a tiddlyweb instance with default plugins in the named directory: <dir>"""
+    """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
     directory = args[0]
     if not directory:
-        raise ValueError('you must provide the name of a directory')
+        raise ValueError('You must provide the name of a directory.')
     if os.path.exists(directory):
         raise IOError('Your chosen directory already exists. Choose a different name.')
     os.mkdir(directory)
     os.chdir(directory)
     _empty_config()
     bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
-    [_make_bag(bag) for bag in bag_names]
+    for bag in bag_names:
+        bag = Bag(bag)
+        _store_bag(bag)
     update(None)
 
 
 @make_command()
 def update(args):
-    """Update the default plugins in the current instance."""
+    """Update all instance_tiddlers in the current instance."""
     [import_list(bag, tiddlers) for bag, tiddlers in
             config['instance_tiddlers']]
 
@@ -87,9 +89,8 @@ def _make_recipe(recipe_name, bags):
     store.put(recipe)
 
 
-def _make_bag(bag_name):
-    """Make a bag with name bag_name to the store."""
-    bag = Bag(bag_name)
+def _store_bag(bag): # XXX: too simple to warrant a dedicated function!?
+    """Add a Bag instance to the store."""
     store = Store(config['server_store'][0], environ={'tiddlyweb.config': config})
     store.put(bag)
 
