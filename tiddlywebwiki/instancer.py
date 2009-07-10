@@ -40,16 +40,13 @@ def _generate_secret():
     return digest.hexdigest()
 
 
-EMPTY_CONFIG = """# A basic config, make your own changes here.
-# Run 'pydoc tiddlyweb.config' for information on changing the defaults.
-config = {
-    'secret': '%s',
+EMPTY_CONFIG = {
+    'secret': '%s' % _generate_secret()
 }
-""" % _generate_secret()
 
 
 @make_command()
-def instance(args):
+def instance(args, config=None): # XXX: accepting additional argument hacky?
     """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
     directory = args[0]
     if not directory:
@@ -58,8 +55,8 @@ def instance(args):
         raise IOError('Your chosen directory already exists. Choose a different name.')
     os.mkdir(directory)
     os.chdir(directory)
-    _empty_config()
-    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
+    _generate_config(config)
+    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']] # XXX: KeyError on instance_tiddlers
     for bag in bag_names:
         bag = Bag(bag)
         _store_bag(bag)
@@ -73,10 +70,20 @@ def update(args):
             config['instance_tiddlers']]
 
 
-def _empty_config():
-    """Write an empty tiddlywebconfig.py to the CWD."""
+def _generate_config(config=None):
+    """
+    Write a default tiddlywebconfig.py to the CWD.
+
+    accepts an optional dictionary with configuration values
+    defaults to global EMPTY_CONFIG
+    """
+    config = config or EMPTY_CONFIG # TODO: merge so secret is retained
+    lines = ["    '%s': '%s'" % (k, v) for k, v in config.items()]
+    config = 'config = {\n%s\n}\n' % ',\n'.join(lines) # XXX: use pprint?
+    intro = '%s\n%s' % ('# A basic configuration.',
+        "# Run 'pydoc tiddlyweb.config' for details on configuration items.")
     cfg = open(CONFIG_NAME, 'w')
-    cfg.write(EMPTY_CONFIG)
+    cfg.write('%s\n%s' % (intro, config))
     cfg.close()
 
 

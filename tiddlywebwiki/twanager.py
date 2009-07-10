@@ -2,7 +2,7 @@ from tiddlyweb.model.bag import Bag
 from tiddlyweb.manage import make_command, usage
 from tiddlywebwiki.importer import import_wiki_file
 from tiddlywebwiki.instancer import instance as create_instance
-from tiddlywebwiki.instancer import _store_bag, _make_recipe
+from tiddlywebwiki.instancer import _store_bag, _make_recipe, _generate_secret
 
 
 @make_command()
@@ -24,7 +24,11 @@ def imwiki(args):
 @make_command()
 def instance(args):
     """Create a TiddlyWebWiki instance in the given directory: <dir>"""
-    create_instance(args)
+    config = {
+        'system_plugins': ['tiddlywebwiki.plugin'],
+        'twanager_plugins': ['tiddlywebwiki.plugin']
+    }
+    create_instance(args, config=config)
 
     bag = Bag('system')
     bag.policy.write = ['R:ADMIN']
