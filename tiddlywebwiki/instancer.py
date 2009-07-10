@@ -29,22 +29,6 @@ from tiddlywebwiki.fromsvn import import_list
 CONFIG_NAME = 'tiddlywebconfig.py'
 
 
-def _generate_secret():
-    """
-    Create a somewhat random secret to be used
-    for message authentication.
-    """
-    digest = sha.sha(str(time.time()))
-    digest.update(str(random.random()))
-    digest.update('tiddlyweb and tiddlywiki are rad')
-    return digest.hexdigest()
-
-
-EMPTY_CONFIG = {
-    'secret': '%s' % _generate_secret()
-}
-
-
 @make_command()
 def instance(args, config=None): # XXX: accepting additional argument hacky?
     """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
@@ -74,17 +58,32 @@ def _generate_config(config=None):
     """
     Write a default tiddlywebconfig.py to the CWD.
 
-    accepts an optional dictionary with configuration values
-    defaults to global EMPTY_CONFIG
+    accepts an optional dictionary with additional configuration values
     """
-    config = config or EMPTY_CONFIG # TODO: merge so secret is retained
-    lines = ["    '%s': '%s'" % (k, v) for k, v in config.items()]
-    config = 'config = {\n%s\n}\n' % ',\n'.join(lines) # XXX: use pprint?
     intro = '%s\n%s' % ('# A basic configuration.',
         "# Run 'pydoc tiddlyweb.config' for details on configuration items.")
+    default_config = {
+        'secret': '%s' % _generate_secret()
+    }
+    default_config.update(config or {})
+
+    # XXX: use pprint?
+    lines = ["    '%s': '%s'" % (k, v) for k, v in default_config.items()]
+    config = 'config = {\n%s\n}\n' % ',\n'.join(lines)
+
     cfg = open(CONFIG_NAME, 'w')
     cfg.write('%s\n%s' % (intro, config))
     cfg.close()
+
+
+def _generate_secret():
+    """
+    Create a pseudo-random secret to be used for message authentication.
+    """
+    digest = sha.sha(str(time.time()))
+    digest.update(str(random.random()))
+    digest.update('tiddlyweb and tiddlywiki are rad')
+    return digest.hexdigest()
 
 
 def _make_recipe(recipe_name, bags):
