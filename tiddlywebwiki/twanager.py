@@ -2,7 +2,7 @@ from tiddlyweb.model.bag import Bag
 from tiddlyweb.manage import make_command, usage
 from tiddlywebwiki.importer import import_wiki_file
 from tiddlywebwiki.instancer import instance as create_instance
-from tiddlywebwiki.instancer import _store_bag, _make_recipe, _generate_secret
+from tiddlywebwiki.instancer import _store_bag, _make_recipe
 
 
 @make_command()
@@ -28,7 +28,7 @@ def instance(args):
         'system_plugins': ['tiddlywebwiki.plugin'],
         'twanager_plugins': ['tiddlywebwiki.plugin']
     }
-    create_instance(args, config=config)
+    create_instance(args, cfg=config)
 
     bag = Bag('system')
     bag.policy.write = ['R:ADMIN']

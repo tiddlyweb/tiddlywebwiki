@@ -30,7 +30,7 @@ CONFIG_NAME = 'tiddlywebconfig.py'
 
 
 @make_command()
-def instance(args, config=None): # XXX: accepting additional argument hacky?
+def instance(args, cfg=None): # XXX: accepting additional argument hacky?
     """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
     directory = args[0]
     if not directory:
@@ -39,8 +39,8 @@ def instance(args, config=None): # XXX: accepting additional argument hacky?
         raise IOError('Your chosen directory already exists. Choose a different name.')
     os.mkdir(directory)
     os.chdir(directory)
-    _generate_config(config)
-    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']] # XXX: KeyError on instance_tiddlers
+    _generate_config(cfg)
+    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
     for bag in bag_names:
         bag = Bag(bag)
         _store_bag(bag)
