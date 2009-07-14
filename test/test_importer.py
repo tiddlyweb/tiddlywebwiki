@@ -8,7 +8,6 @@ sys.path.append('.')
 import html5lib
 from html5lib import treebuilders
 
-
 from tiddlyweb.config import config
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
@@ -55,7 +54,7 @@ def test_import_simple_tiddler_div():
 def test_import_empty_tiddler_div():
     div = _parse(SAMPLE_EMPTY_TIDDLER)
     assert div['title'] == 'GettingStopped'
-    
+
     handle_tiddler_div(BAGNAME, div, store)
 
     tiddler = Tiddler('GettingStopped', BAGNAME)

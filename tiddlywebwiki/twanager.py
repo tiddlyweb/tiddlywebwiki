@@ -7,6 +7,11 @@ from tiddlywebwiki.instancer import create_instance
 from tiddlywebwiki.instancer import _store_bag, _make_recipe
 
 
+def init(config_in):
+    global config
+    config = config_in
+
+
 @make_command()
 def imwiki(args):
     """Import tiddlers from a Tiddlywiki document into a bag: <filename> <bag>"""
@@ -33,11 +38,11 @@ def instance(args):
     if os.path.exists(directory):
         raise IOError('Your chosen directory already exists. Choose a different name.')
 
-    config = {
+    cfg = {
         'system_plugins': ['tiddlywebwiki.plugin'],
         'twanager_plugins': ['tiddlywebwiki.plugin']
     }
-    create_instance(directory, defaults=config)
+    create_instance(directory, config, defaults=cfg)
 
     bag = Bag('system')
     bag.policy.write = ['R:ADMIN']
@@ -58,8 +63,3 @@ def _store():
     """Get our Store from config."""
     return Store(config['server_store'][0],
             environ={'tiddlyweb.config': config})
-
-
-def init(config_in):
-    global config
-    config = config_in

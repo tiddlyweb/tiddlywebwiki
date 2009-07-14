@@ -29,6 +29,12 @@ from tiddlywebwiki.fromsvn import import_list
 CONFIG_NAME = 'tiddlywebconfig.py'
 
 
+def init(config_in):
+    """Initialize the plugin with config."""
+    global config
+    config = config_in
+
+
 @make_command()
 def instance(args):
     """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
@@ -43,11 +49,10 @@ def instance(args):
 @make_command()
 def update(args):
     """Update all instance_tiddlers in the current instance."""
-    [import_list(bag, tiddlers) for bag, tiddlers in
-            config['instance_tiddlers']]
+    update_instance(config)
 
 
-def create_instance(directory, defaults=None):
+def create_instance(directory, cfg, defaults=None):
     """
     Create a TiddlyWeb instance directory.
 
@@ -56,11 +61,18 @@ def create_instance(directory, defaults=None):
     os.mkdir(directory)
     os.chdir(directory)
     _generate_config(defaults)
-    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
+    bag_names = [bag for bag, tiddlers in cfg['instance_tiddlers']]
     for bag in bag_names:
         bag = Bag(bag)
         _store_bag(bag)
     update(None)
+
+
+def update_instance(cfg):
+    """
+    Update a TiddlyWeb instance by reimporting instance_tiddlers.
+    """
+    [import_list(bag, tiddlers) for bag, tiddlers in cfg['instance_tiddlers']]
 
 
 def _generate_config(defaults=None):
@@ -71,14 +83,14 @@ def _generate_config(defaults=None):
     """
     intro = '%s\n%s' % ('# A basic configuration.',
         "# Run 'pydoc tiddlyweb.config' for details on configuration items.")
-    config = {
+    cfg = {
         'secret': _generate_secret()
     }
-    config.update(defaults or {})
+    cfg.update(defaults or {})
 
-    config = 'config = %s\n' % _pretty_print(config)
+    config_string = 'config = %s\n' % _pretty_print(cfg)
     cfg = open(CONFIG_NAME, 'w')
-    cfg.write('%s\n%s' % (intro, config))
+    cfg.write('%s\n%s' % (intro, config_string))
     cfg.close()
 
 
@@ -91,7 +103,7 @@ def _pretty_print(dic): # TODO: use pprint?
             return "'%s'" % value
         else:
             return value
-    lines = ["    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items()]
+    lines = ["    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items()] # TODO: use double quotes (for consistency with JSON in policy files)
     return '{\n%s\n}' % ',\n'.join(lines)
 
 
@@ -118,9 +130,3 @@ def _store_bag(bag): # XXX: too simple to warrant a dedicated function!?
     """Add a Bag instance to the store."""
     store = Store(config['server_store'][0], environ={'tiddlyweb.config': config})
     store.put(bag)
-
-
-def init(config_in):
-    """Initialize the plugin with config."""
-    global config
-    config = config_in
