@@ -67,13 +67,23 @@ def _generate_config(config=None):
     }
     default_config.update(config or {})
 
-    # XXX: use pprint?
-    lines = ["    '%s': '%s'" % (k, v) for k, v in default_config.items()]
-    config = 'config = {\n%s\n}\n' % ',\n'.join(lines)
-
+    config = 'config = %s\n' % _pretty_print(default_config)
     cfg = open(CONFIG_NAME, 'w')
     cfg.write('%s\n%s' % (intro, config))
     cfg.close()
+
+
+def _pretty_print(dic): # TODO: use pprint?
+    """
+    generate an indented string representation of a dictionary
+    """
+    def escape_strings(value):
+        if hasattr(value, "join"): # XXX: checking for join method hacky!?
+            return "'%s'" % value
+        else:
+            return value
+    lines = ["    '%s': %s" % (k, escape_strings(v)) for k, v in dic.items()]
+    return '{\n%s\n}' % ',\n'.join(lines)
 
 
 def _generate_secret():
