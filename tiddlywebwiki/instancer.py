@@ -30,21 +30,14 @@ CONFIG_NAME = 'tiddlywebconfig.py'
 
 
 @make_command()
-def instance(args, cfg=None): # XXX: accepting additional argument hacky?
+def instance(args):
     """Create a TiddlyWeb instance using instance_tiddlers in the given directory: <dir>"""
     directory = args[0]
     if not directory:
         raise ValueError('You must provide the name of a directory.')
     if os.path.exists(directory):
         raise IOError('Your chosen directory already exists. Choose a different name.')
-    os.mkdir(directory)
-    os.chdir(directory)
-    _generate_config(cfg)
-    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
-    for bag in bag_names:
-        bag = Bag(bag)
-        _store_bag(bag)
-    update(None)
+    create_instance(directory)
 
 
 @make_command()
@@ -54,20 +47,36 @@ def update(args):
             config['instance_tiddlers']]
 
 
-def _generate_config(config=None):
+def create_instance(directory, defaults=None):
+    """
+    Create a TiddlyWeb instance directory.
+
+    accepts an optional dictionary with default configuration values
+    """
+    os.mkdir(directory)
+    os.chdir(directory)
+    _generate_config(defaults)
+    bag_names = [bag for bag, tiddlers in config['instance_tiddlers']]
+    for bag in bag_names:
+        bag = Bag(bag)
+        _store_bag(bag)
+    update(None)
+
+
+def _generate_config(defaults=None):
     """
     Write a default tiddlywebconfig.py to the CWD.
 
-    accepts an optional dictionary with additional configuration values
+    accepts an optional dictionary with configuration values
     """
     intro = '%s\n%s' % ('# A basic configuration.',
         "# Run 'pydoc tiddlyweb.config' for details on configuration items.")
-    default_config = {
+    config = {
         'secret': _generate_secret()
     }
-    default_config.update(config or {})
+    config.update(defaults or {})
 
-    config = 'config = %s\n' % _pretty_print(default_config)
+    config = 'config = %s\n' % _pretty_print(config)
     cfg = open(CONFIG_NAME, 'w')
     cfg.write('%s\n%s' % (intro, config))
     cfg.close()
