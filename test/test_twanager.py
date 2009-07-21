@@ -10,6 +10,8 @@ import os
 from shutil import rmtree
 
 from tiddlyweb.config import config
+from tiddlyweb.store import Store
+from tiddlyweb.model.bag import Bag
 
 import tiddlywebwiki.instancer as instancer
 import tiddlywebwiki.twanager as twanager
@@ -29,6 +31,10 @@ def setup_module(module):
 
 class TestInstance(object):
 
+    def setup_method(self, module):
+        env = { 'tiddlyweb.config': config }
+        self.store = Store(config['server_store'][0], environ=env) # XXX: use module.store?
+
     def teardown_method(self, module):
         os.chdir('..')
         rmtree(instance_dir)
@@ -46,17 +52,24 @@ class TestInstance(object):
 
         policy_location = '../%s/store/bags/%%s/policy' % instance_dir
 
-        system_policy = _get_file_contents(policy_location % "system")
-        common_policy = _get_file_contents(policy_location % "common")
+        bag = Bag('system')
+        system_policy = self.store.get(bag).policy
+        bag = Bag('common')
+        common_policy = self.store.get(bag).policy
 
-        assert '"read": []' in system_policy
-        assert '"write": ["R:ADMIN"]' in system_policy
-        assert '"create": ["R:ADMIN"]' in system_policy
-        assert '"manage": ["R:ADMIN"]' in system_policy
-        assert '"accept": ["R:ADMIN"]' in system_policy
-        assert '"delete": ["R:ADMIN"]' in system_policy
+        assert system_policy.read == []
+        assert system_policy.write == ['R:ADMIN']
+        assert system_policy.create == ['R:ADMIN']
+        assert system_policy.manage == ['R:ADMIN']
+        assert system_policy.accept == ['R:ADMIN']
+        assert system_policy.delete == ['R:ADMIN']
 
-        assert '"delete": ["R:ADMIN"]' in common_policy
+        assert common_policy.read == []
+        assert common_policy.write == []
+        assert common_policy.create == []
+        assert common_policy.manage == []
+        assert common_policy.accept == []
+        assert common_policy.delete == ['R:ADMIN']
 
 
 def _get_file_contents(filepath):
