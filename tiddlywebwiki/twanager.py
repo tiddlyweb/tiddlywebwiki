@@ -1,12 +1,18 @@
 import sys
+import os
 
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.importer import import_wiki_file
-from tiddlywebwiki.instancer import instance as create_instance
+from tiddlywebwiki.instancer import create_instance
 from tiddlywebwiki.instancer import _store_bag, _make_recipe
+
+
+def init(config_in):
+    global config
+    config = config_in
 
 
 @make_command()
@@ -28,7 +34,18 @@ def imwiki(args):
 @make_command()
 def instance(args):
     """Create a TiddlyWebWiki instance in the given directory: <dir>"""
-    create_instance(args)
+    directory = args[0]
+    # XXX: DRY (cf. tiddlwebwiki.instancer.instance)
+    if not directory:
+        raise ValueError('You must provide the name of a directory.')
+    if os.path.exists(directory):
+        raise IOError('Your chosen directory already exists. Choose a different name.')
+
+    cfg = {
+        'system_plugins': ['tiddlywebwiki.plugin'],
+        'twanager_plugins': ['tiddlywebwiki.plugin']
+    }
+    create_instance(directory, config, defaults=cfg)
 
     bag = Bag('system')
     bag.policy.write = ['R:ADMIN']
@@ -49,8 +66,3 @@ def _store():
     """Get our Store from config."""
     return Store(config['server_store'][0],
             environ={'tiddlyweb.config': config})
-
-
-def init(config_in):
-    global config
-    config = config_in
