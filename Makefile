@@ -28,11 +28,11 @@ test:
 dist: test
 	python setup.py sdist
 
-upload: clean test pypi peermore
+upload: clean remotes test pypi peermore
 
-pypi:
+pypi: 
 	python setup.py sdist upload
 
 peermore:
-	scp dist/tiddlywebwiki-*.gz cdent@peermore.com:public_html/peermore.com/tiddlyweb/dist
-	scp CHANGES cdent@peermore.com:public_html/peermore.com/tiddlyweb/dist/CHANGES.tiddlywebwiki
+	scp -P 8022 dist/tiddlywebwiki-*.gz cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist
+	scp -P 8022 CHANGES cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist/CHANGES.tiddlywebwiki
