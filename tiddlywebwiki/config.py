@@ -17,6 +17,11 @@ except ImportError:
 
 config = {
         'base_tiddlywiki': BASE_TIDDLYWIKI, 
+        'twanager_plugins': [
+            'tiddlywebwiki.fromsvn',
+            'tiddlywebwiki.instancer',
+            'tiddlywebwiki.twanager'
+            ],
         'instance_tiddlers': [
             ('system', [
                 'http://svn.tiddlywiki.org/Trunk/association/adaptors/TiddlyWebAdaptor.js',
