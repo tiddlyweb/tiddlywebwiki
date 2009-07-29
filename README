@@ -9,6 +9,11 @@ TiddlyWeb instance preconfigured with a tiddlywebconfig.py, client-side
 plugins and default bag policies.
 (There is no default user for the ADMIN role used in those policies.)
 
+To invoke the instance command from any directory, use twanager's --load option:
+
+    twanager --load tiddlywebwiki.config instance <directory>
+
+
 Requires:
 
   wikklytextrender
@@ -29,7 +34,7 @@ automatically.
 
 If you are installing from source run:
 
-   python setup.py install
+    python setup.py install
 
 In a TiddlyWeb instance in which you want to use tiddlywebwiki to
 tiddlywebconfig.py add:
