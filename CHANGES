@@ -1,3 +1,7 @@
+0.5 Wed Jul 29 14:02:42 BST 2009
+
+    * Add support and documentation for use with twanager --load.
+
 0.4 Wed Jul 22 15:12:25 BST 2009
 
     * Extended default configuration created by twanager instance
