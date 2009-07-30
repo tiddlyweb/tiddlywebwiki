@@ -11,4 +11,7 @@ from tiddlywebwiki.config import config as twwconfig
 
 def init(config):
     merge_config(config, twwconfig)
+    tiddlywebwiki.fromsvn.init(config)
+    tiddlywebwiki.instancer.init(config)
+    tiddlywebwiki.twanager.init(config)
     # XXX and add selector for POST a wiki
