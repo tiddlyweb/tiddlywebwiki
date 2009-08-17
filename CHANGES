@@ -1,10 +1,14 @@
+0.7 [TBD]
+
+    * Corrected ETag handling for new tiddlers in TiddlyWebAdaptor
+
 0.6 Thu Aug  6 13:36:03 BST 2009
 
-    * Correct handling of adding of twanager commands and plugins.
+    * Corrected handling of adding of twanager commands and plugins.
 
 0.5 Wed Jul 29 14:02:42 BST 2009
 
-    * Add support and documentation for use with twanager --load.
+    * Added support and documentation for use with twanager --load.
 
 0.4 Wed Jul 22 15:12:25 BST 2009
 
@@ -14,7 +18,7 @@
 
 0.3 Thu Jul  9 13:27:41 BST 2009
 
-    * Properly escape double quotes in HTML attributes
+    * Properly escaping double quotes in HTML attributes
 
 0.2 Wed Jul  8 13:13:54 BST 2009
 
