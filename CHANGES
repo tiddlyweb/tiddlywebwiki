@@ -1,6 +1,7 @@
-0.7 [TBD]
+0.7 Tue Aug 18 16:03:11 BST 2009
 
-    * Corrected ETag handling for new tiddlers in TiddlyWebAdaptor
+    * Corrected ETag handling for new tiddlers in TiddlyWebAdaptor.
+    * Updates to wikitext_render config keys.
 
 0.6 Thu Aug  6 13:36:03 BST 2009
 

@@ -3,7 +3,7 @@
 <head>
 <script id="versionArea" type="text/javascript">
 //<![CDATA[
-var version = {title: "TiddlyWiki", major: 2, minor: 5, revision: 2, date: new Date("June 24, 2009"), extensions: {}};
+var version = {title: "TiddlyWiki", major: 2, minor: 5, revision: 3, date: new Date("Aug 18, 2009"), extensions: {}};
 //]]>
 </script>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -2592,9 +2592,12 @@ config.macros.tags.handler = function(place,macroName,params,wikifier,paramStrin
 	var prompt = tiddler.tags.length == 0 ? lingo.labelNoTags : lingo.labelTags;
 	createTiddlyElement(ul,"li",null,"listTitle",prompt.format([tiddler.title]));
 	for(var t=0; t<tiddler.tags.length; t++) {
-		createTagButton(createTiddlyElement(ul,"li"),tiddler.tags[t],tiddler.title);
-		if(t<tiddler.tags.length-1)
-			createTiddlyText(ul,sep);
+		var tag = store.getTiddler(tiddler.tags[t]); 
+		if(!tag || !tag.tags.contains("excludeLists")) { 
+			createTagButton(createTiddlyElement(ul,"li"),tiddler.tags[t],tiddler.title);
+			if(t<tiddler.tags.length-1)
+				createTiddlyText(ul,sep);
+		}
 	}
 };
 
@@ -3120,8 +3123,9 @@ config.macros.toolbar.createCommand = function(place,commandName,tiddler,classNa
 			var btn = createTiddlyButton(null,text,tooltip,cmd);
 			btn.setAttribute("commandName",commandName);
 			btn.setAttribute("tiddler",tiddler.title);
+			addClass(btn,"command_" + commandName);
 			if(className)
-				jQuery(btn).addClass(className);
+				addClass(btn,className);
 			place.appendChild(btn);
 		}
 	}
@@ -3213,11 +3217,11 @@ config.macros.toolbar.handler = function(place,macroName,params,wikifier,paramSt
 			break;
 		case "<":
 			var btn = createTiddlyButton(place,this.lessLabel,this.lessPrompt,config.macros.toolbar.onClickLess);
-			jQuery(btn).addClass("lessCommand");
+			addClass(btn,"lessCommand");
 			break;
 		case ">":
 			var btn = createTiddlyButton(place,this.moreLabel,this.morePrompt,config.macros.toolbar.onClickMore);
-			jQuery(btn).addClass("moreCommand");
+			addClass(btn,"moreCommand");
 			var e = createTiddlyElement(place,"span",null,"moreCommand");
 			e.style.display = "none";
 			place = e;
@@ -4507,19 +4511,20 @@ Story.prototype.loadMissingTiddler = function(title,fields,tiddlerElem)
 {
 	var getTiddlerCallback = function(context)
 	{
-		var tiddler = context.tiddler;
-		if(tiddler && tiddler.text) {
-			if(!tiddler.created)
-				tiddler.created = new Date();
-			if(!tiddler.modified)
-				tiddler.modified = tiddler.created;
-			store.saveTiddler(tiddler.title,tiddler.title,tiddler.text,tiddler.modifier,tiddler.modified,tiddler.tags,tiddler.fields,true,tiddler.created);
+		if(context.status) {
+			var t = context.tiddler;
+			if(!t.created)
+				t.created = new Date();
+			if(!t.modified)
+				t.modified = t.created;
+			store.saveTiddler(t.title,t.title,t.text,t.modifier,t.modified,t.tags,t.fields,true,t.created);
 			autoSaveChanges();
+		} else {
+			story.refreshTiddler(context.title,null,true);
 		}
 		context.adaptor.close();
-		delete context.adpator;
+		delete context.adaptor;
 	};
-
 	var tiddler = new Tiddler(title);
 	tiddler.fields = typeof fields == "string" ? fields.decodeHashMap() : fields||{};
 	var context = {serverType:tiddler.getServerType()};
@@ -4844,12 +4849,17 @@ Story.prototype.hasChanges = function(title)
 	if(e) {
 		var fields = {};
 		this.gatherSaveFields(e,fields);
-		var tiddler = store.fetchTiddler(title);
-		if(!tiddler)
-			return false;
-		for(var n in fields) {
-			if(store.getValue(title,n) != fields[n])
+		if(store.fetchTiddler(title)) {
+			for(var n in fields) {
+				if(store.getValue(title,n) != fields[n]) //# tiddler changed
+					return true;
+			}
+		} else {
+			if(store.isShadowTiddler(title) && store.getShadowTiddlerText(title) == fields.text) { //# not checking for title or tags
+				return false;
+			} else { //# changed shadow or new tiddler
 				return true;
+			}
 		}
 	}
 	return false;
@@ -5626,6 +5636,8 @@ function upgradeFrom(path)
 {
 	var importStore = new TiddlyWiki();
 	var tw = loadFile(path);
+	if(window.netscape !== undefined)
+		tw = convertUTF8ToUnicode(tw);
 	importStore.importTiddlyWiki(tw);
 	importStore.forEachTiddler(function(title,tiddler) {
 		if(!store.getTiddler(title)) {
@@ -5822,21 +5834,29 @@ config.macros.sync.doSync = function(e)
 	for(var i=0; i<currSync.syncList.length; i++) {
 		var si = currSync.syncList[i];
 		if(rowNames.indexOf(si.title) != -1) {
-			var r = true;
-			switch(si.syncStatus) {
-			case sl.changedServer:
-				r = si.adaptor.getTiddler(syncItem.title,null,si,getTiddlerCallback);
-				break;
-			case sl.notFound:
-			case sl.changedLocally:
-			case sl.changedBoth:
-				r = si.adaptor.putTiddler(si.tiddler,null,si,putTiddlerCallback);
-				break;
-			default:
-				break;
+			var errorMsg = "Error in doSync: ";
+			try {
+				var r = true;
+				switch(si.syncStatus) {
+				case sl.changedServer:
+					r = si.adaptor.getTiddler(si.title,null,si,getTiddlerCallback);
+					break;
+				case sl.notFound:
+				case sl.changedLocally:
+				case sl.changedBoth:
+					r = si.adaptor.putTiddler(si.tiddler,null,si,putTiddlerCallback);
+					break;
+				default:
+					break;
+				}
+				if(!r)
+					displayMessage(errorMsg + r);
+			} catch(ex) {
+				if(ex.name == "TypeError")
+					displayMessage("sync operation unsupported: " + ex.message);
+				else
+					displayMessage(errorMsg + ex.message);
 			}
-			if(!r)
-				displayMessage("Error in doSync: " + r);
 		}
 	}
 	return false;
@@ -6682,10 +6702,7 @@ function mozConvertUTF8ToUnicode(u)
 
 function convertUnicodeToFileFormat(s)
 {
-	if(!config.browser.isIE)
-		return s;
-	else
-		return convertUnicodeToHtmlEntities(s);
+	return config.browser.isOpera || !window.netscape ? convertUnicodeToHtmlEntities(s) : mozConvertUnicodeToUTF8(s);
 }
 
 function convertUnicodeToHtmlEntities(s)
@@ -6730,6 +6747,195 @@ function convertUriToUTF8(uri,charSet)
 		return uri;
 	}
 	return converter.convertURISpecToUTF8(uri,charSet);
+}
+
+function copyFile(dest,source)
+{
+	return config.browser.isIE ? ieCopyFile(dest,source) : false;
+}
+
+function saveFile(fileUrl,content)
+{
+	var r = mozillaSaveFile(fileUrl,content);
+	if(!r)
+		r = ieSaveFile(fileUrl,content);
+	if(!r)
+		r = javaSaveFile(fileUrl,content);
+	return r;
+}
+
+function loadFile(fileUrl)
+{
+	var r = mozillaLoadFile(fileUrl);
+	if((r == null) || (r == false))
+		r = ieLoadFile(fileUrl);
+	if((r == null) || (r == false))
+		r = javaLoadFile(fileUrl);
+	return r;
+}
+
+function ieCreatePath(path)
+{
+	try {
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+	} catch(ex) {
+		return null;
+	}
+
+	var pos = path.lastIndexOf("\\");
+	if(pos==-1)
+		pos = path.lastIndexOf("/");
+	if(pos!=-1)
+		path = path.substring(0,pos+1);
+
+	var scan = [path];
+	var parent = fso.GetParentFolderName(path);
+	while(parent && !fso.FolderExists(parent)) {
+		scan.push(parent);
+		parent = fso.GetParentFolderName(parent);
+	}
+
+	for(i=scan.length-1;i>=0;i--) {
+		if(!fso.FolderExists(scan[i])) {
+			fso.CreateFolder(scan[i]);
+		}
+	}
+	return true;
+}
+
+// Returns null if it can't do it, false if there's an error, true if it saved OK
+function ieSaveFile(filePath,content)
+{
+	ieCreatePath(filePath);
+	try {
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+	} catch(ex) {
+		return null;
+	}
+	var file = fso.OpenTextFile(filePath,2,-1,0);
+	file.Write(content);
+	file.Close();
+	return true;
+}
+
+// Returns null if it can't do it, false if there's an error, or a string of the content if successful
+function ieLoadFile(filePath)
+{
+	try {
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var file = fso.OpenTextFile(filePath,1);
+		var content = file.ReadAll();
+		file.Close();
+	} catch(ex) {
+		return null;
+	}
+	return content;
+}
+
+function ieCopyFile(dest,source)
+{
+	ieCreatePath(dest);
+	try {
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		fso.GetFile(source).Copy(dest);
+	} catch(ex) {
+		return false;
+	}
+	return true;
+}
+
+// Returns null if it can't do it, false if there's an error, true if it saved OK
+function mozillaSaveFile(filePath,content)
+{
+	if(window.Components) {
+		try {
+			netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+			var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+			file.initWithPath(filePath);
+			if(!file.exists())
+				file.create(0,0664);
+			var out = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
+			out.init(file,0x20|0x02,00004,null);
+			out.write(content,content.length);
+			out.flush();
+			out.close();
+			return true;
+		} catch(ex) {
+			return false;
+		}
+	}
+	return null;
+}
+
+// Returns null if it can't do it, false if there's an error, or a string of the content if successful
+function mozillaLoadFile(filePath)
+{
+	if(window.Components) {
+		try {
+			netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+			var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+			file.initWithPath(filePath);
+			if(!file.exists())
+				return null;
+			var inputStream = Components.classes["@mozilla.org/network/file-input-stream;1"].createInstance(Components.interfaces.nsIFileInputStream);
+			inputStream.init(file,0x01,00004,null);
+			var sInputStream = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance(Components.interfaces.nsIScriptableInputStream);
+			sInputStream.init(inputStream);
+			var contents = sInputStream.read(sInputStream.available());
+			sInputStream.close();
+			inputStream.close();
+			return contents;
+		} catch(ex) {
+			return false;
+		}
+	}
+	return null;
+}
+
+function javaUrlToFilename(url)
+{
+	var f = "//localhost";
+	if(url.indexOf(f) == 0)
+		return url.substring(f.length);
+	var i = url.indexOf(":");
+	return i > 0 ? url.substring(i-1) : url;
+}
+
+function javaSaveFile(filePath,content)
+{
+	try {
+		if(document.applets["TiddlySaver"])
+			return document.applets["TiddlySaver"].saveFile(javaUrlToFilename(filePath),"UTF-8",content);
+	} catch(ex) {
+	}
+	try {
+		var s = new java.io.PrintStream(new java.io.FileOutputStream(javaUrlToFilename(filePath)));
+		s.print(content);
+		s.close();
+	} catch(ex) {
+		return null;
+	}
+	return true;
+}
+
+function javaLoadFile(filePath)
+{
+	try {
+		if(document.applets["TiddlySaver"])
+			return String(document.applets["TiddlySaver"].loadFile(javaUrlToFilename(filePath),"UTF-8"));
+	} catch(ex) {
+	}
+	var content = [];
+	try {
+		var r = new java.io.BufferedReader(new java.io.FileReader(javaUrlToFilename(filePath)));
+		var line;
+		while((line = r.readLine()) != null)
+			content.push(new String(line));
+		r.close();
+	} catch(ex) {
+		return null;
+	}
+	return content.join("\n");
 }
 
 //--
@@ -6900,11 +7106,15 @@ FileAdaptor.prototype.getTiddler = function(title,context,userParams,callback)
 FileAdaptor.getTiddlerComplete = function(context,userParams)
 {
 	var t = context.adaptor.store.fetchTiddler(context.title);
-	t.fields['server.type'] = FileAdaptor.serverType;
-	t.fields['server.host'] = AdaptorBase.minHostName(context.host);
-	t.fields['server.page.revision'] = t.modified.convertToYYYYMMDDHHMM();
-	context.tiddler = t;
-	context.status = true;
+	if(t) {
+		t.fields['server.type'] = FileAdaptor.serverType;
+		t.fields['server.host'] = AdaptorBase.minHostName(context.host);
+		t.fields['server.page.revision'] = t.modified.convertToYYYYMMDDHHMM();
+		context.tiddler = t;
+		context.status = true;
+	} else { //# tiddler does not exist in document
+		context.status = false;
+	}
 	if(context.allowSynchronous) {
 		context.isSynchronous = true;
 		context.callback(context,userParams);
@@ -7045,7 +7255,7 @@ function getTiddlyLinkInfo(title,currClasses)
 	return {classes: classes.join(" "),subTitle: subTitle};
 }
 
-function createExternalLink(place,url)
+function createExternalLink(place,url,label)
 {
 	var link = document.createElement("a");
 	link.className = "externalLink";
@@ -7054,6 +7264,8 @@ function createExternalLink(place,url)
 	if(config.options.chkOpenInNewWindow)
 		link.target = "_blank";
 	place.appendChild(link);
+	if(label)
+		createTiddlyText(link, label);
 	return link;
 }
 
@@ -7105,6 +7317,7 @@ function onClickTag(ev)
 {
 	var e = ev || window.event;
 	var popup = Popup.create(this);
+	addClass(popup,"taggedTiddlerList");
 	var tag = this.getAttribute("tag");
 	var title = this.getAttribute("tiddler");
 	if(popup && tag) {
@@ -7760,7 +7973,7 @@ ListView.columnTypes.Link = {
 			var v = listObject[field];
 			var c = columnTemplate.text;
 			if(v != undefined)
-				createTiddlyText(createExternalLink(place,v),c || v);
+				createExternalLink(place,v,c || v);
 		}
 };
 
@@ -8043,30 +8256,6 @@ String.prototype.htmlEncode = function()
 String.prototype.htmlDecode = function()
 {
 	return this.replace(/&lt;/mg,"<").replace(/&gt;/mg,">").replace(/&quot;/mg,"\"").replace(/&amp;/mg,"&");
-};
-
-// Convert a string to it's JSON representation by encoding control characters, double quotes and backslash. See json.org
-String.prototype.toJSONString = function()
-{
-	var m = {
-		'\b': '\\b',
-		'\f': '\\f',
-		'\n': '\\n',
-		'\r': '\\r',
-		'\t': '\\t',
-		'"' : '\\"',
-		'\\': '\\\\'
-		};
-	var replaceFn = function(a,b) {
-		var c = m[b];
-		if(c)
-			return c;
-		c = b.charCodeAt();
-		return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
-		};
-	if(/["\\\x00-\x1f]/.test(this))
-		return '"' + this.replace(/([\x00-\x1f\\"])/g,replaceFn) + '"';
-	return '"' + this + '"';
 };
 
 // Parse a space-separated string of name:value parameters
@@ -8455,6 +8644,11 @@ function drawGradient(place,horiz,locolors,hicolors)
 	}
 }
 
+function createTiddlyText(parent,text)
+{
+	return parent.appendChild(document.createTextNode(text));
+}
+
 function createTiddlyCheckbox(parent,caption,checked,onChange)
 {
 	var cb = document.createElement("input");
@@ -8720,11 +8914,6 @@ function removeChildren(e)
 	jQuery(e).empty();
 }
 
-function createTiddlyText(parent,text)
-{
-	return jQuery(parent).append(text);
-}
-
 // Return the content of an element as plain text with no formatting
 function getPlainText(e)
 {
@@ -8940,26 +9129,6 @@ function removeStyleSheet(id)
 	jQuery.twStylesheet.remove({ id: id });
 }
 //--
-//-- Deprecated Filesystem code
-//-- Use the jQuery.file functions directly instead
-//--
-
-function saveFile(filePath,content)
-{
-	return jQuery.twFile.save(filePath,content);
-}
-
-function loadFile(filePath)
-{
-	return jQuery.twFile.load(filePath);
-}
-
-function copyFile(dest,source)
-{
-	return jQuery.twFile.copy(dest,source);
-}
-
-//--
 //-- Deprecated HTTP request code
 //-- Use the jQuery ajax functions directly instead
 //--
@@ -8981,7 +9150,7 @@ function httpReq(type,url,callback,params,headers,data,contentType,username,pass
 		url:url,
 		processData:false,
 		data:data,
-		cache:allowCache ? false : true,
+		cache:!!allowCache,
 		beforeSend: function(xhr) {
 			for(var i in headers)
 				xhr.setRequestHeader(i,headers[i]);
@@ -9007,6 +9176,35 @@ function httpReq(type,url,callback,params,headers,data,contentType,username,pass
 		window.netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
 	jQuery.ajax(options);
 }
+
+//--
+//-- Deprecated String functions
+//--
+
+// @Deprecated: no direct replacement, since not used in core code
+String.prototype.toJSONString = function()
+{
+	// Convert a string to it's JSON representation by encoding control characters, double quotes and backslash. See json.org
+	var m = {
+		'\b': '\\b',
+		'\f': '\\f',
+		'\n': '\\n',
+		'\r': '\\r',
+		'\t': '\\t',
+		'"' : '\\"',
+		'\\': '\\\\'
+		};
+	var replaceFn = function(a,b) {
+		var c = m[b];
+		if(c)
+			return c;
+		c = b.charCodeAt();
+		return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
+		};
+	if(/["\\\x00-\x1f]/.test(this))
+		return '"' + this.replace(/([\x00-\x1f\\"])/g,replaceFn) + '"';
+	return '"' + this + '"';
+};
 
 //--
 //-- Deprecated Tiddler code
@@ -9211,274 +9409,6 @@ if(!$.encoding.digests)
 	}
 })(jQuery);
 /*
-jQuery.twFile.js
-
-jQuery plugin for loading a file and saving data to a file
-
-Copyright (c) UnaMesa Association 2009
-
-Triple licensed under the BSD, MIT and GPL licenses:
-  http://www.opensource.org/licenses/bsd-license.php
-  http://www.opensource.org/licenses/mit-license.php
-  http://www.gnu.org/licenses/gpl.html
-*/
-
-(function($) {
-	if(!$.twFile) {
-		$.twFile = {};
-	}
-
-	$.extend($.twFile,{
-		currentDriver: null,
-		driverList: ["activeX", "mozilla", "tiddlySaver", "javaLiveConnect"],
-
-		getDriver: function() {
-			if(this.currentDriver === null) {
-				for(var t=0; t<this.driverList.length; t++) {
-					if(this.currentDriver === null && drivers[this.driverList[t]].isAvailable && drivers[this.driverList[t]].isAvailable())
-						this.currentDriver = drivers[this.driverList[t]];
-				}
-			}
-			return this.currentDriver;
-		},
-		init: function() {
-			this.getDriver();
-		},
-		load: function(filePath) {
-			return this.getDriver().loadFile(filePath);
-		},
-		save: function(filePath,content) {
-			return this.getDriver().saveFile(filePath,content);
-		},
-		copy: function(dest,source) {
-			if(this.getDriver().copyFile)
-				return this.currentDriver.copyFile(dest,source);
-			else
-				return false;
-		}
-	});
-
-	// Deferred initialisation for any drivers that need it
-	$(function() {
-		for(var t in drivers) {
-			if(drivers[t].deferredInit)
-				drivers[t].deferredInit();
-		}
-	});
-
-	// Private driver implementations for each browser
-
-	var drivers = {};
-
-	// Internet Explorer driver
-
-	drivers.activeX = {
-		name: "activeX",
-		isAvailable: function() {
-			try {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-			} catch(ex) {
-				return false;
-			}
-			return true;
-		},
-		loadFile: function(filePath) {
-			// Returns null if it can't do it, false if there's an error, or a string of the content if successful
-			try {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-				var file = fso.OpenTextFile(filePath,1);
-				var content = file.ReadAll();
-				file.Close();
-			} catch(ex) {
-				return null;
-			}
-			return content;
-		},
-		createPath: function(path) {
-			var pos = path.lastIndexOf("\\");
-			if(pos!=-1)
-				path = path.substring(0,pos+1);
-			var scan = [path];
-			try {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-				var parent = fso.GetParentFolderName(path);
-				while(parent && !fso.FolderExists(parent)) {
-					scan.push(parent);
-					parent = fso.GetParentFolderName(parent);
-				}
-				for(i=scan.length-1;i>=0;i--) {
-					if(!fso.FolderExists(scan[i])) {
-						fso.CreateFolder(scan[i]);
-					}
-				}
-				return true;
-			} catch(ex) {
-			}
-			return false;
-		},
-		copyFile: function(dest,source) {
-			drivers.activeX.createPath(dest);
-			try {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-				fso.GetFile(source).Copy(dest);
-			} catch(ex) {
-				return false;
-			}
-			return true;
-		},
-		saveFile: function(filePath,content) {
-			// Returns null if it can't do it, false if there's an error, true if it saved OK
-			drivers.activeX.createPath(filePath);
-			try {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-				var file = fso.OpenTextFile(filePath,2,-1,0);
-				file.Write(content);
-				file.Close();
-			} catch (ex) {
-				return null;
-			}
-			return true;
-		}
-	};
-
-	// Mozilla driver
-
-	drivers.mozilla = {
-		name: "mozilla",
-		isAvailable: function() {
-			return !!window.Components;
-		},
-		loadFile: function(filePath) {
-			// Returns null if it can't do it, false if there's an error, or a string of the content if successful
-			if(window.Components) {
-				try {
-					netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-					var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-					file.initWithPath(filePath);
-					if(!file.exists())
-						return null;
-					var inputStream = Components.classes["@mozilla.org/network/file-input-stream;1"].createInstance(Components.interfaces.nsIFileInputStream);
-					inputStream.init(file,0x01,4,null);
-					var converter = Components.classes["@mozilla.org/intl/converter-input-stream;1"].createInstance(Components.interfaces.nsIConverterInputStream);
-					converter.init(inputStream, "UTF-8", 0, 0);
-					var buffer = {};
-					var result = [];
-					while(converter.readString(-1,buffer) != 0) {
-						result.push(buffer.value);
-					}
-					converter.close();
-					inputStream.close();
-					return result.join("");
-				} catch(ex) {
-					return false;
-				}
-			}
-			return null;
-		},
-		saveFile: function(filePath,content) {
-			// Returns null if it can't do it, false if there's an error, true if it saved OK
-			if(window.Components) {
-				try {
-					netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-					var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-					file.initWithPath(filePath);
-					if(!file.exists())
-						file.create(0,0664);
-					var out = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
-					out.init(file,0x22,4,null);
-					var converter = Components.classes["@mozilla.org/intl/converter-output-stream;1"].createInstance(Components.interfaces.nsIConverterOutputStream);
-					converter.init(out, "UTF-8", 0, 0);
-					converter.writeString(content);
-					converter.close();
-					out.close();
-					return true;
-				} catch(ex) {
-					alert("Exception while attempting to save\n\n" + ex);
-					return false;
-				}
-			}
-			return null;
-		}
-	};
-
-	// TiddlySaver driver
-
-	drivers.tiddlySaver = {
-		name: "tiddlySaver",
-		deferredInit: function() {
-			if(!document.applets["TiddlySaver"] && !$.browser.mozilla && !$.browser.msie && document.location.toString().substr(0,5) == "file:") {
-				$(document.body).append("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='TiddlySaver.jar' width='1'height='1'></applet>");
-			}
-		},
-		isAvailable: function() {
-			return !!document.applets["TiddlySaver"];
-		},
-		loadFile: function(filePath) {
-			var r;
-			try {
-				if(document.applets["TiddlySaver"]) {
-					r = document.applets["TiddlySaver"].loadFile(javaUrlToFilename(filePath),"UTF-8");
-					return (r === undefined || r === null) ? null : String(r);
-				}
-			} catch(ex) {
-			}
-			return null;
-		},
-		saveFile: function(filePath,content) {
-			try {
-				if(document.applets["TiddlySaver"])
-					return document.applets["TiddlySaver"].saveFile(javaUrlToFilename(filePath),"UTF-8",content);
-			} catch(ex) {
-			}
-			return null;
-		}
-	}
-
-	// Java LiveConnect driver
-
-	drivers.javaLiveConnect = {
-		name: "javaLiveConnect",
-		isAvailable: function() {
-			return !!window.java && !!window.java.io && !!window.java.io.FileReader;
-		},
-		loadFile: function(filePath) {
-			var r;
-			var content = [];
-			try {
-				r = new java.io.BufferedReader(new java.io.FileReader(javaUrlToFilename(filePath)));
-				var line;
-				while((line = r.readLine()) != null)
-					content.push(new String(line));
-				r.close();
-			} catch(ex) {
-				return null;
-			}
-			return content.join("\n") + "\n";
-		},
-		saveFile: function(filePath,content) {
-			try {
-				var s = new java.io.PrintStream(new java.io.FileOutputStream(javaUrlToFilename(filePath)));
-				s.print(content);
-				s.close();
-			} catch(ex) {
-				return null;
-			}
-			return true;
-		}
-	}
-
-	// Private utilities
-
-	function javaUrlToFilename(url) {
-		var f = "//localhost";
-		if(url.indexOf(f) == 0)
-			return url.substring(f.length);
-		var i = url.indexOf(":");
-		return i > 0 ? url.substring(i-1) : url;
-	}
-
-})(jQuery);
-/*
 jQuery.twStylesheet.js
 
 jQuery plugin to dynamically insert CSS rules into a document
@@ -9542,6 +9472,12 @@ $.twStylesheet.remove = function(options) {
 };
 
 })(jQuery);
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+if(useJavaSaver)
+	document.write("<applet style='position:absolute;left:-1px' name='TiddlySaver' code='TiddlySaver.class' archive='TiddlySaver.jar' width='1' height='1'></applet>");
 //]]>
 </script>
 <!--POST-SCRIPT-START-->
