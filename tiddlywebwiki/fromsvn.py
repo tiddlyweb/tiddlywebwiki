@@ -1,20 +1,21 @@
 """
 A built-in twanager plugin for retrieving tiddlers, plugins or full
-recipes from the TiddlyWiki subversion repository. Provide the name of
-one bag and one or more http or file urls on the twanager command line.
+recipes from the TiddlyWiki Subversion repository. Provide the name of
+one bag and one or more URIs (HTTP or file protocol) on the twanager
+command line.
 
 Example:
 
-   twanager from_svn bag0 http://tiddly-svn.dyndns.org/Trunk/verticals/stunplugged/index.html.recipe
+   twanager from_svn myBag http://svn.tiddlywiki.org/Trunk/verticals/stunplugged/index.html.recipe
 
-If the url is a recipe it will be parsed for lines beginning with
-recipe: or tiddler.
+If the URL is a recipe it will be parsed for lines beginning with
+"recipe:", "tiddler:" or "plugin:".
 
-If recipe, that recipe is retrieved and recursively parsed.
+Recipes are retrieved and parsed recursively.
 
-If tiddler, if the end of the URL is js, then get the .js and .js.meta
-files, massage them, join them together, make a tiddler, and put it in
-the store.
+For tiddlers, if the end of the URI is ".js", then get the .js and .js.meta
+files, massage them, join them together, make a tiddler, and put it in the
+store.
 
 Otherwise assume we have a tiddler in the <div> format and use importer
 code to import it.
@@ -22,19 +23,19 @@ code to import it.
 
 import sys
 
-import html5lib
-from html5lib import treebuilders
-
 import urllib
 import urllib2
 from urllib2 import urlopen, HTTPError
 from urlparse import urljoin
 
+import html5lib
+from html5lib import treebuilders
+
 from tiddlyweb.manage import make_command
 
+from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
-from tiddlyweb.model.tiddler import Tiddler
 from tiddlywebwiki.importer import handle_tiddler_div
 
 
@@ -46,7 +47,7 @@ urllib2.url2pathname = new_url2pathname
 
 @make_command()
 def from_svn(args):
-    """Import one or more plugins, tiddlers or recipes in cook format: <bag> <http or file URL>"""
+    """Import one or more plugins, tiddlers or recipes in Cook format: <bag> <URI>"""
     bag = args[0]
     urls = args[1:]
     if not bag or not urls:

@@ -142,7 +142,7 @@ the content of this wiki</a>.
         into plain text by finding all the included
         text.
         """
-        output = wikitext_to_wikklyhtml('', '', unicode(title))
+        output = wikitext_to_wikklyhtml('', '', unicode(title), self.environ)
         parser = html5lib.HTMLParser(
                 tree=treebuilders.getTreeBuilder('beautifulsoup'))
         soup = parser.parse(output)

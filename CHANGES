@@ -1,8 +1,34 @@
+0.8 [TBD]
+
+    * Moved plugin initialization into tiddlywebwiki.__init__
+      This consitutes a slight break in backwards comaptibility, as
+      existing instances' tiddlywebconfig.py needs to be updated to use
+      tiddlywebwiki instead of tiddlywebwiki.plugin in system_plugins and
+      twanager_plugins.
+
+0.7 Tue Aug 18 16:03:11 BST 2009
+
+    * Corrected ETag handling for new tiddlers in TiddlyWebAdaptor
+    * Updates to wikitext_render config keys
+
+0.6 Thu Aug  6 13:36:03 BST 2009
+
+    * Corrected handling of adding of twanager commands and plugins
+
+0.5 Wed Jul 29 14:02:42 BST 2009
+
+    * Added support and documentation for use with twanager --load
+
+0.4 Wed Jul 22 15:12:25 BST 2009
+
+    * Extended default configuration created by twanager instance
+    * Added standard policies to default bags created by twanager instance
+    * Included required TiddlyWeb plugins in the distribution
+
 0.3 Thu Jul  9 13:27:41 BST 2009
 
-    * Properly escape " in HTML attributes.
+    * Properly escaping double quotes in HTML attributes
 
 0.2 Wed Jul  8 13:13:54 BST 2009
 
-    * First packaging and release to pypi.
-
+    * First packaging and release to PyPI

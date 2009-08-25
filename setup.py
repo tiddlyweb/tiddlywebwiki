@@ -14,8 +14,9 @@ setup(name = 'tiddlywebwiki',
         author = 'Chris Dent',
         author_email = 'cdent@peermore.com',
         packages = ['tiddlywebwiki'],
+        py_modules = ['status', 'wikklytextrender'],
         platforms = 'Posix; MacOS X; Windows',
-        install_requires = ['tiddlyweb', 'BeautifulSoup', 'wikklytext'], # + wikklytextrender
+        install_requires = ['tiddlyweb', 'BeautifulSoup', 'wikklytext'],
         include_package_data = True,
         )
 
