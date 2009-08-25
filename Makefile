@@ -17,12 +17,26 @@ wikklytextrender_plugin:
 
 twebplugins: status_plugin wikklytextrender_plugin
 
-remotes: empty twebplugins
+ServerSideSideSavingPlugin:
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/ServerSideSavingPlugin.js -O tiddlywebwiki/ServerSideSavingPlugin.js
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/ServerSideSavingPlugin.js.meta -O tiddlywebwiki/ServerSideSavingPlugin.js.meta
+
+TiddlyWebAdaptor:
+	wget http://svn.tiddlywiki.org/Trunk/association/adaptors/TiddlyWebAdaptor.js -O tiddlywebwiki/TiddlyWebAdaptor.js
+	wget http://svn.tiddlywiki.org/Trunk/association/adaptors/TiddlyWebAdaptor.js.meta -O tiddlywebwiki/TiddlyWebAdaptor.js.meta
+
+TiddlyWebConfig:
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/TiddlyWebConfig.js -O tiddlywebwiki/TiddlyWebConfig.js
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/TiddlyWebConfig.js.meta -O tiddlywebwiki/TiddlyWebConfig.js.meta
+
+twikiplugins: ServerSideSideSavingPlugin TiddlyWebAdaptor TiddlyWebConfig
+
+remotes: empty twebplugins twikiplugins
 
 clean:
 	rm -r dist || true
 
-test: 
+test:
 	py.test -x test
 
 dist: test
