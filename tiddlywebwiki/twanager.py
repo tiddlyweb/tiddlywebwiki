@@ -1,7 +1,10 @@
+import sys
 import os
 
 from tiddlyweb.model.bag import Bag
+from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
+
 from tiddlywebwiki.importer import import_wiki_file
 from tiddlywebwiki.instancer import create_instance
 from tiddlywebwiki.instancer import _store_bag, _make_recipe
@@ -39,8 +42,8 @@ def instance(args):
         raise IOError('Your chosen directory already exists. Choose a different name.')
 
     cfg = {
-        'system_plugins': ['tiddlywebwiki.plugin'],
-        'twanager_plugins': ['tiddlywebwiki.plugin']
+        'system_plugins': ['tiddlywebwiki'],
+        'twanager_plugins': ['tiddlywebwiki']
     }
     create_instance(directory, config, defaults=cfg)
 
