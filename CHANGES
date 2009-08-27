@@ -1,5 +1,8 @@
 0.8 [TBD]
 
+    * Client-side plugins are now included in the distribution
+      These components no longer need to be downloaded from the TiddlyWiki
+      Subversion repository when creating or updating an instance.
     * Moved plugin initialization into tiddlywebwiki.__init__
       This consitutes a slight break in backwards comaptibility, as
       existing instances' tiddlywebconfig.py needs to be updated to use
