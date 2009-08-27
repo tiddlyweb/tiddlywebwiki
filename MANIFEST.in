@@ -1,2 +1,2 @@
-include tiddlywebwiki/empty.html README Makefile CHANGES
+include tiddlywebwiki/empty.html tiddlywebwiki/*.js tiddlywebwiki/*.js.meta README Makefile CHANGES
 recursive-include test *

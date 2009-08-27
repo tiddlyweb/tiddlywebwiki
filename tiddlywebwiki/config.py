@@ -10,22 +10,25 @@ directory of the server.
 
 import os
 
-
-try:
-    from pkg_resources import resource_filename
-    RESOURCES_DIRECTORY = resource_filename('tiddlywebwiki', 'empty.html') # XXX: hacky!?
-    RESOURCES_DIRECTORY = os.path.dirname(RESOURCES_DIRECTORY)
-except ImportError:
-    RESOURCES_DIRECTORY = 'tiddlywebwiki'
-
-BASE_TIDDLYWIKI = os.path.join(RESOURCES_DIRECTORY, 'empty.html')
-
-CLIENT_PLUGINS = [
+CLIENT_PLUGIN_NAMES = [
     'TiddlyWebAdaptor.js',
     'ServerSideSavingPlugin.js',
     'TiddlyWebConfig.js']
-CLIENT_PLUGINS = [os.path.join(RESOURCES_DIRECTORY, plugin)
-    for plugin in CLIENT_PLUGINS]
+
+try:
+    from pkg_resources import resource_filename
+    BASE_TIDDLYWIKI = resource_filename('tiddlywebwiki', 'empty.html')
+    CLIENT_PLUGINS = ['file:%s' % resource_filename('tiddlywebwiki', plugin)
+            for plugin in CLIENT_PLUGIN_NAMES]
+    # The following list comprehension is required to make sure the meta
+    # files get unpacked into the egg cache.
+    ['file:%s' % resource_filename('tiddlywebwiki', '%s.meta' % plugin)
+            for plugin in CLIENT_PLUGIN_NAMES]
+except ImportError:
+    BASE_TIDDLYWIKI = os.path.join('tiddlywebwiki', 'empty.html')
+    CLIENT_PLUGINS = ['file:%s' % os.path.join('tiddlywebwiki', plugin)
+        for plugin in CLIENT_PLUGIN_NAMES]
+
 
 config = {
         'base_tiddlywiki': BASE_TIDDLYWIKI,

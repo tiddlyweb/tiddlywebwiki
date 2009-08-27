@@ -9,7 +9,7 @@ from tiddlyweb.config import merge_config
 from tiddlywebwiki.config import config as twwconfig
 
 
-__version__ = '0.7'
+__version__ = '0.8'
 
 
 def init(config):
