@@ -1,4 +1,9 @@
-0.8 [TBD]
+0.9 Wed Sep  2 13:43:21 BST 2009
+
+    * Correct a cyclic dependency problem when install tiddlywebwiki
+      by moving import statements in __init__ into init().
+
+0.8 Thu Aug 27 16:40:09 BST 2009
 
     * Client-side plugins are now included in the distribution
       These components no longer need to be downloaded from the TiddlyWiki
