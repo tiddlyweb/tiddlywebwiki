@@ -42,7 +42,7 @@ def instance(args):
         raise IOError('Your chosen directory already exists. Choose a different name.')
 
     cfg = {
-        'system_plugins': ['tiddlywebwiki', 'status'],
+        'system_plugins': ['tiddlywebwiki', 'status', 'differ'],
         'twanager_plugins': ['tiddlywebwiki']
     }
     create_instance(directory, config, defaults=cfg)
