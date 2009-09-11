@@ -10,11 +10,16 @@ directory of the server.
 
 import os
 
+
 CLIENT_PLUGIN_NAMES = [
     'TiddlyWebAdaptor.js',
     'ServerSideSavingPlugin.js',
-    'TiddlyWebConfig.js']
+    'TiddlyWebConfig.js',
+    'RevisionsCommandPlugin.js',
+    'DiffFormatterPlugin.js']
 
+
+# determine file paths
 try:
     from pkg_resources import resource_filename
     BASE_TIDDLYWIKI = resource_filename('tiddlywebwiki', 'empty.html')

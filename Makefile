@@ -29,7 +29,15 @@ TiddlyWebConfig:
 	wget http://svn.tiddlywiki.org/Trunk/association/plugins/TiddlyWebConfig.js -O tiddlywebwiki/TiddlyWebConfig.js
 	wget http://svn.tiddlywiki.org/Trunk/association/plugins/TiddlyWebConfig.js.meta -O tiddlywebwiki/TiddlyWebConfig.js.meta
 
-twikiplugins: ServerSideSideSavingPlugin TiddlyWebAdaptor TiddlyWebConfig
+RevisionsCommandPlugin:
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/RevisionsCommandPlugin.js -O tiddlywebwiki/RevisionsCommandPlugin.js
+	wget http://svn.tiddlywiki.org/Trunk/association/plugins/RevisionsCommandPlugin.js.meta -O tiddlywebwiki/RevisionsCommandPlugin.js.meta
+
+DiffFormatterPlugin:
+	wget http://svn.tiddlywiki.org/Trunk/contributors/MartinBudden/formatters/DiffFormatterPlugin.js -O tiddlywebwiki/DiffFormatterPlugin.js
+	wget http://svn.tiddlywiki.org/Trunk/contributors/MartinBudden/formatters/DiffFormatterPlugin.js.meta -O tiddlywebwiki/DiffFormatterPlugin.js.meta
+
+twikiplugins: ServerSideSideSavingPlugin TiddlyWebAdaptor TiddlyWebConfig RevisionsCommandPlugin DiffFormatterPlugin
 
 remotes: empty twebplugins twikiplugins
 
