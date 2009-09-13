@@ -16,9 +16,9 @@ This will create a foo directory containing:
 
 import os
 import random
-import sha
 import time
 
+from tiddlyweb.util import sha
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
 from tiddlyweb.store import Store
@@ -111,7 +111,7 @@ def _generate_secret():
     """
     Create a pseudo-random secret to be used for message authentication.
     """
-    digest = sha.sha(str(time.time()))
+    digest = sha(str(time.time()))
     digest.update(str(random.random()))
     digest.update('tiddlyweb and tiddlywiki are rad')
     return digest.hexdigest()
