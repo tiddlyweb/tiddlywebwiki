@@ -268,16 +268,17 @@ the content of this wiki</a>.
 
         Base64 encode if the stuff is small enough for browsers to handle.
         """
-        b64text = b64encode(tiddler.text)
-        if b64text < 32 * 1024:
-            return 'data:$s;base64,%s' % (tiddler.type, b64text)
+        #b64text = b64encode(tiddler.text)
+        #if len(b64text) < 32 * 1024:
+        #    return 'data:%s;base64,%s' % (tiddler.type, b64text)
+        #else:
+        # XXX don't b64encode for now
+        if tiddler.type.startswith('image'):
+            return ('\n<html><img src="%s" /></html>\n' %
+                    tiddler_url(self.environ, tiddler))
         else:
-            if tiddler.type.startswith('image'):
-                return ('\n<html><img src="%s" /></html>\n' %
-                        tiddler_url(self.environ, tiddler))
-            else:
-                return ('\n<html><a href="%s">%s</a></html>\n' %
-                        (tiddler_url(self.environ, tiddler), tiddler.title))
+            return ('\n<html><a href="%s">%s</a></html>\n' %
+                    (tiddler_url(self.environ, tiddler), tiddler.title))
 
     def _tiddler_fields(self, fields):
         """
