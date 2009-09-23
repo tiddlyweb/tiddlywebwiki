@@ -57,6 +57,7 @@ def instance(args):
 
     bag = Bag('common')
     bag.policy.delete = ['R:ADMIN']
+    bag.policy.manage = ['R:ADMIN']
     _store_bag(bag)
 
     recipe = _make_recipe('default', ['system', 'common'])
