@@ -50,8 +50,6 @@ class TestInstance(object):
     def test_create_bag_policies(self):
         twanager.instance([instance_dir])
 
-        policy_location = '../%s/store/bags/%%s/policy' % instance_dir
-
         bag = Bag('system')
         system_policy = self.store.get(bag).policy
         bag = Bag('common')
@@ -67,7 +65,7 @@ class TestInstance(object):
         assert common_policy.read == []
         assert common_policy.write == []
         assert common_policy.create == []
-        assert common_policy.manage == []
+        assert common_policy.manage == ['R:ADMIN']
         assert common_policy.accept == []
         assert common_policy.delete == ['R:ADMIN']
 
