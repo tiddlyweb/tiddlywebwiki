@@ -124,7 +124,7 @@ def _get_url(url):
     exception handling.
     """
     getter = urlopen(url)
-    content = getter.read()
+    content = getter.read().replace('\r', '')
     return unicode(content, 'utf-8')
 
 
