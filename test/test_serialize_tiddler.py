@@ -29,11 +29,11 @@ def test_html_attribute_escape():
     serializer.object = tiddler
     string = serializer.to_string()
 
-    assert r'''title="escape \"double\" quotes in tiddler field values"''' in string
-    assert r'''server.title="escape \"double\" quotes in tiddler field values"''' in string
-    assert r'''bag="foo \"bar\" baz"''' in string
-    assert r'''recipe="baz \"bar\" foo"''' in string
-    assert r'''server.workspace="bags/foo \"bar\" baz"''' in string
-    assert r'''modifier="Chris \"sensei\" Dent"''' in string
-    assert r'''tags="foo [[xxx \"yyy\" zzz]]"''' in string
-    assert r'''custom="lorem 'ipsum' dolor \"sit\" amet"''' in string
+    assert r'''title="escape &quot;double&quot; quotes in tiddler field values"''' in string
+    assert r'''server.title="escape &quot;double&quot; quotes in tiddler field values"''' in string
+    assert r'''bag="foo &quot;bar&quot; baz"''' in string
+    assert r'''recipe="baz &quot;bar&quot; foo"''' in string
+    assert r'''server.workspace="bags/foo &quot;bar&quot; baz"''' in string
+    assert r'''modifier="Chris &quot;sensei&quot; Dent"''' in string
+    assert r'''tags="foo [[xxx &quot;yyy&quot; zzz]]"''' in string
+    assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
