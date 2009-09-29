@@ -17,11 +17,11 @@ def init(config_in):
 
 @make_command()
 def imwiki(args):
-    """Import tiddlers from a Tiddlywiki document into a bag: <filename> <bag>"""
+    """Import tiddlers from a Tiddlywiki document into a bag: <bag> <filename>"""
     store = _store()
 
     try:
-        filename, bag_name = args[0:2]
+        bag_name, filename = args[0:2]
         import_wiki_file(store, filename, bag_name)
     except IndexError, exc:
         print >> sys.stderr, "index error: %s" % exc
