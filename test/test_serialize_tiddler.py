@@ -2,10 +2,6 @@
 Tests for turning a Tiddler into HTML within a TiddlyWiki document
 """
 
-# XXX: required?
-import sys
-sys.path.insert(0, '.')
-
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.serializer import Serializer
 from tiddlyweb.config import config

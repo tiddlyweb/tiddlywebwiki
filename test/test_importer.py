@@ -2,9 +2,6 @@
 Test reading in a tiddler div via the importer.
 """
 
-import sys
-sys.path.append('.')
-
 import html5lib
 from html5lib import treebuilders
 

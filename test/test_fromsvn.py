@@ -2,9 +2,6 @@
 Test retrieving content from the TiddlyWiki Subversion repository.
 """
 
-import sys
-sys.path.insert(0, '.')
-
 from tiddlywebwiki.fromsvn import _strip_extension
 
 

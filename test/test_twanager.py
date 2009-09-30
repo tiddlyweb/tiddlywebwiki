@@ -2,9 +2,6 @@
 Test twanager commands.
 """
 
-import sys
-sys.path.insert(0, '.')
-
 import os
 
 import tiddlywebwiki as tww
@@ -33,8 +30,8 @@ def setup_module(module):
         bag = collection[0]
         uris = collection[1]
         collection = (bag, [
-            uri.replace("file:./", "file:../") for uri in uris
-        ])
+            uri.replace('file:./', 'file:../') for uri in uris
+            ])
         instance_tiddlers.append(collection)
     tww.twanager.config['instance_tiddlers'] = instance_tiddlers
 

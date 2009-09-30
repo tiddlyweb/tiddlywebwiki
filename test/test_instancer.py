@@ -2,9 +2,6 @@
 Test instance creation.
 """
 
-import sys
-sys.path.insert(0, '.')
-
 import os
 
 from shutil import rmtree
