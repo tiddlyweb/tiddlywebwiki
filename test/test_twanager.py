@@ -7,40 +7,50 @@ sys.path.insert(0, '.')
 
 import os
 
+import tiddlywebwiki as tww
+
 from shutil import rmtree
 
 from tiddlyweb.config import config
 from tiddlyweb.store import Store
 from tiddlyweb.model.bag import Bag
 
-import tiddlywebwiki.instancer as instancer
-import tiddlywebwiki.twanager as twanager
-
 
 instance_dir = 'test_instance'
 
 
 def setup_module(module):
-    instancer.init(config)
-    twanager.init(config)
+    tww.init(config)
+    tww.twanager.init(config)
     try:
         rmtree(instance_dir)
     except:
         pass
+
+    # adjust relative paths to account for instancer's chdir operation
+    instance_tiddlers = []
+    for collection in tww.twanager.config['instance_tiddlers']:
+        bag = collection[0]
+        uris = collection[1]
+        collection = (bag, [
+            uri.replace("file:./", "file:../") for uri in uris
+        ])
+        instance_tiddlers.append(collection)
+    tww.twanager.config['instance_tiddlers'] = instance_tiddlers
 
 
 class TestInstance(object):
 
     def setup_method(self, module):
         env = { 'tiddlyweb.config': config }
-        self.store = Store(config['server_store'][0], environ=env) # XXX: use module.store?
+        self.store = Store(config['server_store'][0], environ=env)
 
     def teardown_method(self, module):
         os.chdir('..')
         rmtree(instance_dir)
 
     def test_create_tiddlywebwiki_instance(self):
-        twanager.instance([instance_dir])
+        tww.twanager.instance([instance_dir])
 
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
@@ -48,7 +58,7 @@ class TestInstance(object):
         assert "'twanager_plugins': ['tiddlywebwiki']" in contents
 
     def test_create_bag_policies(self):
-        twanager.instance([instance_dir])
+        tww.twanager.instance([instance_dir])
 
         bag = Bag('system')
         system_policy = self.store.get(bag).policy
