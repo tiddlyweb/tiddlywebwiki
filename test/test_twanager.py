@@ -18,7 +18,7 @@ instance_dir = 'test_instance'
 
 def setup_module(module):
     tww.init(config)
-    tww.twanager.init(config)
+    tww.manage.init(config)
     try:
         rmtree(instance_dir)
     except:
@@ -26,14 +26,14 @@ def setup_module(module):
 
     # adjust relative paths to account for instancer's chdir operation
     instance_tiddlers = []
-    for collection in tww.twanager.config['instance_tiddlers']:
+    for collection in tww.manage.config['instance_tiddlers']:
         bag = collection[0]
         uris = collection[1]
         collection = (bag, [
             uri.replace('file:./', 'file:../') for uri in uris
             ])
         instance_tiddlers.append(collection)
-    tww.twanager.config['instance_tiddlers'] = instance_tiddlers
+    tww.manage.config['instance_tiddlers'] = instance_tiddlers
 
 
 class TestInstance(object):
@@ -47,7 +47,7 @@ class TestInstance(object):
         rmtree(instance_dir)
 
     def test_create_tiddlywebwiki_instance(self):
-        tww.twanager.instance([instance_dir])
+        tww.manage.instance([instance_dir])
 
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
@@ -55,7 +55,7 @@ class TestInstance(object):
         assert "'twanager_plugins': ['tiddlywebwiki']" in contents
 
     def test_create_bag_policies(self):
-        tww.twanager.instance([instance_dir])
+        tww.manage.instance([instance_dir])
 
         bag = Bag('system')
         system_policy = self.store.get(bag).policy

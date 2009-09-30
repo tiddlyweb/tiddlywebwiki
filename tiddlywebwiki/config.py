@@ -40,7 +40,7 @@ config = {
         'twanager_plugins': [
             'tiddlywebwiki.fromsvn',
             'tiddlywebwiki.instancer',
-            'tiddlywebwiki.twanager'
+            'tiddlywebwiki.manage'
             ],
         'instance_tiddlers': [
             ('system', CLIENT_PLUGINS),
