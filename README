@@ -16,11 +16,6 @@ To invoke the instance command from any directory, use twanager's --load option:
 
 Requires:
 
-  wikklytextrender
-    TiddlyWeb plugin that renders tiddlywiki syntax to HTML, using
-    wikklytext.
-    Available at:
-    http://github.com/tiddlyweb/tiddlyweb-plugins/tree/master/wikklytextrender
   wikklytext
     Python package for parsing TiddlyWiki markup.
     Available via easy_install.
