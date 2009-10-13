@@ -184,14 +184,17 @@ def import_plugin(bag, url):
     """
     meta_url = '%s.meta' % url
     plugin_content = get_url(url)
+    default_title = _strip_extension(url, '.js').split('/')[-1]
     try:
         meta_content = _get_url(meta_url)
     except HTTPError:
-        meta_content = 'title: %s\ntags: systemConfig\n' % _strip_extension(url, '.js').split('/')[-1]
+        meta_content = 'title: %s\ntags: systemConfig\n' % default_title
 
-
-    title = [line for line in meta_content.split('\n') if line.startswith('title:')][0]
-    title = title.split(':', 1)[1].lstrip().rstrip()
+    try:
+        title = [line for line in meta_content.split('\n') if line.startswith('title:')][0]
+        title = title.split(':', 1)[1].lstrip().rstrip()
+    except IndexError:
+        title = default_title
     tiddler_meta = '\n'.join([line for line in meta_content.split('\n') if not line.startswith('title:')])
 
     tiddler_meta.rstrip()
