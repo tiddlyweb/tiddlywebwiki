@@ -6,13 +6,18 @@ from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.importer import import_wiki_file
-from tiddlywebwiki.instancer import create_instance
-from tiddlywebwiki.instancer import _store_bag, _make_recipe
+from tiddlywebwiki.instancer import update_instance
 
 
 def init(config_in):
     global config
     config = config_in
+
+
+@make_command()
+def update(args):
+    """Update all instance_tiddlers in the current instance."""
+    update_instance(config)
 
 
 @make_command()
@@ -29,38 +34,6 @@ def imwiki(args):
     except ValueError, exc:
         print >> sys.stderr, "value error: %s" % exc
         usage()
-
-
-@make_command()
-def instance(args):
-    """Create a TiddlyWebWiki instance in the given directory: <dir>"""
-    directory = args[0]
-    # XXX: DRY (cf. tiddlwebwiki.instancer.instance)
-    if not directory:
-        raise ValueError('You must provide the name of a directory.')
-    if os.path.exists(directory):
-        raise IOError('Your chosen directory already exists. Choose a different name.')
-
-    cfg = {
-        'system_plugins': ['tiddlywebwiki', 'status', 'differ'],
-        'twanager_plugins': ['tiddlywebwiki']
-    }
-    create_instance(directory, config, defaults=cfg)
-
-    bag = Bag('system')
-    bag.policy.write = ['R:ADMIN']
-    bag.policy.create = ['R:ADMIN']
-    bag.policy.delete = ['R:ADMIN']
-    bag.policy.manage = ['R:ADMIN']
-    bag.policy.accept = ['R:ADMIN']
-    _store_bag(bag)
-
-    bag = Bag('common')
-    bag.policy.delete = ['R:ADMIN']
-    bag.policy.manage = ['R:ADMIN']
-    _store_bag(bag)
-
-    recipe = _make_recipe('default', ['system', 'common'])
 
 
 def _store():

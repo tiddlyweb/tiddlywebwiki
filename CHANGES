@@ -1,6 +1,8 @@
 0.11 [TBD]
 
     * Added twinstance script to simplify instance creation
+      This replaces the twanager instance command.
+    * Reordered arguments for twanager imwiki
     * Reordered arguments for twanager imwiki
 
 0.10 Sun Sep 27 21:21:25 BST 2009
@@ -9,8 +11,8 @@
 
 0.9 Wed Sep  2 13:43:21 BST 2009
 
-    * Correct a cyclic dependency problem when install tiddlywebwiki
-      by moving import statements in __init__ into init().
+    * Corrected a cyclic dependency problem when installing
+      tiddlywebwiki by moving import statements in __init__ into init()
 
 0.8 Thu Aug 27 16:40:09 BST 2009
 
