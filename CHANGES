@@ -3,7 +3,6 @@
     * Added twinstance script to simplify instance creation
       This replaces the twanager instance command.
     * Reordered arguments for twanager imwiki
-    * Reordered arguments for twanager imwiki
 
 0.10 Sun Sep 27 21:21:25 BST 2009
 

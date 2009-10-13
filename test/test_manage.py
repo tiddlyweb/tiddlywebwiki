@@ -47,7 +47,7 @@ class TestInstance(object):
         rmtree(instance_dir)
 
     def test_create_tiddlywebwiki_instance(self):
-        tww.manage.instance([instance_dir])
+        tww.instancer.instance(instance_dir)
 
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
@@ -55,7 +55,7 @@ class TestInstance(object):
         assert "'twanager_plugins': ['tiddlywebwiki']" in contents
 
     def test_create_bag_policies(self):
-        tww.manage.instance([instance_dir])
+        tww.instancer.instance(instance_dir)
 
         bag = Bag('system')
         system_policy = self.store.get(bag).policy
