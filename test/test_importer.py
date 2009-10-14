@@ -2,7 +2,7 @@
 Test retrieving content from the TiddlyWiki Subversion repository.
 """
 
-from tiddlywebwiki.fromsvn import _strip_extension
+from tiddlywebwiki.importer import _strip_extension
 
 
 def test_strip_extension():

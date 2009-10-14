@@ -6,7 +6,7 @@ command line.
 
 Example:
 
-   twanager from_svn myBag http://svn.tiddlywiki.org/Trunk/verticals/stunplugged/index.html.recipe
+   twanager twimport myBag http://svn.tiddlywiki.org/Trunk/verticals/stunplugged/index.html.recipe
 
 If the URL is a recipe it will be parsed for lines beginning with
 "recipe:", "tiddler:" or "plugin:".
@@ -43,13 +43,13 @@ urllib2.url2pathname = new_url2pathname
 
 
 def import_list(bag, urls):
-    """Import a list of svn urls into bag."""
+    """Import a list of URIs into bag."""
     for url in urls:
         import_one(bag, url)
 
 
 def import_one(bag, url):
-    """Import one svn url into bag."""
+    """Import one URI into bag."""
     print >> sys.stderr, "handling %s" % url.encode('utf-8')
     if url.endswith('.recipe'):
         import_via_recipe(bag, url)
@@ -63,7 +63,7 @@ def import_one(bag, url):
 
 def import_via_recipe(bag, url):
     """
-    Import one recipe, at svn url, into bag, calling import_one as needed.
+    Import one recipe into bag, calling import_one as needed.
     Will recurse recipes as it finds them. NO LOOP DETECTION.
     """
     recipe = get_url(url)
@@ -117,8 +117,7 @@ def _get_url(url):
 
 def import_tid_tiddler(bag, url):
     """
-    Import one tiddler, in the tid format, from svn
-    url, into bag.
+    Import one tiddler, in the tid format, into bag.
     """
     content = get_url(url)
     tiddler_title = urllib.unquote(url.split('/')[-1])
@@ -142,7 +141,7 @@ def process_tid_tiddler(tiddler, content):
 
 def import_tiddler(bag, url):
     """
-    Import one tiddler, at svn url, into bag.
+    Import one tiddler into bag.
     """
     content = get_url(url)
     tiddler = process_tiddler(content)
@@ -163,8 +162,8 @@ def process_tiddler(content):
 
 def import_plugin(bag, url):
     """
-    Import one plugin, at svn url, into bag, retrieving
-    both the .js and .js.meta files.
+    Import one plugin into bag, retrieving both the
+    .js and .js.meta files.
 
     If there is no meta file, then set title and tags
     to something appropriate before de-serializing.

@@ -7,7 +7,7 @@ from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.tiddlywiki import import_wiki_file
 from tiddlywebwiki.instancer import update_instance
-from tiddlywebwiki.fromsvn import import_list
+from tiddlywebwiki.importer import import_list
 
 
 def init(config_in):
@@ -22,7 +22,7 @@ def update(args):
 
 
 @make_command()
-def from_svn(args):
+def twimport(args):
     """Import one or more plugins, tiddlers or recipes in Cook format: <bag> <URI>"""
     bag = args[0]
     urls = args[1:]

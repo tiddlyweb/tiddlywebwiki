@@ -12,7 +12,7 @@ from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 
 from tiddlywebwiki.tiddlywiki import handle_tiddler_div
-from tiddlywebwiki.fromsvn import process_tiddler, handle_recipe
+from tiddlywebwiki.importer import process_tiddler, handle_recipe
 
 BAGNAME = 'test'
 SAMPLE_BASIC_TIDDLER = """
@@ -60,7 +60,7 @@ def test_import_empty_tiddler_div():
     assert tiddler.title == 'GettingStopped'
     assert tiddler.text == ''
 
-def test_from_svn_preprocessing():
+def test_importer_preprocessing():
     div = process_tiddler(SAMPLE_BASIC_TIDDLER)
     assert div['title'] == 'GettingStarted'
     assert '<<option txtUserName>>' in '%s' % div

@@ -1,7 +1,8 @@
 0.11 [TBD]
 
-    * Added twinstance script to simplify instance creation
-      This replaces the twanager instance command.
+    * Added twinstance script to simplify instance creation, replacing
+      the twanager instance command
+    * Renamed from_svn twanager command to twimport
     * Reordered arguments for twanager imwiki
 
 0.10 Sun Sep 27 21:21:25 BST 2009

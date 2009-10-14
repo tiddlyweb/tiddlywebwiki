@@ -22,7 +22,7 @@ from tiddlyweb.util import sha
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
 from tiddlyweb.store import Store
-from tiddlywebwiki.fromsvn import import_list
+from tiddlywebwiki.importer import import_list
 
 
 CONFIG_NAME = 'tiddlywebconfig.py'
