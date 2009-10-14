@@ -22,7 +22,6 @@ from tiddlyweb.util import sha
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
 from tiddlyweb.store import Store
-from tiddlyweb.manage import make_command
 from tiddlywebwiki.fromsvn import import_list
 
 

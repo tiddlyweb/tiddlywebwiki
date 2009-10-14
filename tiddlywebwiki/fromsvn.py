@@ -31,8 +31,6 @@ from urlparse import urljoin
 import html5lib
 from html5lib import treebuilders
 
-from tiddlyweb.manage import make_command
-
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
@@ -43,16 +41,6 @@ def new_url2pathname(pathname):
     return pathname
 
 urllib2.url2pathname = new_url2pathname
-
-
-@make_command()
-def from_svn(args):
-    """Import one or more plugins, tiddlers or recipes in Cook format: <bag> <URI>"""
-    bag = args[0]
-    urls = args[1:]
-    if not bag or not urls:
-        raise IndexError('missing args')
-    import_list(bag, urls)
 
 
 def import_list(bag, urls):

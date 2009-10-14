@@ -7,6 +7,7 @@ from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.importer import import_wiki_file
 from tiddlywebwiki.instancer import update_instance
+from tiddlywebwiki.fromsvn import import_list
 
 
 def init(config_in):
@@ -18,6 +19,16 @@ def init(config_in):
 def update(args):
     """Update all instance_tiddlers in the current instance."""
     update_instance(config)
+
+
+@make_command()
+def from_svn(args):
+    """Import one or more plugins, tiddlers or recipes in Cook format: <bag> <URI>"""
+    bag = args[0]
+    urls = args[1:]
+    if not bag or not urls:
+        raise IndexError('missing args')
+    import_list(bag, urls)
 
 
 @make_command()
