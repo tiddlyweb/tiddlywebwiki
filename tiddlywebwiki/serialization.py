@@ -44,7 +44,7 @@ class Serialization(SerializationInterface):
         stored in the bag.
         """
         try:
-            from tiddlyweb.importer import import_wiki
+            from tiddlyweb.tiddlywiki import import_wiki
             return import_wiki(self.environ['tiddlyweb.store'], input_string,
                     bag.name)
         except ImportError:

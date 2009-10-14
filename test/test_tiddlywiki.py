@@ -1,5 +1,5 @@
 """
-Test reading in a tiddler div via the importer.
+Test reading in a tiddler div from a TiddlyWiki document.
 """
 
 import html5lib
@@ -11,7 +11,7 @@ from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 
-from tiddlywebwiki.importer import handle_tiddler_div
+from tiddlywebwiki.tiddlywiki import handle_tiddler_div
 from tiddlywebwiki.fromsvn import process_tiddler, handle_recipe
 
 BAGNAME = 'test'

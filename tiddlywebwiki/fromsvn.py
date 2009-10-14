@@ -17,8 +17,7 @@ For tiddlers, if the end of the URI is ".js", then get the .js and .js.meta
 files, massage them, join them together, make a tiddler, and put it in the
 store.
 
-Otherwise assume we have a tiddler in the <div> format and use importer
-code to import it.
+Otherwise assume we have a tiddler in the <div> format and import it.
 """
 
 import sys
@@ -34,7 +33,7 @@ from html5lib import treebuilders
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
-from tiddlywebwiki.importer import handle_tiddler_div
+from tiddlywebwiki.tiddlywiki import handle_tiddler_div
 
 
 def new_url2pathname(pathname):

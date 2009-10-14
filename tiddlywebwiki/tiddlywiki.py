@@ -1,6 +1,5 @@
 """
-Given a string or file representing a wiki, do the
-work to import it into a named bag.
+Functionality for parsing TiddlyWiki documents.
 """
 
 import codecs
