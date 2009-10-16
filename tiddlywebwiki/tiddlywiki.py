@@ -64,8 +64,7 @@ def import_wiki(store, wikitext, bagname='wiki'):
 
 def handle_tiddler_div(bagname, tiddler_div, store):
     """
-    Create a new Tiddler from a tiddler div, in beautifulsoup
-    form.
+    Create a new Tiddler from a tiddler div, in BeautifulSoup form.
     """
     new_tiddler = Tiddler(tiddler_div['title'], bag=bagname)
 
@@ -80,7 +79,8 @@ def handle_tiddler_div(bagname, tiddler_div, store):
         if data and attr != 'tags':
             if attr in (['modifier', 'created', 'modified']):
                 new_tiddler.__setattr__(attr, data)
-            else:
+            elif (attr not in ['title', 'changecount'] and
+                not attr.startswith('server.')):
                 new_tiddler.fields[attr] = data
     new_tiddler.tags = _tag_string_to_list(tiddler_div.get('tags', ''))
 

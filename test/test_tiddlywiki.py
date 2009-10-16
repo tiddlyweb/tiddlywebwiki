@@ -5,7 +5,6 @@ Test reading in a tiddler div from a TiddlyWiki document.
 import html5lib
 from html5lib import treebuilders
 
-
 from tiddlyweb.config import config
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
@@ -13,6 +12,7 @@ from tiddlyweb.store import Store
 
 from tiddlywebwiki.tiddlywiki import handle_tiddler_div
 from tiddlywebwiki.importer import process_tiddler, handle_recipe
+
 
 BAGNAME = 'test'
 SAMPLE_BASIC_TIDDLER = """
@@ -52,13 +52,36 @@ def test_import_simple_tiddler_div():
 def test_import_empty_tiddler_div():
     div = _parse(SAMPLE_EMPTY_TIDDLER)
     assert div['title'] == 'GettingStopped'
-    
+
     handle_tiddler_div(BAGNAME, div, store)
 
     tiddler = Tiddler('GettingStopped', BAGNAME)
     tiddler = store.get(tiddler)
     assert tiddler.title == 'GettingStopped'
     assert tiddler.text == ''
+
+def test_omit_reserved_fields():
+    tiddler_element = """
+    <div title="Hello World" changecount="3" title="bar"
+        server.host="example.org" server.workspace="default"
+        custom="baz">
+    <pre>lorem ipsum
+    dolor sit amet</pre>
+    </div>
+    """
+    div = _parse(tiddler_element)
+    assert div['title'] == 'Hello World'
+
+    handle_tiddler_div(BAGNAME, div, store)
+
+    tiddler = Tiddler('Hello World', BAGNAME)
+    tiddler = store.get(tiddler)
+    assert tiddler.title == 'Hello World'
+    assert tiddler.fields['custom'] == 'baz'
+    assert tiddler.fields.has_key('title') == False
+    assert tiddler.fields.has_key('server.host') == False
+    assert tiddler.fields.has_key('server.workspace') == False
+    assert tiddler.fields.has_key('changecount') == False
 
 def test_importer_preprocessing():
     div = process_tiddler(SAMPLE_BASIC_TIDDLER)
