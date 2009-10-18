@@ -12,13 +12,10 @@ empty:
 wikklytextrender_plugin:
 	wget http://github.com/tiddlyweb/tiddlyweb-plugins/raw/master/wikklytextrender/wikklytextrender.py -O wikklytextrender.py
 
-status_plugin:
-	wget http://github.com/tiddlyweb/tiddlyweb-plugins/raw/master/status/status.py -O status.py
-
 differ_plugin:
 	wget http://github.com/FND/tiddlyweb-plugins/raw/master/differ.py -O differ.py
 
-twebplugins: wikklytextrender_plugin status_plugin differ_plugin
+twebplugins: wikklytextrender_plugin differ_plugin
 
 ServerSideSideSavingPlugin:
 	wget http://svn.tiddlywiki.org/Trunk/association/plugins/ServerSideSavingPlugin.js -O tiddlywebwiki/ServerSideSavingPlugin.js

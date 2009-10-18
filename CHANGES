@@ -1,4 +1,4 @@
-0.11 [TBD]
+0.11 Thu Oct 15 10:27:18 BST 2009
 
     * Added twinstance script to simplify instance creation, replacing
       the twanager instance command
