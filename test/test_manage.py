@@ -51,7 +51,7 @@ class TestInstance(object):
 
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
-        assert "'system_plugins': ['tiddlywebwiki', 'status', 'differ']" in contents
+        assert "'system_plugins': ['tiddlywebwiki', 'tiddlywebplugins.status', 'differ']" in contents
         assert "'twanager_plugins': ['tiddlywebwiki']" in contents
 
     def test_create_bag_policies(self):
