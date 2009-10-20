@@ -51,9 +51,9 @@ config = {
         'serializers': {
             'text/x-tiddlywiki': ['tiddlywebwiki.serialization', 'text/html; charset=UTF-8'],
             },
-        'wikitext.default_renderer': 'wikklytextrender',
+        'wikitext.default_renderer': 'tiddlywebplugins.wikklytextrender',
         # XXX the following is, in most cases, redundant
         'wikitext.type_render_map': {
-            'text/x-tiddlywiki': 'wikklytextrender',
+            'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
             }
         }

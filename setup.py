@@ -14,10 +14,10 @@ setup(name = 'tiddlywebwiki',
         author = 'Chris Dent',
         author_email = 'cdent@peermore.com',
         packages = ['tiddlywebwiki'],
-        py_modules = ['wikklytextrender', 'differ'],
+        py_modules = ['differ'],
         scripts = ['twinstance'],
         platforms = 'Posix; MacOS X; Windows',
-        install_requires = ['tiddlyweb', 'tiddlywebplugins.status', 'BeautifulSoup', 'wikklytext'],
+        install_requires = ['tiddlyweb', 'tiddlywebplugins.wikklytextrender', 'tiddlywebplugins.status', 'BeautifulSoup', 'wikklytext'],
         include_package_data = True,
         )
 
