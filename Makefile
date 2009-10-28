@@ -40,6 +40,7 @@ remotes: empty twebplugins twikiplugins
 
 clean:
 	rm -r dist || true
+	rm -r TiddlyWebWiki.bundle || true
 
 test:
 	py.test -x test
@@ -55,3 +56,6 @@ pypi:
 peermore:
 	scp -P 8022 dist/tiddlywebwiki-*.gz cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist
 	scp -P 8022 CHANGES cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist/CHANGES.tiddlywebwiki
+
+bundle: clean dist
+	pip bundle TiddlyWebWiki.bundle dist/tiddlywebwiki*.tar.gz
