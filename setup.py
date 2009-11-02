@@ -8,9 +8,10 @@ except ImportError:
 
 from tiddlywebwiki import __version__ as VERSION
 
+
 setup(name = 'tiddlywebwiki',
         version = VERSION,
-        description = 'A plugin for TiddlyWeb that provides a multiuser TiddlyWiki environment.',
+        description = 'A TiddlyWeb plugin to provide a multi-user TiddlyWiki environment.',
         author = 'Chris Dent',
         author_email = 'cdent@peermore.com',
         packages = ['tiddlywebwiki'],
@@ -20,7 +21,3 @@ setup(name = 'tiddlywebwiki',
         install_requires = ['tiddlyweb', 'tiddlywebplugins.wikklytextrender', 'tiddlywebplugins.status', 'BeautifulSoup', 'wikklytext'],
         include_package_data = True,
         )
-
-
-
-
