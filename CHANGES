@@ -1,3 +1,9 @@
+0.12 Thu Nov  5 14:50:53 GMT 2009
+
+    * Move wikklytextrender and status plugins out as dependent packages.
+      If existing tiddlywebconfig.py contain 'status' this should change
+      to 'tiddlywebplugins.status'.
+
 0.11 Thu Oct 15 10:27:18 BST 2009
 
     * Added twinstance script to simplify instance creation, replacing
