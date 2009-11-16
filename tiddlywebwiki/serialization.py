@@ -211,7 +211,7 @@ the content of this wiki</a>.
             tiddler_output = tiddler.text
 
         return ('<div title="%s" server.title="%s" server.page.revision="%s" '
-                'modifier="%s" server.workspace="bags/%s" '
+                'modifier="%s" creator="%s" server.workspace="bags/%s" '
                 'server.type="tiddlyweb" server.host="%s" '
                 'server.recipe="%s" server.bag="%s" server.permissions="%s" '
                 'modified="%s" created="%s" tags="%s" %s>\n'
@@ -220,6 +220,7 @@ the content of this wiki</a>.
                         escape_attribute_value(tiddler.title),
                         tiddler.revision,
                         escape_attribute_value(tiddler.modifier),
+                        escape_attribute_value(tiddler.creator),
                         escape_attribute_value(tiddler.bag),
                         host,
                         escape_attribute_value(recipe_name),

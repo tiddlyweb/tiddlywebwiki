@@ -31,5 +31,6 @@ def test_html_attribute_escape():
     assert r'''recipe="baz &quot;bar&quot; foo"''' in string
     assert r'''server.workspace="bags/foo &quot;bar&quot; baz"''' in string
     assert r'''modifier="Chris &quot;sensei&quot; Dent"''' in string
+    assert r'''creator="Chris &quot;sensei&quot; Dent"''' in string
     assert r'''tags="foo [[xxx &quot;yyy&quot; zzz]]"''' in string
     assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
