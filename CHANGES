@@ -1,6 +1,6 @@
 0.13 Tue Nov 17 12:49:17 GMT 2009
 
-    * Add support for tiddler creator attribute in wiki serialization.
+    * Added support for tiddler creator attribute in wiki serialization
 
 0.12 Thu Nov  5 14:50:53 GMT 2009
 
