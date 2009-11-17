@@ -2,7 +2,7 @@
 A TiddlyWeb plugin providing a multi-user TiddlyWiki environment.
 """
 
-__version__ = '0.12.1'
+__version__ = '0.13.0'
 
 
 def init(config):
