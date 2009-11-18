@@ -65,13 +65,16 @@ class Serialization(SerializationInterface):
         return self._put_tiddlers_in_tiddlywiki([tiddler], title=tiddler.title)
 
     def _no_script(self, url):
-        return """
+        if url:
+            return """
 <div id="javascriptWarning">
 This page requires JavaScript to function properly.<br /><br />
 If you do not use JavaScript you may still <a href="%s">browse
 the content of this wiki</a>.
 </div>
 """ % url
+        else:
+            return ''
 
     def _put_tiddlers_in_tiddlywiki(self, tiddlers, title='TiddlyWeb Loading'):
         """
@@ -80,12 +83,14 @@ the content of this wiki</a>.
         head sections of the file.
         """
 
-        if tiddlers[0].recipe:
-            workspace = '/recipes/%s/tiddlers' % encode_name(
-                    tiddlers[0].recipe)
-        else:
-            workspace = '/bags/%s/tiddlers' % encode_name(tiddlers[0].bag)
-        browsable_url = server_base_url(self.environ) + workspace
+        browsable_url = None
+        if tiddlers:
+            if tiddlers[0].recipe:
+                workspace = '/recipes/%s/tiddlers' % encode_name(
+                        tiddlers[0].recipe)
+            else:
+                workspace = '/bags/%s/tiddlers' % encode_name(tiddlers[0].bag)
+            browsable_url = server_base_url(self.environ) + workspace
 
         if len(tiddlers) == 1:
             default_tiddler = Tiddler('DefaultTiddlers')
