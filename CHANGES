@@ -1,3 +1,7 @@
+0.13 Tue Nov 17 12:49:17 GMT 2009
+
+    * Added support for tiddler creator attribute in wiki serialization
+
 0.12 Thu Nov  5 14:50:53 GMT 2009
 
     * Ignoring reserved fields when importing a TiddlyWiki document

@@ -40,7 +40,9 @@ remotes: empty twebplugins twikiplugins
 
 clean:
 	rm -r dist || true
-	rm -r TiddlyWebWiki.bundle || true
+	rm -r build || true
+	rm -r tiddlywebwiki.egg-info || true
+	rm *.bundle || true
 
 test:
 	py.test -x test
@@ -57,5 +59,10 @@ peermore:
 	scp -P 8022 dist/tiddlywebwiki-*.gz cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist
 	scp -P 8022 CHANGES cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist/CHANGES.tiddlywebwiki
 
-bundle: clean dist
-	pip bundle TiddlyWebWiki.bundle dist/tiddlywebwiki*.tar.gz
+makebundle: clean dist
+	pip bundle tiddlywebwiki-`date +%F`.bundle dist/tiddlywebwiki*.tar.gz
+
+uploadbundle:
+	scp -P 8022 *.bundle cdent@heavy.peermore.com:public_html/tiddlyweb.peermore.com/dist
+
+bundle: clean dist makebundle uploadbundle
