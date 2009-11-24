@@ -33,6 +33,7 @@ from html5lib import treebuilders
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
+from tiddlyweb.util import std_error_message
 from tiddlywebwiki.tiddlywiki import handle_tiddler_div
 
 
@@ -50,7 +51,7 @@ def import_list(bag, urls):
 
 def import_one(bag, url):
     """Import one URI into bag."""
-    print >> sys.stderr, "handling %s" % url.encode('utf-8')
+    std_error_message("handling %s" % url)
     if url.endswith('.recipe'):
         import_via_recipe(bag, url)
     elif url.endswith('.js'):
@@ -98,10 +99,10 @@ def get_url(url):
     Get the content at url, raising HTTPProblem if there is one.
     """
     try:
-        print >> sys.stderr, 'getting url: %s' % url.encode('utf-8')
+        std_error_message('getting url: %s' % url)
         return _get_url(url)
     except HTTPError, exc:
-        print >> sys.stderr, "HTTP Error while getting %s: %s" % (url, exc)
+        std_error_message("HTTP Error while getting %s: %s" % (url, exc))
         sys.exit(1)
 
 

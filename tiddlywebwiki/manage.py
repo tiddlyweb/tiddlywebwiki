@@ -40,11 +40,9 @@ def imwiki(args):
         bag_name, filename = args[0:2]
         import_wiki_file(store, filename, bag_name)
     except IndexError, exc:
-        print >> sys.stderr, "index error: %s" % exc
-        usage()
+        usage("index error: %s" % exc)
     except ValueError, exc:
-        print >> sys.stderr, "value error: %s" % exc
-        usage()
+        usage("value error: %s" % exc)
 
 
 def _store():
