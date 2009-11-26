@@ -96,9 +96,9 @@ def get_tiddler_from_div(node):
             elif (attr not in ['title', 'changecount'] and
                 not attr.startswith('server.')):
                 tiddler.fields[attr] = data
+    if not node.get('modified', None) and tiddler.created:
+        tiddler.modified = tiddler.created
     tiddler.tags = _tag_string_to_list(node.get('tags', ''))
-    if not tiddler.created:
-        tiddler.created = tiddler.modified # modified defaults to current time
 
     return tiddler
 

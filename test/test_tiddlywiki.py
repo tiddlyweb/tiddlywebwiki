@@ -2,7 +2,10 @@
 Test reading in a tiddler div from a TiddlyWiki document.
 """
 
+import re
+
 import html5lib
+
 from html5lib import treebuilders
 
 from tiddlyweb.config import config
@@ -10,7 +13,7 @@ from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 
-from tiddlywebwiki.tiddlywiki import handle_tiddler_div
+from tiddlywebwiki.tiddlywiki import handle_tiddler_div, get_tiddler_from_div
 from tiddlywebwiki.importer import process_tiddler, handle_recipe
 
 
@@ -59,6 +62,48 @@ def test_import_empty_tiddler_div():
     tiddler = store.get(tiddler)
     assert tiddler.title == 'GettingStopped'
     assert tiddler.text == ''
+
+def test_handle_timestamps():
+    tiddler_element = """
+    <div title="Foo" created="200901011200" modified="200911261330">
+    <pre></pre>
+    </div>
+    """
+    div = _parse(tiddler_element)
+    tiddler = get_tiddler_from_div(div)
+    assert tiddler.created == '200901011200'
+    assert tiddler.modified == '200911261330'
+
+    tiddler_element = """
+    <div title="Foo" created="200901011200">
+    <pre></pre>
+    </div>
+    """
+    div = _parse(tiddler_element)
+    tiddler = get_tiddler_from_div(div)
+    assert tiddler.created == '200901011200'
+    assert tiddler.modified == '200901011200'
+
+    tiddler_element = """
+    <div title="Foo" modified="200911261330">
+    <pre></pre>
+    </div>
+    """
+    div = _parse(tiddler_element)
+    tiddler = get_tiddler_from_div(div)
+    assert tiddler.created == ''
+    assert tiddler.modified == '200911261330'
+
+    tiddler_element = """
+    <div title="Foo">
+    <pre></pre>
+    </div>
+    """
+    div = _parse(tiddler_element)
+    tiddler = get_tiddler_from_div(div)
+    assert re.match('\d{12}', tiddler.modified)
+    assert tiddler.created == ''
+
 
 def test_omit_reserved_fields():
     tiddler_element = """
