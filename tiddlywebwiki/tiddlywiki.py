@@ -97,6 +97,8 @@ def get_tiddler_from_div(node):
                 not attr.startswith('server.')):
                 tiddler.fields[attr] = data
     tiddler.tags = _tag_string_to_list(node.get('tags', ''))
+    if not tiddler.created:
+        tiddler.created = tiddler.modified # modified defaults to current time
 
     return tiddler
 
