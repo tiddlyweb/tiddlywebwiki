@@ -6,7 +6,10 @@ creates a TiddlyWebWiki instance
 comfort wrapper for twanager --load tiddlywebwiki.config instance
 """
 
-import sys
+import os, sys
+# extend module search path for access to tiddlywebconfig.py
+cwd = os.getcwd()
+sys.path.insert(0, cwd)
 
 import tiddlywebwiki
 
