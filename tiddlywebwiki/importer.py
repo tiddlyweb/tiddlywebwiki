@@ -87,9 +87,13 @@ def handle_recipe(url, content):
     for rule in rules:
         target = rule.split(':', 1)[1]
         target = target.lstrip().rstrip()
-        if not '%' in target:
-            target = urllib.quote(target)
-        target_url = urljoin(url, target)
+        if not (target.startswith('http:') or 
+                target.startswith('https:')):
+            if not '%' in target:
+                target = urllib.quote(target)
+            target_url = urljoin(url, target)
+        else:
+            target_url = target
         urls.append(target_url)
     return urls
 
