@@ -8,6 +8,8 @@ from shutil import rmtree
 
 import tiddlywebwiki.instancer as instancer
 
+from tiddlyweb.config import config as system_config
+
 
 instance_dir = 'test_instance'
 config = {
@@ -16,7 +18,6 @@ config = {
 
 
 def setup_module(module):
-    instancer.init(config)
     try:
         rmtree(instance_dir)
     except:
@@ -30,7 +31,7 @@ class TestCreateInstance(object):
         rmtree(instance_dir)
 
     def test_create_default(self):
-        instancer.create_instance(instance_dir, config)
+        instancer.create_instance(instance_dir, config, system_config=system_config)
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
         assert 'config = {\n' in contents
@@ -42,7 +43,8 @@ class TestCreateInstance(object):
             'foo': 'lorem',
             'bar': 'ipsum'
         }
-        instancer.create_instance(instance_dir, config, defaults=defaults)
+        instancer.create_instance(instance_dir, config, defaults=defaults,
+                system_config=system_config)
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
         assert 'config = {\n' in contents
