@@ -36,6 +36,8 @@ from tiddlyweb.serializer import Serializer
 from tiddlyweb.util import std_error_message
 from tiddlywebwiki.tiddlywiki import handle_tiddler_div
 
+from tiddlywebplugins.utils import get_store
+
 
 def new_url2pathname(pathname):
     return pathname
@@ -43,26 +45,26 @@ def new_url2pathname(pathname):
 urllib2.url2pathname = new_url2pathname
 
 
-def import_list(bag, urls):
+def import_list(bag, urls, config):
     """Import a list of URIs into bag."""
     for url in urls:
-        import_one(bag, url)
+        import_one(bag, url, store=get_store(config))
 
 
-def import_one(bag, url):
+def import_one(bag, url, store):
     """Import one URI into bag."""
     std_error_message("handling %s" % url)
     if url.endswith('.recipe'):
-        import_via_recipe(bag, url)
+        import_via_recipe(bag, url, store)
     elif url.endswith('.js'):
-        import_plugin(bag, url)
+        import_plugin(bag, url, store)
     elif url.endswith('.tid'):
-        import_tid_tiddler(bag, url)
+        import_tid_tiddler(bag, url, store)
     else:
-        import_tiddler(bag, url)
+        import_tiddler(bag, url, store)
 
 
-def import_via_recipe(bag, url):
+def import_via_recipe(bag, url, store):
     """
     Import one recipe into bag, calling import_one as needed.
     Will recurse recipes as it finds them. NO LOOP DETECTION.
@@ -71,7 +73,7 @@ def import_via_recipe(bag, url):
     recipe = recipe.encode('utf-8')
     urls = handle_recipe(url, recipe)
     for url in urls:
-        import_one(bag, url)
+        import_one(bag, url, store)
 
 
 def handle_recipe(url, content):
@@ -116,7 +118,7 @@ def _get_url(url):
     return unicode(content, 'utf-8')
 
 
-def import_tid_tiddler(bag, url):
+def import_tid_tiddler(bag, url, store):
     """
     Import one tiddler, in the tid format, into bag.
     """
@@ -127,7 +129,7 @@ def import_tid_tiddler(bag, url):
         tiddler_title = unicode(tiddler_title, 'utf-8')
     tiddler = Tiddler(tiddler_title, bag)
     tiddler = process_tid_tiddler(tiddler, content)
-    _store().put(tiddler)
+    store.put(tiddler)
 
 
 def process_tid_tiddler(tiddler, content):
@@ -140,13 +142,13 @@ def process_tid_tiddler(tiddler, content):
     return tiddler
 
 
-def import_tiddler(bag, url):
+def import_tiddler(bag, url, store):
     """
     Import one tiddler into bag.
     """
     content = get_url(url)
     tiddler = process_tiddler(content)
-    handle_tiddler_div(bag, tiddler, _store())
+    handle_tiddler_div(bag, tiddler, store)
 
 
 def process_tiddler(content):
@@ -161,7 +163,7 @@ def process_tiddler(content):
     return tiddler
 
 
-def import_plugin(bag, url):
+def import_plugin(bag, url, store):
     """
     Import one plugin into bag, retrieving both the
     .js and .js.meta files.
@@ -192,13 +194,7 @@ def import_plugin(bag, url):
     serializer.object = tiddler
     serializer.from_string(tiddler_text)
 
-    _store().put(tiddler)
-
-
-def init(config_in):
-    """Register the config into the plugin."""
-    global config
-    config = config_in
+    store.put(tiddler)
 
 
 def _escape_brackets(content):
@@ -209,10 +205,6 @@ def _escape_brackets(content):
     end = content[close_pre:]
     middle = middle.replace('>', '&gt;').replace('<', '&lt;')
     return start + middle + end
-
-
-def _store():
-    return Store(config['server_store'][0], {'tiddlyweb.config': config})
 
 
 def _strip_extension(name, ext):

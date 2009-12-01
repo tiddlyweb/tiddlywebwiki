@@ -28,7 +28,7 @@ def twimport(args):
     urls = args[1:]
     if not bag or not urls:
         raise IndexError('missing args')
-    import_list(bag, urls)
+    import_list(bag, urls, config)
 
 
 @make_command()

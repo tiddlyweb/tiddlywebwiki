@@ -18,34 +18,33 @@ import os
 import random
 import time
 
+from tiddlyweb.config import config
 from tiddlyweb.util import sha
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.recipe import Recipe
-from tiddlyweb.store import Store
 from tiddlywebwiki.importer import import_list
+from tiddlywebplugins.utils import get_store
 
 
 CONFIG_NAME = 'tiddlywebconfig.py'
 
 
-def init(config_in):
-    """Initialize the plugin with config."""
-    global config
-    config = config_in
-
-
-def instance(directory):
+def instance(directory, system_config=None):
     """Create a TiddlyWebWiki instance in the given directory"""
     if not directory:
         raise ValueError('You must provide the name of a directory.')
     if os.path.exists(directory):
         raise IOError('Your chosen directory already exists. Choose a different name.')
 
+    if system_config == None:
+        system_config = {}
+    store = get_store(system_config)
+
     cfg = {
         'system_plugins': ['tiddlywebwiki', 'tiddlywebplugins.status', 'differ'],
         'twanager_plugins': ['tiddlywebwiki']
     }
-    create_instance(directory, config, defaults=cfg)
+    create_instance(directory, config, defaults=cfg, system_config=system_config)
 
     bag = Bag('system')
     bag.policy.write = ['R:ADMIN']
@@ -53,17 +52,17 @@ def instance(directory):
     bag.policy.delete = ['R:ADMIN']
     bag.policy.manage = ['R:ADMIN']
     bag.policy.accept = ['R:ADMIN']
-    _store_bag(bag)
+    store.put(bag)
 
     bag = Bag('common')
     bag.policy.delete = ['R:ADMIN']
     bag.policy.manage = ['R:ADMIN']
-    _store_bag(bag)
+    store.put(bag)
 
-    recipe = _make_recipe('default', ['system', 'common'])
+    recipe = _make_recipe('default', ['system', 'common'], store)
 
 
-def create_instance(directory, cfg, defaults=None):
+def create_instance(directory, cfg, defaults=None, system_config=None):
     """
     Create a TiddlyWeb instance directory.
 
@@ -72,18 +71,21 @@ def create_instance(directory, cfg, defaults=None):
     os.mkdir(directory)
     os.chdir(directory)
     _generate_config(defaults)
-    bag_names = [bag for bag, tiddlers in cfg['instance_tiddlers']]
+    store = get_store(system_config)
+    bag_names = [bag for bag, tiddlers in cfg.get('instance_tiddlers', [])]
     for bag in bag_names:
         bag = Bag(bag)
-        _store_bag(bag)
-    update_instance(config)
+        store.put(bag)
+    update_instance(system_config)
 
 
-def update_instance(cfg):
+def update_instance(cfg=None):
     """
     Update a TiddlyWeb instance by reimporting instance_tiddlers.
     """
-    [import_list(bag, tiddlers) for bag, tiddlers in cfg['instance_tiddlers']]
+    if cfg == None:
+        cfg = {}
+    [import_list(bag, tiddlers, cfg) for bag, tiddlers in cfg.get('instance_tiddlers', [])]
 
 
 def _generate_config(defaults=None):
@@ -128,16 +130,9 @@ def _generate_secret():
     return digest.hexdigest()
 
 
-def _make_recipe(recipe_name, bags):
+def _make_recipe(recipe_name, bags, store):
     """Make a recipe with recipe_name."""
     recipe = Recipe(recipe_name)
     recipe_list = [[bag, ''] for bag in bags]
     recipe.set_recipe(recipe_list)
-    store = Store(config['server_store'][0], environ={'tiddlyweb.config': config})
     store.put(recipe)
-
-
-def _store_bag(bag): # XXX: too simple to warrant a dedicated function!?
-    """Add a Bag instance to the store."""
-    store = Store(config['server_store'][0], environ={'tiddlyweb.config': config})
-    store.put(bag)

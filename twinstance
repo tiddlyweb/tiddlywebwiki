@@ -24,7 +24,7 @@ def main(args=None):
 		prompt = "Please enter instance name or path:\n"
 		instance_path = raw_input(prompt)
 	tiddlywebwiki.init(config)
-	tiddlywebwiki.instancer.instance(instance_path)
+	tiddlywebwiki.instancer.instance(instance_path, config)
 	return True
 
 

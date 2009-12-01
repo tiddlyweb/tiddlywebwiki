@@ -15,6 +15,6 @@ setup(name = 'tiddlywebwiki',
         py_modules = ['differ'],
         scripts = ['twinstance'],
         platforms = 'Posix; MacOS X; Windows',
-        install_requires = ['tiddlyweb>=0.9.78', 'tiddlywebplugins.wikklytextrender', 'tiddlywebplugins.status', 'BeautifulSoup', 'wikklytext'],
+        install_requires = ['tiddlyweb>=0.9.78', 'tiddlywebplugins.wikklytextrender', 'tiddlywebplugins.status', 'tiddlywebplugins.utils', 'BeautifulSoup', 'wikklytext'],
         include_package_data = True,
         )
