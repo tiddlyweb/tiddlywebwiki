@@ -1,4 +1,9 @@
-0.14 [TBD]
+0.15 [TBD]
+
+    * Added Atom serialization to default distribution
+    * Added explicit support for tiddlywebconfig.py to twinstance
+
+0.14 Tue Dec 01 10:22:08 GMT 2009
 
     * Improved date handling when importing TiddlyWiki documents
     * Fixed wiki serialization for empty bags
