@@ -1,7 +1,4 @@
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 from tiddlywebwiki import __version__ as VERSION
 
@@ -9,9 +6,9 @@ from tiddlywebwiki import __version__ as VERSION
 setup(name = 'tiddlywebwiki',
         version = VERSION,
         description = 'A TiddlyWeb plugin to provide a multi-user TiddlyWiki environment.',
-        author = 'Chris Dent',
-        author_email = 'cdent@peermore.com',
-        packages = ['tiddlywebwiki'],
+        author = 'FND',
+        author_email = 'FNDo@gmx.net',
+        packages = find_packages(exclude=['test']),
         py_modules = ['differ'],
         scripts = ['twinstance'],
         platforms = 'Posix; MacOS X; Windows',
