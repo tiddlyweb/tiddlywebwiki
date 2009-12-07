@@ -37,9 +37,9 @@ except ImportError:
 
 config = {
         'base_tiddlywiki': BASE_TIDDLYWIKI,
-        'instance_tiddlers': [
-            ('system', CLIENT_PLUGINS),
-            ],
+        'instance_tiddlers': {
+            'system': CLIENT_PLUGINS
+            },
         'extension_types': {
             'wiki': 'text/x-tiddlywiki',
             },

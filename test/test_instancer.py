@@ -13,7 +13,7 @@ from tiddlyweb.config import config as system_config
 
 instance_dir = 'test_instance'
 config = {
-    'instance_tiddlers': []
+    'instance_tiddlers': {}
 }
 
 

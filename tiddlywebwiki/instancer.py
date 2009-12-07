@@ -72,7 +72,8 @@ def create_instance(directory, cfg, defaults=None, system_config=None):
     os.chdir(directory)
     _generate_config(defaults)
     store = get_store(system_config)
-    bag_names = [bag for bag, tiddlers in cfg.get('instance_tiddlers', [])]
+    instance_tiddlers = cfg.get('instance_tiddlers', {})
+    bag_names = [bag for bag, tiddlers in instance_tiddlers.items()]
     for bag in bag_names:
         bag = Bag(bag)
         store.put(bag)
@@ -85,7 +86,9 @@ def update_instance(cfg=None):
     """
     if cfg == None:
         cfg = {}
-    [import_list(bag, tiddlers, cfg) for bag, tiddlers in cfg.get('instance_tiddlers', [])]
+    instance_tiddlers = cfg.get('instance_tiddlers', {})
+    [import_list(bag, tiddlers, cfg) for bag, tiddlers
+        in instance_tiddlers.items()]
 
 
 def _generate_config(defaults=None):

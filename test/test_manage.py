@@ -24,16 +24,12 @@ def setup_module(module):
     except:
         pass
 
-    # adjust relative paths to account for instancer's chdir operation
-    instance_tiddlers = []
-    for collection in tww.manage.config['instance_tiddlers']:
-        bag = collection[0]
-        uris = collection[1]
-        collection = (bag, [
+    # adjust relative paths to account for instancer's chdir operation -- XXX: obsolete?
+    instance_tiddlers = tww.manage.config['instance_tiddlers']
+    for bag, uris in instance_tiddlers.items():
+        instance_tiddlers[bag] = [
             uri.replace('file:./', 'file:../') for uri in uris
-            ])
-        instance_tiddlers.append(collection)
-    tww.manage.config['instance_tiddlers'] = instance_tiddlers
+            ]
 
 
 class TestInstance(object):
