@@ -18,7 +18,9 @@ def init(config_in):
 @make_command()
 def update(args):
     """Update all instance_tiddlers in the current instance."""
-    update_instance(config)
+    from tiddlywebplugins.instancer import Instance
+    instance = Instance('.', config)
+    instance.update_store()
 
 
 @make_command()
