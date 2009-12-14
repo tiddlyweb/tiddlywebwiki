@@ -20,4 +20,5 @@ setup(name = 'tiddlywebwiki',
             'BeautifulSoup',
             'wikklytext'],
         include_package_data = True,
+        zip_safe = False
         )

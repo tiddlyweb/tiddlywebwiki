@@ -1,4 +1,4 @@
-# Simple Makefile for some common tasks. This will get 
+# Simple Makefile for some common tasks. This will get
 # fleshed out with time to make things easier on developer
 # and tester types.
 .PHONY: test dist upload
@@ -52,7 +52,7 @@ dist: test
 
 upload: clean remotes test pypi peermore
 
-pypi: 
+pypi:
 	python setup.py sdist upload
 
 peermore:
