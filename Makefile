@@ -7,6 +7,7 @@ all:
 	@echo "No target"
 
 empty:
+	mkdir tiddlywebwiki/resources || true
 	wget http://tiddlywiki.com/empty.html -O tiddlywebwiki/resources/empty.html
 
 differ_plugin:
@@ -15,13 +16,14 @@ differ_plugin:
 twebplugins: differ_plugin
 
 remotes: empty twebplugins
-	./cacher tiddlywebwiki
+	./cacher
 
 clean:
 	rm -r dist || true
 	rm -r build || true
 	rm -r tiddlywebwiki.egg-info || true
 	rm *.bundle || true
+	rm -r tiddlywebwiki/resources || true
 
 test:
 	py.test -x test

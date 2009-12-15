@@ -7,7 +7,7 @@ TiddlyWebWiki instantiation
 import sys
 
 import mangler # XXX: DEBUG
-from tiddlywebplugins.instancer.spawner import spawn
+from tiddlywebplugins.instancer.util import spawn
 
 from tiddlywebwiki import instance as instance_module
 from tiddlywebwiki.config import config as init_config

@@ -6,7 +6,6 @@ from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.tiddlywiki import import_wiki_file
-from tiddlywebwiki.instancer import update_instance
 from tiddlywebwiki.importer import import_list
 
 
