@@ -4,7 +4,9 @@ Test twanager commands.
 
 import os
 
-import tiddlywebwiki as tww
+import tiddlywebwiki
+
+import tiddlywebwiki.instance as instance_module
 
 from shutil import rmtree
 
@@ -12,21 +14,27 @@ from tiddlyweb.config import config
 from tiddlyweb.store import Store
 from tiddlyweb.model.bag import Bag
 
+from tiddlywebplugins.instancer.util import spawn
+
 
 instance_dir = 'test_instance'
 
 
 def setup_module(module):
-    tww.init(config)
-    tww.manage.init(config)
+    tiddlywebwiki.init(config)
+    tiddlywebwiki.manage.init(config)
     try:
         rmtree(instance_dir)
     except:
         pass
 
-    # adjust relative paths to account for instancer's chdir operation -- XXX: obsolete?
-    instance_tiddlers = tww.manage.config['instance_tiddlers']
+    instance_tiddlers = tiddlywebwiki.manage.config['instance_tiddlers']
     for bag, uris in instance_tiddlers.items():
+        # ensure that HTTP URLs are not used -- XXX: this is a temporary workaround until we have proper tests
+        for uri in uris:
+            if uri.startswith('http'):
+                raise ValueError('must not use HTTP URLs; use cacher for local copies')
+        # adjust relative paths to account for instancer's chdir operation -- XXX: obsolete?
         instance_tiddlers[bag] = [
             uri.replace('file:./', 'file:../') for uri in uris
             ]
@@ -43,15 +51,15 @@ class TestInstance(object):
         rmtree(instance_dir)
 
     def test_create_tiddlywebwiki_instance(self):
-        tww.instancer.instance(instance_dir, system_config=config)
+        spawn(instance_dir, config, instance_module)
 
         contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
 
-        assert "'system_plugins': ['tiddlywebwiki', 'tiddlywebplugins.status', 'differ']" in contents
-        assert "'twanager_plugins': ['tiddlywebwiki']" in contents
+        assert '''"system_plugins": ['tiddlywebwiki', 'tiddlywebplugins.status', 'differ']''' in contents
+        assert '''"twanager_plugins": ['tiddlywebwiki']''' in contents
 
     def test_create_bag_policies(self):
-        tww.instancer.instance(instance_dir, config)
+        spawn(instance_dir, config, instance_module)
 
         bag = Bag('system')
         system_policy = self.store.get(bag).policy
