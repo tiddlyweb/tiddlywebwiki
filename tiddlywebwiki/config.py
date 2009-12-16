@@ -14,12 +14,7 @@ from tiddlywebplugins.instancer.util import get_tiddler_locations
 
 from tiddlywebwiki.instance import store_contents
 
-
-try:
-    package_name = __package__
-except NameError: # Python 2.5.x
-    package_name = __name__.rsplit('.', 1)[0]
-
+package_name = 'tiddlywebwiki'
 base_tiddlywiki = resource_filename(package_name, 'resources/empty.html')
 
 config = {
