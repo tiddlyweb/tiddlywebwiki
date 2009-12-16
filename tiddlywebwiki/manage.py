@@ -6,7 +6,6 @@ from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.tiddlywiki import import_wiki_file
-from tiddlywebwiki.instancer import update_instance
 from tiddlywebwiki.importer import import_list
 
 
@@ -18,7 +17,9 @@ def init(config_in):
 @make_command()
 def update(args):
     """Update all instance_tiddlers in the current instance."""
-    update_instance(config)
+    from tiddlywebplugins.instancer import Instance
+    instance = Instance('.', config)
+    instance.update_store()
 
 
 @make_command()

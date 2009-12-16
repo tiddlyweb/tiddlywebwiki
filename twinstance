@@ -1,33 +1,24 @@
 #!/usr/bin/env python
 
 """
-creates a TiddlyWebWiki instance
-
-comfort wrapper for twanager --load tiddlywebwiki.config instance
+TiddlyWebWiki instantiation
 """
 
-import os, sys
-# extend module search path for access to tiddlywebconfig.py
-cwd = os.getcwd()
-sys.path.insert(0, cwd)
+import sys
 
-import tiddlywebwiki
+from tiddlywebplugins.instancer.util import spawn
 
-from tiddlyweb.config import config
+from tiddlywebwiki import instance as instance_module
+from tiddlywebwiki.config import config as init_config
 
 
-def main(args=None):
-	args = [unicode(arg, "UTF-8") for arg in args]
-	try:
-		instance_path = args[1]
-	except IndexError:
-		prompt = "Please enter instance name or path:\n"
-		instance_path = raw_input(prompt)
-	tiddlywebwiki.init(config)
-	tiddlywebwiki.instancer.instance(instance_path, config)
-	return True
+def main(args):
+    args = [unicode(arg, 'UTF-8') for arg in args]
+    instance_path = args[1]
+    spawn(instance_path, init_config, instance_module)
+    return True
 
 
-if __name__ == "__main__":
-	status = not main(sys.argv)
-	sys.exit(status)
+if __name__ == '__main__':
+    status = not main(sys.argv)
+    sys.exit(status)
