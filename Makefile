@@ -24,6 +24,7 @@ clean:
 	rm -r tiddlywebwiki.egg-info || true
 	rm *.bundle || true
 	rm -r tiddlywebwiki/resources || true
+	rm -r store tiddlyweb.log || true
 
 test:
 	py.test -x test
