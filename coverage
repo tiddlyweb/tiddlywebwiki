@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# a simple little script to generate test coverage data
+# adjust as you require
+# requires figleaf from:
+#   http://darcs.idyll.org/~t/projects/figleaf/doc/
+
+find tiddlywebwiki -name "*.py" > interesting_files.txt
+rm -rf html
+rm .figleaf
+figleaf /usr/local/bin/py.test test
+figleaf2html -f interesting_files.txt

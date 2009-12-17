@@ -26,7 +26,7 @@ clean:
 	rm -r tiddlywebwiki/resources || true
 	rm -r store tiddlyweb.log || true
 
-test:
+test: remotes
 	py.test -x test
 
 dist: test
