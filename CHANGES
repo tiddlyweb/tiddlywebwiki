@@ -1,3 +1,7 @@
+0.20 Thu Dec 17 15:40:21 GMT 2009
+
+    * Internal refactoring to make use of tiddlywebplugins.instancer
+
 0.15 Mon Dec  7 13:15:28 GMT 2009
 
     * Added Atom serialization to default distribution
