@@ -1,5 +1,5 @@
 instance_config = {
-    'system_plugins': ['tiddlywebwiki', 'tiddlywebplugins.status', 'differ'], # XXX: status and differ should be invoked by tiddlywebwiki
+    'system_plugins': ['tiddlywebwiki'],
     'twanager_plugins': ['tiddlywebwiki']
 }
 
