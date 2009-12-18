@@ -6,16 +6,11 @@
 all:
 	@echo "No target"
 
-empty:
+tiddlywiki:
 	mkdir tiddlywebwiki/resources || true
 	wget http://tiddlywiki.com/empty.html -O tiddlywebwiki/resources/empty.html
 
-differ_plugin:
-	wget http://github.com/FND/tiddlyweb-plugins/raw/master/differ.py -O differ.py
-
-twebplugins: differ_plugin
-
-remotes: empty twebplugins
+remotes: tiddlywiki
 	./cacher
 
 clean:
