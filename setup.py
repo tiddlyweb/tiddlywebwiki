@@ -15,11 +15,11 @@ setup(
     install_requires = [
         'tiddlyweb>=0.9.83',
         'tiddlywebplugins.wikklytextrender',
-        'tiddlywebplugins.status',
+        'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
         'tiddlywebplugins.utils',
-        'tiddlywebplugins.instancer',
+        'tiddlywebplugins.instancer>=0.5.5',
         'BeautifulSoup',
         'wikklytext'],
     include_package_data = True,
