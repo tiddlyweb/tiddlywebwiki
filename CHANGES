@@ -1,7 +1,3 @@
-0.20.1 Fri Dec 18 08:12:25 GMT 2009
-
-    * Pace tiddlyweb api changes.
-
 0.20 Thu Dec 17 15:40:21 GMT 2009
 
     * Internal refactoring to make use of tiddlywebplugins.instancer
