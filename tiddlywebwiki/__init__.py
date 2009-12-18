@@ -12,7 +12,7 @@ def init(config):
     import tiddlywebplugins.status
     import tiddlywebplugins.atom
     import differ
-    from tiddlyweb.config import merge_config
+    from tiddlyweb.util import merge_config
     from tiddlywebwiki.config import config as twwconfig
 
     merge_config(config, twwconfig)
