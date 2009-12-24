@@ -8,7 +8,7 @@ from tiddlyweb.config import config
 
 
 # TODO: use module_setup!?
-BASE_TIDDLYWIKI = 'tiddlywebwiki/empty.html'
+BASE_TIDDLYWIKI = 'tiddlywebwiki/resources/empty.html'
 config['base_tiddlywiki'] = BASE_TIDDLYWIKI
 environ = { 'tiddlyweb.config': config }
 
