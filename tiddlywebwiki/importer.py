@@ -34,7 +34,7 @@ from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
 from tiddlyweb.util import std_error_message
-from tiddlywebwiki.tiddlywiki import handle_tiddler_div
+from tiddlywebwiki.tiddlywiki import handle_tiddler_div, import_wiki
 
 from tiddlywebplugins.utils import get_store
 
@@ -60,8 +60,18 @@ def import_one(bag, url, store):
         import_plugin(bag, url, store)
     elif url.endswith('.tid'):
         import_tid_tiddler(bag, url, store)
+    elif url.endswith('.wiki'):
+        import_via_wiki(bag, url, store)
     else:
         import_tiddler(bag, url, store)
+
+
+def import_via_wiki(bag, url, store):
+    """
+    Import one wiki into bag, delegating to import_wiki code.
+    """
+    wiki = get_url(url)
+    import_wiki(store, wiki, bagname=bag)
 
 
 def import_via_recipe(bag, url, store):
