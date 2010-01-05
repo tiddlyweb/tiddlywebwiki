@@ -31,7 +31,6 @@ import html5lib
 from html5lib import treebuilders
 
 from tiddlyweb.model.tiddler import Tiddler
-from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
 from tiddlyweb.util import std_error_message
 from tiddlywebwiki.tiddlywiki import handle_tiddler_div, import_wiki
@@ -171,7 +170,8 @@ def process_tiddler(content):
     a tiddler.
     """
     content = _escape_brackets(content)
-    parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+    parser = html5lib.HTMLParser(
+            tree=treebuilders.getTreeBuilder('beautifulsoup'))
     soup = parser.parse(content)
     tiddler = soup.find('div')
     return tiddler
@@ -194,11 +194,13 @@ def import_plugin(bag, url, store):
         meta_content = 'title: %s\ntags: systemConfig\n' % default_title
 
     try:
-        title = [line for line in meta_content.split('\n') if line.startswith('title:')][0]
+        title = [line for line in meta_content.split('\n')
+                if line.startswith('title:')][0]
         title = title.split(':', 1)[1].lstrip().rstrip()
     except IndexError:
         title = default_title
-    tiddler_meta = '\n'.join([line for line in meta_content.split('\n') if not line.startswith('title:')])
+    tiddler_meta = '\n'.join([line for line in meta_content.split('\n')
+        if not line.startswith('title:')])
 
     tiddler_meta.rstrip()
     tiddler_text = '%s\n\n%s' % (tiddler_meta, plugin_content)

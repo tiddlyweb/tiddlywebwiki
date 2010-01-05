@@ -1,12 +1,14 @@
-import sys
-import os
+"""
+twanager commands made available by tiddlywebwiki.
+"""
 
-from tiddlyweb.model.bag import Bag
 from tiddlyweb.store import Store
 from tiddlyweb.manage import make_command, usage
 
 from tiddlywebwiki.tiddlywiki import import_wiki_file
 from tiddlywebwiki.importer import import_list
+
+config = None
 
 
 def init(config_in):
