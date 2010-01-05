@@ -2,11 +2,6 @@
 Serialize into a fullblown tiddlywiki wiki.
 """
 
-import logging
-import urllib
-
-from base64 import b64encode
-
 import html5lib
 from html5lib import treebuilders
 
@@ -14,8 +9,8 @@ from tiddlyweb.serializer import NoSerializationError
 from tiddlyweb.serializations import SerializationInterface
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
-from tiddlyweb.web.util import server_base_url, tiddler_url,\
-        encode_name, html_encode, escape_attribute_value
+from tiddlyweb.web.util import (server_base_url, tiddler_url,
+        encode_name, html_encode, escape_attribute_value)
 from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
 
 
@@ -44,7 +39,7 @@ class Serialization(SerializationInterface):
         stored in the bag.
         """
         try:
-            from tiddlyweb.tiddlywiki import import_wiki
+            from tiddlywebwiki.tiddlywiki import import_wiki
             return import_wiki(self.environ['tiddlyweb.store'], input_string,
                     bag.name)
         except ImportError:
@@ -271,14 +266,7 @@ the content of this wiki</a>.
     def _binary_tiddler(self, tiddler):
         """
         Make the content for a tiddler that has non-wikitext content.
-
-        Base64 encode if the stuff is small enough for browsers to handle.
         """
-        #b64text = b64encode(tiddler.text)
-        #if len(b64text) < 32 * 1024:
-        #    return 'data:%s;base64,%s' % (tiddler.type, b64text)
-        #else:
-        # XXX don't b64encode for now
         if tiddler.type.startswith('image'):
             return ('\n<html><img src="%s" /></html>\n' %
                     tiddler_url(self.environ, tiddler))
