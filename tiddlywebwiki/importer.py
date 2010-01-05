@@ -99,7 +99,7 @@ def handle_recipe(url, content):
     for rule in rules:
         target = rule.split(':', 1)[1]
         target = target.lstrip().rstrip()
-        if not (target.startswith('http:') or 
+        if not (target.startswith('http:') or
                 target.startswith('https:')):
             if not '%' in target:
                 target = urllib.quote(target)
@@ -214,8 +214,8 @@ def import_plugin(bag, url, store):
 def _escape_brackets(content):
     open_pre = content.index('<pre>')
     close_pre = content.rindex('</pre>')
-    start = content[0:open_pre+5]
-    middle = content[open_pre+5:close_pre]
+    start = content[0:open_pre + 5]
+    middle = content[open_pre + 5:close_pre]
     end = content[close_pre:]
     middle = middle.replace('>', '&gt;').replace('<', '&lt;')
     return start + middle + end

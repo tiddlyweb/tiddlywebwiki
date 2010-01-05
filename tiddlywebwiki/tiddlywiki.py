@@ -25,7 +25,8 @@ def import_wiki(store, wikitext, bagname='wiki'):
     Import the wiki provided as a string and import all the tiddlers
     into a bag.
     """
-    parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+    parser = html5lib.HTMLParser(
+            tree=treebuilders.getTreeBuilder('beautifulsoup'))
     soup = parser.parse(wikitext)
     store_area = soup.find('div', id='storeArea')
     divs = store_area.findAll('div')
@@ -60,7 +61,7 @@ def get_tiddler_from_div(node):
         # there are no contents in the tiddler
         tiddler.text = ''
 
-    for attr, value in node.attrs:
+    for attr, _ in node.attrs:
         data = node.get(attr, None)
         if data and attr != 'tags':
             if attr in (['modifier', 'created', 'modified']):
@@ -86,4 +87,5 @@ def _html_decode(text):
     """
     Decode HTML entities used in TiddlyWiki content into the 'real' things.
     """
-    return text.replace('&gt;', '>').replace('&lt;', '<').replace('&amp;', '&').replace('&quot;', '"')
+    return text.replace('&gt;', '>').replace('&lt;', '<').replace(
+            '&amp;', '&').replace('&quot;', '"')
