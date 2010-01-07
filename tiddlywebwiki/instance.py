@@ -26,8 +26,6 @@ store_structure = {
         'common': {
             'desc': 'shared content',
             'policy': {
-                'read': [],
-                'delete': ['R:ADMIN'],
                 'manage': ['R:ADMIN'],
                 'owner': 'administrator' # XXX: meaningless?
             }
