@@ -29,7 +29,7 @@ def test_strip_extension():
 
     doc = """raises TypeError for None extension"""
     try:
-       _strip_extension('foo.bar', None)
-       assert False, doc
+        _strip_extension('foo.bar', None)
+        assert False, doc
     except TypeError:
         assert True, doc

@@ -9,6 +9,7 @@ import tiddlywebwiki.manage
 from tiddlyweb.model.bag import Bag
 from tiddlyweb import control
 
+
 def setup_module(module):
     tiddlywebwiki.manage.init(config)
 

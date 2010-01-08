@@ -56,12 +56,15 @@ recipe_list_string = [
         [u'bagthree', u'select=tag:tagone;select=tag:tagthree']
          ]
 
+
 def _teststore():
     return Store(config['server_store'][0], environ={'tiddlyweb.config': config})
+
 
 def reset_textstore():
     if os.path.exists('store'):
         shutil.rmtree('store')
+
 
 def muchdata(store):
     for bag_numeral in range(30):
@@ -98,6 +101,7 @@ def create_tiddler(store, bag, numeral):
     if tiddler.title == 'tiddler8':
         tiddler.modified = '200805230303'
     store.put(tiddler)
+
 
 def create_bag(store, numeral):
     bag = Bag('bag%s' % numeral)

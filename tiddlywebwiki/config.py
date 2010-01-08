@@ -13,8 +13,10 @@ from tiddlywebplugins.instancer.util import get_tiddler_locations
 
 from tiddlywebwiki.instance import store_contents
 
+
 PACKAGE_NAME = 'tiddlywebwiki'
 BASE_TIDDLYWIKI = resource_filename(PACKAGE_NAME, 'resources/empty.html')
+
 
 config = {
     'instance_tiddlers': get_tiddler_locations(store_contents, PACKAGE_NAME),

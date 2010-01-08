@@ -52,6 +52,7 @@ def test_import_simple_tiddler_div():
     assert tiddler.title == 'GettingStarted'
     assert 'as shown above (after' in tiddler.text
 
+
 def test_import_empty_tiddler_div():
     div = _parse(SAMPLE_EMPTY_TIDDLER)
     assert div['title'] == 'GettingStopped'
@@ -62,6 +63,7 @@ def test_import_empty_tiddler_div():
     tiddler = store.get(tiddler)
     assert tiddler.title == 'GettingStopped'
     assert tiddler.text == ''
+
 
 def test_handle_timestamps():
     tiddler_element = """
@@ -123,10 +125,11 @@ def test_omit_reserved_fields():
     tiddler = store.get(tiddler)
     assert tiddler.title == 'Hello World'
     assert tiddler.fields['custom'] == 'baz'
-    assert tiddler.fields.has_key('title') == False
-    assert tiddler.fields.has_key('server.host') == False
-    assert tiddler.fields.has_key('server.workspace') == False
-    assert tiddler.fields.has_key('changecount') == False
+    assert 'title' not in tiddler.fields
+    assert 'server.host' not in tiddler.fields
+    assert 'server.workspace' not in tiddler.fields
+    assert 'changecount' not in tiddler.fields
+
 
 def test_importer_preprocessing():
     div = process_tiddler(SAMPLE_BASIC_TIDDLER)

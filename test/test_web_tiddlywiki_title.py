@@ -1,4 +1,3 @@
-
 import os
 
 from wsgi_intercept import httplib2_intercept
@@ -8,6 +7,7 @@ import httplib2
 from tiddlyweb.model.tiddler import Tiddler
 
 from fixtures import muchdata, reset_textstore, _teststore
+
 
 def setup_module(module):
     from tiddlyweb.web import serve
@@ -23,6 +23,7 @@ def setup_module(module):
     module.store = _teststore()
     muchdata(module.store)
 
+
 def test_get_wiki():
     http = httplib2.Http()
     response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
@@ -32,6 +33,7 @@ def test_get_wiki():
     assert response['content-type'] == 'text/html; charset=UTF-8'
     assert '\n<title>\nTiddlyWeb Loading\n</title>\n' in content
     assert 'i am tiddler 8' in content
+
 
 def test_get_wiki_with_title():
     tiddler = Tiddler('SiteTitle')
