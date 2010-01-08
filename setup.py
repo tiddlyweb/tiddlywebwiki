@@ -13,7 +13,7 @@ setup(
     scripts = ['twinstance'],
     platforms = 'Posix; MacOS X; Windows',
     install_requires = [
-        'tiddlyweb>=0.9.83',
+        'tiddlyweb>=0.9.87',
         'tiddlywebplugins.wikklytextrender',
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
