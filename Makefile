@@ -27,7 +27,7 @@ test: remotes
 dist: test
 	python setup.py sdist
 
-upload: clean remotes test pypi peermore
+release: clean remotes test pypi peermore
 
 pypi:
 	python setup.py sdist upload
