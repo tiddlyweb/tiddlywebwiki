@@ -17,11 +17,11 @@ from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
 SPLITTER = '</div>\n<!--POST-STOREAREA-->\n'
 
 MARKUPS = {
-        'MarkupPreHead': 'PRE-HEAD',
-        'MarkupPostHead': 'POST-HEAD',
-        'MarkupPreBody': 'PRE-BODY',
-        'MarkupPostBody': 'POST-SCRIPT',
-        }
+    'MarkupPreHead': 'PRE-HEAD',
+    'MarkupPostHead': 'POST-HEAD',
+    'MarkupPreBody': 'PRE-BODY',
+    'MarkupPostBody': 'POST-SCRIPT',
+    }
 
 
 class Serialization(SerializationInterface):
@@ -186,7 +186,7 @@ the content of this wiki</a>.
         Read base_tiddlywiki from its location.
         """
         base_tiddlywiki = open(
-                self.environ['tiddlyweb.config']['base_tiddlywiki'])
+            self.environ['tiddlyweb.config']['base_tiddlywiki'])
         wiki = base_tiddlywiki.read()
         base_tiddlywiki.close()
         wiki = unicode(wiki, 'utf-8')
