@@ -28,7 +28,7 @@ def setup_module(module):
     except:
         pass
 
-    instance_tiddlers = tiddlywebwiki.manage.config['instance_tiddlers']
+    instance_tiddlers = config['instance_tiddlers']
     for bag, uris in instance_tiddlers.items():
         # ensure that HTTP URLs are not used -- XXX: this is a temporary workaround until we have proper tests
         for uri in uris:
@@ -78,7 +78,7 @@ class TestInstance(object):
         assert common_policy.create == []
         assert common_policy.manage == ['R:ADMIN']
         assert common_policy.accept == []
-        assert common_policy.delete == ['R:ADMIN']
+        assert common_policy.delete == []
 
 
 def _get_file_contents(filepath):

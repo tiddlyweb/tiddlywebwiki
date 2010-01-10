@@ -2,12 +2,14 @@
 Test some of the wiki importing routines.
 """
 
-from tiddlywebwiki.tiddlywiki import import_wiki_file
-from tiddlyweb.config import config
 import tiddlywebwiki.manage
 
 from tiddlyweb.model.bag import Bag
+from tiddlyweb.store import Store
 from tiddlyweb import control
+from tiddlyweb.config import config
+
+from tiddlywebwiki.tiddlywiki import import_wiki_file
 
 
 def setup_module(module):
@@ -15,7 +17,7 @@ def setup_module(module):
 
 
 def test_import_wiki_file():
-    store = tiddlywebwiki.manage._store()
+    store = _store()
     bag = Bag('wiki')
     store.put(bag)
 
@@ -26,3 +28,9 @@ def test_import_wiki_file():
 
     assert len(tiddlers) == 191
     assert 'Osmosoft' in [tiddler.title for tiddler in tiddlers]
+
+
+def _store():
+    """Get our Store from config."""
+    return Store(config['server_store'][0],
+        environ={'tiddlyweb.config': config})
