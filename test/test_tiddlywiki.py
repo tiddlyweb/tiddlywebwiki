@@ -36,7 +36,7 @@ SAMPLE_EMPTY_TIDDLER = """
 
 
 def setup_module(module):
-    module.store = Store(config['server_store'][0], environ={'tiddlyweb.config': config})
+    module.store = Store(config['server_store'][0], config['server_store'][1], environ={'tiddlyweb.config': config})
     bag = Bag(BAGNAME)
     module.store.put(bag)
 

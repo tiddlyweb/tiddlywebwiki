@@ -44,7 +44,7 @@ class TestInstance(object):
 
     def setup_method(self, module):
         env = { 'tiddlyweb.config': config }
-        self.store = Store(config['server_store'][0], environ=env)
+        self.store = Store(config['server_store'][0], config['server_store'][1], environ=env)
 
     def teardown_method(self, module):
         os.chdir('..')
