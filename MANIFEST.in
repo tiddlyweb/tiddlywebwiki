@@ -1,3 +1,3 @@
-include README CHANGES
+include Makefile README CHANGES
 recursive-include tiddlywebwiki/resources *
 recursive-include test *
