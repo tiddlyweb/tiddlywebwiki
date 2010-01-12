@@ -13,6 +13,9 @@ from tiddlywebplugins.instancer.util import get_tiddler_locations
 
 from tiddlywebwiki.instance import store_contents
 
+from tiddlywebplugins.console.instance import (store_contents as
+    console_store_contents)
+
 
 PACKAGE_NAME = 'tiddlywebwiki'
 BASE_TIDDLYWIKI = resource_filename(PACKAGE_NAME, 'resources/empty.html')
@@ -34,3 +37,11 @@ config = {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
         }
     }
+
+console_instance_tiddlers = get_tiddler_locations(store_contents,
+    'tiddlywebplugins.console')
+for bag, uris in console_instance_tiddlers.items():
+    try:
+        config['instance_tiddlers'][bag].extend(uris)
+    except KeyError:
+        config['instance_tiddlers'][bag] = uris
