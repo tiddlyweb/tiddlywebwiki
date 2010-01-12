@@ -38,7 +38,7 @@ config = {
         }
     }
 
-console_instance_tiddlers = get_tiddler_locations(store_contents,
+console_instance_tiddlers = get_tiddler_locations(console_store_contents,
     'tiddlywebplugins.console')
 for bag, uris in console_instance_tiddlers.items():
     try:
