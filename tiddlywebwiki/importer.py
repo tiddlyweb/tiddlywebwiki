@@ -59,10 +59,10 @@ def import_one(bag, url, store):
         import_plugin(bag, url, store)
     elif url.endswith('.tid'):
         import_tid_tiddler(bag, url, store)
-    elif url.endswith('.wiki'):
-        import_via_wiki(bag, url, store)
-    else:
+    elif url.endswith('.tiddler'):
         import_tiddler(bag, url, store)
+    else:
+        import_via_wiki(bag, url, store)
 
 
 def import_via_wiki(bag, url, store):
