@@ -20,7 +20,7 @@ def init(config):
 
     @make_command()
     def twimport(args):
-        """Import one or more plugins, tiddlers or recipes in Cook format: <bag> <URI>"""
+        """Import one or more plugins, tiddlers or recipes in Cook format or a wiki: <bag> <URI>"""
         bag = args[0]
         urls = args[1:]
         if not bag or not urls:
@@ -29,7 +29,8 @@ def init(config):
 
     @make_command()
     def imwiki(args):
-        """Import tiddlers from a Tiddlywiki document into a bag: <bag> <filename>"""
+        """Import tiddlers from a Tiddlywiki document into a bag, deprecated in favor of twimport: <bag> <filename>"""
+        # XXX to be removed soon, deprecated.
         store = _store()
 
         try:
