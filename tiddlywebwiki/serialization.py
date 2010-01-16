@@ -39,9 +39,10 @@ class Serialization(SerializationInterface):
         stored in the bag.
         """
         try:
-            from tiddlywebwiki.tiddlywiki import import_wiki
-            return import_wiki(self.environ['tiddlyweb.store'], input_string,
-                    bag.name)
+            from tiddlywebwiki.twimport import wiki_string_to_tiddlers
+            tiddlers = wiki_string_to_tiddlers(input_string)
+            bag.add_tiddlers(tiddlers)
+            return bag
         except ImportError:
             raise NoSerializationError
 
