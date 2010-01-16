@@ -18,6 +18,7 @@ setup(
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
+        'tiddlywebplugins.twimport',
         'tiddlywebplugins.utils',
         'tiddlywebplugins.instancer>=0.5.5',
         'BeautifulSoup',
