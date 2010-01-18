@@ -2,11 +2,13 @@
 TiddlyWebWiki-specific twanager commands
 """
 
-from tiddlyweb.store import Store
-from tiddlyweb.manage import make_command, usage
+from tiddlyweb.manage import make_command
 
 
 def init(config):
+    """
+    Initialize the twanager commands.
+    """
 
     @make_command()
     def update(args):
