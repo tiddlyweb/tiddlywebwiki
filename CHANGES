@@ -1,12 +1,13 @@
 0.22 Mon Jan 18 11:06:33 GMT 2010
 
-    * Use tiddlywebplugins.twimport for twimport functionality.
+    * Internal refactoring to take advantage of tiddlywebplugins.twimport
+      The imwiki command has been subsumed by the twimport command.
 
 0.21 Fri Jan 15 10:15:49 GMT 2010
 
     * Changed common bag's default policy allow deleting tiddlers
     * Enabled import of TiddlyWiki documents for twanager twimport
-      This replaces the imwiki command.
+      This deprecates the imwiki command.
     * Updated TiddlyWebAdaptor to improve ETag handling
 
 0.20 Thu Dec 17 15:40:21 GMT 2009
