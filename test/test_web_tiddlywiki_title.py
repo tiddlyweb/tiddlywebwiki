@@ -75,3 +75,15 @@ def test_get_wiki_with_title():
     assert response['status'] == '200'
     assert '<title>\nMooCow\n</title>' in content
     assert 'MooCow' in content
+
+    tiddler = Tiddler('MarkupPreHead', 'bag1')
+    tiddler.text = 'UNIQUE9578'
+    store.put(tiddler)
+
+    http = httplib2.Http()
+    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+            method='GET')
+
+    assert response['status'] == '200'
+    assert '<!--PRE-HEAD-START-->\nUNIQUE9578\n<!--PRE-HEAD-END-->' in content
+
