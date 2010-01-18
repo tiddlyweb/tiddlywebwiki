@@ -1,3 +1,7 @@
+0.22 Mon Jan 18 11:06:33 GMT 2010
+
+    * Use tiddlywebplugins.twimport for twimport functionality.
+
 0.21 Fri Jan 15 10:15:49 GMT 2010
 
     * Changed common bag's default policy allow deleting tiddlers
