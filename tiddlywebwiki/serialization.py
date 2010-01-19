@@ -157,10 +157,19 @@ the content of this wiki</a>.
         text.
         """
         output = wikitext_to_wikklyhtml('', '', unicode(title), self.environ)
-        parser = html5lib.HTMLParser(
-                tree=treebuilders.getTreeBuilder('beautifulsoup'))
-        soup = parser.parse(output)
-        title = soup.findAll(text=True)
+        parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder('dom'))
+        dom = parser.parse(output)
+
+        def _get_text(nodelist):
+            text = ''
+            for node in nodelist:
+                if node.nodeType == node.TEXT_NODE:
+                   text = text + node.data
+                if node.childNodes:
+                   text = text + _get_text(node.childNodes)
+            return text
+
+        title = _get_text(dom.childNodes)
         return ''.join(title).rstrip().lstrip()
 
     def _determine_title(self, title, candidate_title, candidate_subtitle):

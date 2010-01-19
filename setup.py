@@ -22,7 +22,6 @@ setup(
         'tiddlywebplugins.utils',
         'tiddlywebplugins.instancer>=0.5.5',
         'html5lib',
-        'BeautifulSoup',
         'wikklytext'],
     include_package_data = True,
     zip_safe = False

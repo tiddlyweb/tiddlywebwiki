@@ -38,5 +38,4 @@ def test_serialize_binary():
     assert '&lt;html&gt;&lt;img src="http://0.0.0.0:8080/bags/holder/tiddlers/peermore.png" /&gt;&lt;/html&gt;' in output
 
     # but we want just an html anchor link to the zero
-    print output
     assert '&lt;html&gt;&lt;a href="http://0.0.0.0:8080/bags/holder/tiddlers/zero.bin"&gt;zero.bin&lt;/a&gt;&lt;' in output
