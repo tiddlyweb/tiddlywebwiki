@@ -1,3 +1,9 @@
+0.23 [TBD]
+
+    * Added tiddlywebplugins.console
+      This provides an exploration interface at /console.
+    * Removed BeautifulSoup dependency
+
 0.22 Mon Jan 18 11:06:33 GMT 2010
 
     * Internal refactoring to take advantage of tiddlywebplugins.twimport
