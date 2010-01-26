@@ -20,10 +20,8 @@ setup(
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
-        'tiddlywebplugins.utils',
-        'tiddlywebplugins.instancer>=0.7.2',
-        'html5lib',
         'tiddlywebplugins.console',
+        'html5lib',
         'wikklytext'],
     include_package_data = True,
     zip_safe = False

@@ -1,6 +1,5 @@
 """
-The definition of the structure and contents of a 
-default TiddlyWikiWiki instance.
+structure and contents of a default TiddlyWebWiki instance
 """
 
 from tiddlywebplugins.instancer.util import get_tiddler_locations
@@ -12,11 +11,11 @@ instance_config = {
     'twanager_plugins': ['tiddlywebwiki']
 }
 
-store_contents = get_tiddler_locations(store_contents, 'tiddlywebplugins.console')
-
+store_contents = get_tiddler_locations(store_contents,
+    'tiddlywebplugins.console')
 store_contents['system'] = [
-        'http://svn.tiddlywiki.org/Trunk/verticals/TiddlyWebWiki/index.recipe',
-    ]
+    'http://svn.tiddlywiki.org/Trunk/verticals/TiddlyWebWiki/index.recipe',
+]
 
 store_structure = {
     'bags': {
@@ -29,14 +28,14 @@ store_structure = {
                 'delete': ['R:ADMIN'],
                 'manage': ['R:ADMIN'],
                 'accept': ['R:ADMIN'],
-                'owner': 'administrator' # XXX: meaningless?
+                'owner': 'administrator'
             }
         },
         'common': {
             'desc': 'shared content',
             'policy': {
                 'manage': ['R:ADMIN'],
-                'owner': 'administrator' # XXX: meaningless?
+                'owner': 'administrator'
             }
         }
     },
@@ -52,12 +51,12 @@ store_structure = {
                 'write': ['R:ADMIN'],
                 'manage': ['R:ADMIN'],
                 'delete': ['R:ADMIN'],
-                'owner': 'administrator' # XXX: meaningless?
+                'owner': 'administrator'
             }
         }
     },
     'users': {
-        'administrator': { # XXX: DEBUG; for demo purposes only
+        'administrator': { # XXX: obsolete?
             'note': 'system administrator',
             'roles': ['ADMIN']
         }

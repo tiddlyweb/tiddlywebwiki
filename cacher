@@ -6,8 +6,6 @@ creates local cache of instance tiddlers to be included in distribution
 
 import sys
 
-import mangler
-
 from tiddlywebplugins.instancer.util import cache_tiddlers
 
 
