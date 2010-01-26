@@ -24,7 +24,7 @@ clean:
 test: remotes
 	py.test -x test
 
-dist: test
+dist:
 	python setup.py sdist
 
 release: clean remotes test pypi peermore

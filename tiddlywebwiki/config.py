@@ -37,3 +37,16 @@ config = {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
         }
     }
+<<<<<<< HEAD:tiddlywebwiki/config.py
+=======
+
+# print 'console store contents ', console_store_contents
+# console_instance_tiddlers = get_tiddler_locations(console_store_contents,
+#     'tiddlywebplugins.console')
+# print 'console instance tiddlers', console_instance_tiddlers
+# for bag, uris in console_instance_tiddlers.items():
+#     try:
+#         config['instance_tiddlers'][bag].extend(uris)
+#     except KeyError:
+#         config['instance_tiddlers'][bag] = uris
+>>>>>>> tiddlyrecon_integration:tiddlywebwiki/config.py
