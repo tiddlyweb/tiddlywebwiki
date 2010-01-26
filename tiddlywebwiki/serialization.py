@@ -39,9 +39,10 @@ class Serialization(SerializationInterface):
         stored in the bag.
         """
         try:
-            from tiddlywebwiki.tiddlywiki import import_wiki
-            return import_wiki(self.environ['tiddlyweb.store'], input_string,
-                    bag.name)
+            from tiddlywebplugins.twimport import wiki_string_to_tiddlers
+            tiddlers = wiki_string_to_tiddlers(input_string)
+            bag.add_tiddlers(tiddlers)
+            return bag
         except ImportError:
             raise NoSerializationError
 
@@ -60,6 +61,12 @@ class Serialization(SerializationInterface):
         return self._put_tiddlers_in_tiddlywiki([tiddler], title=tiddler.title)
 
     def _no_script(self, url):
+        """
+        Inject noscript content into the created wiki to provide
+        a link to indexable content.
+
+        Often overridden.
+        """
         if url:
             return """
 <div id="javascriptWarning">
@@ -92,8 +99,34 @@ the content of this wiki</a>.
             default_tiddler.text = '[[' + tiddlers[0].title + ']]'
             tiddlers = [tiddlers[0], default_tiddler]
 
-        # figure out the content to be pushed into the
-        # wiki and calculate the title
+        lines, title, found_markup_tiddlers = self._create_tiddlers(title, tiddlers)
+
+        # load the wiki
+        wiki = self._get_wiki()
+        # put the title in place
+        wiki = self._inject_title(wiki, title)
+
+        wiki = self._replace_chunk(wiki, '\n<noscript>\n', '\n</noscript>\n',
+                self._no_script(browsable_url))
+
+        # replace the markup bits
+        if len(found_markup_tiddlers):
+            for tiddler_title in found_markup_tiddlers:
+                start = '\n<!--%s-START-->\n' % MARKUPS[tiddler_title]
+                finish = '\n<!--%s-END-->\n' % MARKUPS[tiddler_title]
+                wiki = self._replace_chunk(wiki, start, finish,
+                        found_markup_tiddlers[tiddler_title])
+
+        # split the wiki into the before store and after store
+        # sections, put our content in the middle
+        tiddlystart, tiddlyfinish = wiki.split(SPLITTER, 2)
+        return tiddlystart + lines + SPLITTER + tiddlyfinish
+
+    def _create_tiddlers(self, title, tiddlers):
+        """
+        Figure out the content to be pushed into the
+        wiki and calculate the title.
+        """
         lines = ''
         candidate_title = None
         candidate_subtitle = None
@@ -115,26 +148,7 @@ the content of this wiki</a>.
                 candidate_subtitle)
         title = self._plain_textify_string(title)
 
-        # load the wiki
-        wiki = self._get_wiki()
-        # put the title in place
-        wiki = self._inject_title(wiki, title)
-
-        wiki = self._replace_chunk(wiki, '\n<noscript>\n', '\n</noscript>\n',
-                self._no_script(browsable_url))
-
-        # replace the markup bits
-        if len(found_markup_tiddlers):
-            for title in found_markup_tiddlers:
-                start = '\n<!--%s-START-->\n' % MARKUPS[title]
-                finish = '\n<!--%s-END-->\n' % MARKUPS[title]
-                wiki = self._replace_chunk(wiki, start, finish,
-                        found_markup_tiddlers[title])
-
-        # split the wiki into the before store and after store
-        # sections, put our content in the middle
-        tiddlystart, tiddlyfinish = wiki.split(SPLITTER, 2)
-        return tiddlystart + lines + SPLITTER + tiddlyfinish
+        return lines, title, found_markup_tiddlers
 
     def _plain_textify_string(self, title):
         """
@@ -143,10 +157,19 @@ the content of this wiki</a>.
         text.
         """
         output = wikitext_to_wikklyhtml('', '', unicode(title), self.environ)
-        parser = html5lib.HTMLParser(
-                tree=treebuilders.getTreeBuilder('beautifulsoup'))
-        soup = parser.parse(output)
-        title = soup.findAll(text=True)
+        parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder('dom'))
+        dom = parser.parse(output)
+
+        def _get_text(nodelist):
+            text = ''
+            for node in nodelist:
+                if node.nodeType == node.TEXT_NODE:
+                   text = text + node.data
+                if node.childNodes:
+                   text = text + _get_text(node.childNodes)
+            return text
+
+        title = _get_text(dom.childNodes)
         return ''.join(title).rstrip().lstrip()
 
     def _determine_title(self, title, candidate_title, candidate_subtitle):
@@ -239,6 +262,9 @@ the content of this wiki</a>.
         """
 
         def _read_bag_perms(environ, tiddler):
+            """
+            Get the permissions of the bag this tiddler is in.
+            """
             perms = []
             if 'tiddlyweb.usersign' in environ:
                 store = tiddler.store

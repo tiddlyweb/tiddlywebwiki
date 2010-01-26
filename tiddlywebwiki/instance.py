@@ -1,3 +1,7 @@
+"""
+The definition of the structure and contents of a 
+default TiddlyWikiWiki instance.
+"""
 instance_config = {
     'system_plugins': ['tiddlywebwiki'],
     'twanager_plugins': ['tiddlywebwiki']
