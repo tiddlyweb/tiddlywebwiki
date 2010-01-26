@@ -18,12 +18,6 @@ store_contents['system'] = [
         'http://svn.tiddlywiki.org/Trunk/verticals/TiddlyWebWiki/index.recipe',
     ]
 
-for bag, uris in console_store_contents.items():
-    try:
-        store_contents[bag].extend(uris)
-    except KeyError:
-        store_contents[bag] = uris
-
 store_structure = {
     'bags': {
         'system': {
