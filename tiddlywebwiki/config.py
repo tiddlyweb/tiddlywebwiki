@@ -38,10 +38,12 @@ config = {
         }
     }
 
-console_instance_tiddlers = get_tiddler_locations(console_store_contents,
-    'tiddlywebplugins.console')
-for bag, uris in console_instance_tiddlers.items():
-    try:
-        config['instance_tiddlers'][bag].extend(uris)
-    except KeyError:
-        config['instance_tiddlers'][bag] = uris
+# print 'console store contents ', console_store_contents
+# console_instance_tiddlers = get_tiddler_locations(console_store_contents,
+#     'tiddlywebplugins.console')
+# print 'console instance tiddlers', console_instance_tiddlers
+# for bag, uris in console_instance_tiddlers.items():
+#     try:
+#         config['instance_tiddlers'][bag].extend(uris)
+#     except KeyError:
+#         config['instance_tiddlers'][bag] = uris

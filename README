@@ -11,17 +11,8 @@ and default bag policies (there is no default user for the ADMIN role
 used in those policies).
 
 
-Requires:
-
-  wikklytext
-    Python package for parsing TiddlyWiki markup.
-    Available via easy_install.
-  BeautifulSoup
-    Parser for HTML, used to read TiddlyWiki documents.
-    Available via easy_install.
-
-If tiddlywebwiki is installed as a Python package via easy_install,
-these dependencies are included automatically.
+If tiddlywebwiki is installed as a Python package via pip or
+easy_install, all dependencies are included automatically.
 
 If you are installing from source run:
 
