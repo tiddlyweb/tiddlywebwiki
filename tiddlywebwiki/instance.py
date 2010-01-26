@@ -2,6 +2,11 @@
 The definition of the structure and contents of a 
 default TiddlyWikiWiki instance.
 """
+
+from tiddlywebplugins.console.instance import (store_contents as
+    console_store_contents)
+
+
 instance_config = {
     'system_plugins': ['tiddlywebwiki'],
     'twanager_plugins': ['tiddlywebwiki']
@@ -12,6 +17,12 @@ store_contents = {
         'http://svn.tiddlywiki.org/Trunk/verticals/TiddlyWebWiki/index.recipe'
     ]
 }
+
+for bag, uris in console_store_contents.items():
+    try:
+        store_contents[bag].extend(uris)
+    except KeyError:
+        store_contents[bag] = uris
 
 store_structure = {
     'bags': {
