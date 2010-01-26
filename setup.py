@@ -14,6 +14,8 @@ setup(
     platforms = 'Posix; MacOS X; Windows',
     install_requires = [
         'tiddlyweb>=0.9.96',
+        'tiddlywebplugins.instancer>=0.5.5',
+        'tiddlywebplugins.utils',
         'tiddlywebplugins.wikklytextrender',
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
@@ -21,6 +23,7 @@ setup(
         'tiddlywebplugins.utils',
         'tiddlywebplugins.instancer>=0.7.2',
         'html5lib',
+        'tiddlywebplugins.console',
         'wikklytext'],
     include_package_data = True,
     zip_safe = False
