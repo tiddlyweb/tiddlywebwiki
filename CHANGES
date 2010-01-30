@@ -1,6 +1,7 @@
 0.24 [TBD]
 
     * Added default policy for console bag
+    * Improved cross-browser compatibility of tiddlywebplugins.console
 
 0.23 Tue Jan 26 20:36:46 GMT 2010
 
@@ -44,7 +45,7 @@
 
     * Ignoring reserved fields when importing a TiddlyWiki document
     * Improved dependency management
-      This consitutes a slight break in backwards comaptibility; existing
+      This constitutes a slight break in backwards compatibility; existing
       instance configurations (tiddlywebconfig.py) should be updated to use
       "tiddlywebplugins.status" instead of "status" in system_plugins
 
