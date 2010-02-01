@@ -7,14 +7,17 @@ from TiddlyWeb. This can be an absolute path or relative to the startup
 directory of the server.
 """
 
-from pkg_resources import resource_filename
-
 from tiddlywebplugins.instancer.util import get_tiddler_locations
 
 from tiddlywebwiki.instance import store_contents
 
 from tiddlywebplugins.console.instance import (store_contents as
     console_store_contents)
+
+try:
+    from pkg_resources import resource_filename
+except ImportError:
+    from tiddlywebplugins.utils import resource_filename
 
 
 PACKAGE_NAME = 'tiddlywebwiki'
