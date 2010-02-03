@@ -6,6 +6,7 @@ TiddlyWebWiki instantiation
 
 import sys
 
+from tiddlyweb.util import std_error_message
 from tiddlywebplugins.instancer.util import spawn
 
 from tiddlywebwiki import instance as instance_module
@@ -14,7 +15,11 @@ from tiddlywebwiki.config import config as init_config
 
 def main(args):
     args = [unicode(arg, 'UTF-8') for arg in args]
-    instance_path = args[1]
+    try:
+        instance_path = args[1]
+    except IndexError:
+        std_error_message('ERROR: missing instance directory parameter')
+        return False
     spawn(instance_path, init_config, instance_module)
     return True
 
