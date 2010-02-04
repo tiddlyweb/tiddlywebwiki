@@ -11,9 +11,6 @@ from tiddlywebplugins.instancer.util import get_tiddler_locations
 
 from tiddlywebwiki.instance import store_contents
 
-from tiddlywebplugins.console.instance import (store_contents as
-    console_store_contents)
-
 try:
     from pkg_resources import resource_filename
 except ImportError:
