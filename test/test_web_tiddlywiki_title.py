@@ -1,8 +1,7 @@
-import os
-
-from wsgi_intercept import httplib2_intercept
 import wsgi_intercept
 import httplib2
+
+from wsgi_intercept import httplib2_intercept
 
 from tiddlyweb.model.tiddler import Tiddler
 
@@ -41,7 +40,6 @@ def test_get_wiki_with_title():
     tiddler.text = u'Wow //cow// moo'
 
     store.put(tiddler)
-
 
     http = httplib2.Http()
     response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',

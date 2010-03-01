@@ -37,9 +37,6 @@ peermore:
 	scp -P 8022 CHANGES cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist/CHANGES.tiddlywebwiki
 
 makebundle: clean dist
-	# work around errors in pip when bundling a tarball by instead
-	# bundling the thing at pypy
-	#pip bundle tiddlywebwiki-`date +%F`.bundle dist/tiddlywebwiki*.tar.gz
 	pip bundle tiddlywebwiki-`python setup.py --version`.bundle tiddlywebwiki
 
 uploadbundle:

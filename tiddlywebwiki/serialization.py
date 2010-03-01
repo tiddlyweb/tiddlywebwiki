@@ -164,9 +164,9 @@ the content of this wiki</a>.
             text = ''
             for node in nodelist:
                 if node.nodeType == node.TEXT_NODE:
-                   text = text + node.data
+                    text = text + node.data
                 if node.childNodes:
-                   text = text + _get_text(node.childNodes)
+                    text = text + _get_text(node.childNodes)
             return text
 
         title = _get_text(dom.childNodes)
