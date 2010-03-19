@@ -1,3 +1,10 @@
+0.25 [TBD]
+
+    * Upgraded TiddyWiki version to release 2.6
+    * Improved synchronization handling
+    * Improved error handling in instantiation script
+    * Improved Windows support
+
 0.24 Sat Jan 30 19:35:38 GMT 2010
 
     * Added default policy for console bag
