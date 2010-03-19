@@ -1,9 +1,12 @@
-0.25 [TBD]
+0.25 Fri Mar 19 17:54:00 GMT 2010
 
     * Upgraded TiddyWiki version to release 2.6
     * Improved synchronization handling
     * Improved error handling in instantiation script
     * Improved Windows support
+    * Disabled wikification in diff view
+      This is a temporary workaround until a safer solution has been
+      implemented.
 
 0.24 Sat Jan 30 19:35:38 GMT 2010
 
