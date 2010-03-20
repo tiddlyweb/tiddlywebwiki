@@ -1,7 +1,4 @@
-# Simple Makefile for some common tasks. This will get
-# fleshed out with time to make things easier on developer
-# and tester types.
-.PHONY: test dist upload
+.PHONY: all tiddlywiki remotes clean test dist release pypi peermore makebundle uploadbundle bundle
 
 all:
 	@echo "No target"
