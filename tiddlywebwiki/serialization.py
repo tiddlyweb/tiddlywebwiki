@@ -51,7 +51,10 @@ class Serialization(SerializationInterface):
         Take the tiddlers from the given bag and inject
         them into a TiddlyWiki.
         """
-        return self._put_tiddlers_in_tiddlywiki(bag.list_tiddlers())
+        try:
+            return self._put_tiddlers_in_tiddlywiki(bag.list_tiddlers())
+        except AttributeError:
+            return self._put_tiddlers_in_tiddlywiki(bag)
 
     def tiddler_as(self, tiddler):
         """
@@ -85,21 +88,8 @@ the content of this wiki</a>.
         head sections of the file.
         """
 
-        browsable_url = None
-        if tiddlers:
-            if tiddlers[0].recipe:
-                workspace = '/recipes/%s/tiddlers' % encode_name(
-                        tiddlers[0].recipe)
-            else:
-                workspace = '/bags/%s/tiddlers' % encode_name(tiddlers[0].bag)
-            browsable_url = server_base_url(self.environ) + workspace
-
-        if len(tiddlers) == 1:
-            default_tiddler = Tiddler('DefaultTiddlers')
-            default_tiddler.text = '[[' + tiddlers[0].title + ']]'
-            tiddlers = [tiddlers[0], default_tiddler]
-
-        lines, title, found_markup_tiddlers = self._create_tiddlers(title, tiddlers)
+        (browsable_url, lines, title,
+                found_markup_tiddlers) = self._create_tiddlers(title, tiddlers)
 
         # load the wiki
         wiki = self._get_wiki()
@@ -132,6 +122,7 @@ the content of this wiki</a>.
         candidate_subtitle = None
         markup_tiddlers = MARKUPS.keys()
         found_markup_tiddlers = {}
+        tiddler_count = 0
         for tiddler in tiddlers:
             lines += self._tiddler_as_div(tiddler)
             tiddler_title = tiddler.title
@@ -141,6 +132,19 @@ the content of this wiki</a>.
                 candidate_subtitle = tiddler.text
             if tiddler_title in markup_tiddlers:
                 found_markup_tiddlers[tiddler_title] = tiddler.text
+            tiddler_count += 1
+
+        if tiddler_count == 1:
+            default_tiddler = Tiddler('DefaultTiddlers')
+            default_tiddler.text = '[[' + tiddler.title + ']]'
+            lines += self._tiddler_as_div(default_tiddler)
+
+        browsable_url = None
+        if tiddler.recipe:
+            workspace = '/recipes/%s/tiddlers' % encode_name(tiddler.recipe)
+        else:
+            workspace = '/bags/%s/tiddlers' % encode_name(tiddler.bag)
+        browsable_url = server_base_url(self.environ) + workspace
 
         # Turn the title into HTML and then turn it into
         # plain text so it is of a form satisfactory to <title>
@@ -148,7 +152,7 @@ the content of this wiki</a>.
                 candidate_subtitle)
         title = self._plain_textify_string(title)
 
-        return lines, title, found_markup_tiddlers
+        return browsable_url, lines, title, found_markup_tiddlers
 
     def _plain_textify_string(self, title):
         """
