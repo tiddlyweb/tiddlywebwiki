@@ -118,6 +118,7 @@ the content of this wiki</a>.
         wiki and calculate the title.
         """
         lines = ''
+        window_title = None
         candidate_title = None
         candidate_subtitle = None
         markup_tiddlers = MARKUPS.keys()
@@ -126,6 +127,8 @@ the content of this wiki</a>.
         for tiddler in tiddlers:
             lines += self._tiddler_as_div(tiddler)
             tiddler_title = tiddler.title
+            if tiddler_title == 'WindowTitle':
+                window_title = tiddler.text
             if tiddler_title == 'SiteTitle':
                 candidate_title = tiddler.text
             if tiddler_title == 'SiteSubtitle':
@@ -148,7 +151,7 @@ the content of this wiki</a>.
 
         # Turn the title into HTML and then turn it into
         # plain text so it is of a form satisfactory to <title>
-        title = self._determine_title(title, candidate_title,
+        title = self._determine_title(title, window_title, candidate_title,
                 candidate_subtitle)
         title = self._plain_textify_string(title)
 
@@ -176,11 +179,13 @@ the content of this wiki</a>.
         title = _get_text(dom.childNodes)
         return ''.join(title).rstrip().lstrip()
 
-    def _determine_title(self, title, candidate_title, candidate_subtitle):
+    def _determine_title(self, title, window_title, candidate_title, candidate_subtitle):
         """
         Create a title for the wiki file from various
         optional inputs.
         """
+        if window_title:
+            return window_title
         if candidate_title and candidate_subtitle:
             return '%s - %s' % (candidate_title, candidate_subtitle)
         if candidate_title:

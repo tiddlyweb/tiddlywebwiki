@@ -85,3 +85,15 @@ def test_get_wiki_with_title():
     assert response['status'] == '200'
     assert '<!--PRE-HEAD-START-->\nUNIQUE9578\n<!--PRE-HEAD-END-->' in content
 
+    tiddler = Tiddler('WindowTitle')
+    tiddler.bag = u'bag1'
+    tiddler.text = u'A window title'
+
+    store.put(tiddler)
+
+    http = httplib2.Http()
+    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+            method='GET')
+    assert response['status'] == '200'
+    # WindowTitle overrides the SiteTitle created up the stack
+    assert '<title>\nA window title\n</title>' in content
