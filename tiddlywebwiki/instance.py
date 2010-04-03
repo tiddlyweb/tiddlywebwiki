@@ -7,6 +7,7 @@ from tiddlywebplugins.instancer.util import get_tiddler_locations
 from tiddlywebplugins.console.instance import (store_contents,
     store_structure as console_store_structure)
 
+
 instance_config = {
     'system_plugins': ['tiddlywebwiki'],
     'twanager_plugins': ['tiddlywebwiki']

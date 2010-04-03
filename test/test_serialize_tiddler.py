@@ -36,6 +36,7 @@ def test_html_attribute_escape_with_recipe():
     assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
     assert r'''you may still <a href="http://0.0.0.0:8080/recipes/baz%20%22bar%22%20foo/tiddlers">browse''' in string
 
+
 def test_html_attribute_escape_with_bag():
     tiddler = Tiddler('escape "double" quotes in tiddler field values')
     tiddler.bag = 'foo "bar" baz'
@@ -56,3 +57,20 @@ def test_html_attribute_escape_with_bag():
     assert r'''tags="foo [[xxx &quot;yyy&quot; zzz]]"''' in string
     assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
     assert r'''you may still <a href="http://0.0.0.0:8080/bags/foo%20%22bar%22%20baz/tiddlers">browse''' in string
+
+
+def test_content_type():
+    tiddler = Tiddler('Foo', 'Alpha')
+    serializer = Serializer('tiddlywebwiki.serialization', environ)
+    serializer.object = tiddler
+    string = serializer.to_string()
+
+    assert r'''server.content-type=""''' in string
+
+    tiddler = Tiddler('Bar', 'Bravo')
+    tiddler.type = "text/x-custom"
+    serializer = Serializer('tiddlywebwiki.serialization', environ)
+    serializer.object = tiddler
+    string = serializer.to_string()
+
+    assert r'''server.content-type="text/x-custom"''' in string

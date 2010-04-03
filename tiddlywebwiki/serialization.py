@@ -246,6 +246,7 @@ the content of this wiki</a>.
                 'modifier="%s" creator="%s" server.workspace="bags/%s" '
                 'server.type="tiddlyweb" server.host="%s" '
                 'server.recipe="%s" server.bag="%s" server.permissions="%s" '
+                'server.content-type="%s" '
                 'modified="%s" created="%s" tags="%s" %s>\n'
                 '<pre>%s</pre>\n</div>\n' %
                     (escape_attribute_value(tiddler.title),
@@ -258,6 +259,7 @@ the content of this wiki</a>.
                         escape_attribute_value(recipe_name),
                         escape_attribute_value(tiddler.bag),
                         self._tiddler_permissions(tiddler),
+                        tiddler.type or '',
                         tiddler.modified,
                         tiddler.created,
                         escape_attribute_value(self.tags_as(tiddler.tags)),
