@@ -1,3 +1,9 @@
+0.26 [TBD]
+
+    * Added support for WindowTitle shadow tiddler
+    * Improved handling of binary tiddlers
+    * Performance enhancements
+
 0.25 Fri Mar 19 17:54:00 GMT 2010
 
     * Upgraded TiddyWiki version to release 2.6
