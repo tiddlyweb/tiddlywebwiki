@@ -6,6 +6,8 @@ from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.serializer import Serializer
 from tiddlyweb.config import config
 
+from tiddlywebwiki.serialization import SPLITTER
+
 
 # TODO: use module_setup!?
 BASE_TIDDLYWIKI = 'tiddlywebwiki/resources/empty.html'
@@ -64,13 +66,38 @@ def test_content_type():
     serializer = Serializer('tiddlywebwiki.serialization', environ)
     serializer.object = tiddler
     string = serializer.to_string()
+    tiddler = _extract_tiddler('Foo', string)
 
-    assert r'''server.content-type=""''' in string
+    assert r'''server.content-type=""''' in tiddler
 
     tiddler = Tiddler('Bar', 'Bravo')
-    tiddler.type = "text/x-custom"
+    tiddler.type = 'text/x-custom'
     serializer = Serializer('tiddlywebwiki.serialization', environ)
     serializer.object = tiddler
     string = serializer.to_string()
+    tiddler = _extract_tiddler('Bar', string)
 
-    assert r'''server.content-type="text/x-custom"''' in string
+    assert r'''server.content-type="text/x-custom"''' in tiddler
+
+    tiddler = Tiddler('Baz', 'Charlie')
+    tiddler.type = 'None' # possible weirdness in the text serialization and some stores
+    serializer = Serializer('tiddlywebwiki.serialization', environ)
+    serializer.object = tiddler
+    string = serializer.to_string()
+    tiddler = _extract_tiddler('Baz', string)
+
+    assert r'''server.content-type=""''' in tiddler
+
+
+def _extract_tiddler(title, wiki):
+    """
+    helper function to extract a tiddler DIV from a TiddlyWiki string
+
+    tiddlywebplugins.twimport:wiki_string_to_tiddlers does this better
+    """
+    tiddlystart, tiddlyfinish = wiki.split(SPLITTER, 2)
+    tiddlystart, store = tiddlystart.split('<div id="storeArea">', 2)
+    splitter = '<div title='
+    for tiddler in store.split(splitter):
+        if tiddler.startswith('"%s"' % title):
+            return splitter + tiddler

@@ -239,8 +239,10 @@ the content of this wiki</a>.
 
         if tiddler.type and tiddler.type != 'None':
             tiddler_output = self._binary_tiddler(tiddler)
+            content_type = tiddler.type
         else:
             tiddler_output = tiddler.text
+            content_type = ''
 
         return ('<div title="%s" server.title="%s" server.page.revision="%s" '
                 'modifier="%s" creator="%s" server.workspace="bags/%s" '
@@ -259,7 +261,7 @@ the content of this wiki</a>.
                         escape_attribute_value(recipe_name),
                         escape_attribute_value(tiddler.bag),
                         self._tiddler_permissions(tiddler),
-                        tiddler.type or '',
+                        content_type,
                         tiddler.modified,
                         tiddler.created,
                         escape_attribute_value(self.tags_as(tiddler.tags)),
