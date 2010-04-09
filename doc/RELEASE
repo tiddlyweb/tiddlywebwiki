@@ -1,6 +1,6 @@
 pre-release checklist
 
-* update version number (in both setup.py and tiddlywebwiki package)
+* update version number (tiddlywebwiki/__init__.py)
 * update changelog
 ** review commit logs for both this repository and the client-side
    components at svn.tiddlywiki.org

@@ -1,3 +1,9 @@
+0.27 [TBD]
+
+    * Improved (and restored) wikification in diff view
+    * Improved handling of binary tiddlers in serialization
+      Tiddlers with content-type text/* are not encoded anymore.
+
 0.26 Tue Apr  6 15:11:00 UTC 2010
 
     * Added support for WindowTitle shadow tiddler
