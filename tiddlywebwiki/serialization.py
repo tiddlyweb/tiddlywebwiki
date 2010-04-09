@@ -237,12 +237,16 @@ the content of this wiki</a>.
             host = ''
         host = '%s/' % host
 
-        if tiddler.type and tiddler.type != 'None':
+        text_type = tiddler.type and tiddler.type.startswith('text/')
+        if tiddler.type and tiddler.type != 'None' and not text_type:
             tiddler_output = self._binary_tiddler(tiddler)
             content_type = tiddler.type
         else:
             tiddler_output = tiddler.text
-            content_type = ''
+            if text_type:
+                content_type = tiddler.type
+            else:
+                content_type = ''
 
         return ('<div title="%s" server.title="%s" server.page.revision="%s" '
                 'modifier="%s" creator="%s" server.workspace="bags/%s" '

@@ -9,7 +9,6 @@ from tiddlyweb.config import config
 from tiddlywebwiki.serialization import SPLITTER
 
 
-# TODO: use module_setup!?
 BASE_TIDDLYWIKI = 'tiddlywebwiki/resources/empty.html'
 config['base_tiddlywiki'] = BASE_TIDDLYWIKI
 environ = { 'tiddlyweb.config': config }
@@ -70,23 +69,38 @@ def test_content_type():
 
     assert r'''server.content-type=""''' in tiddler
 
+    tiddler = Tiddler('_Foo', 'Alpha')
+    tiddler.type = 'None' # possible weirdness in the text serialization and some stores
+    serializer = Serializer('tiddlywebwiki.serialization', environ)
+    serializer.object = tiddler
+    string = serializer.to_string()
+    tiddler = _extract_tiddler('_Foo', string)
+
+    assert r'''server.content-type=""''' in tiddler
+
     tiddler = Tiddler('Bar', 'Bravo')
     tiddler.type = 'text/x-custom'
+    tiddler.text = 'lorem ipsum dolor sit amet'
     serializer = Serializer('tiddlywebwiki.serialization', environ)
     serializer.object = tiddler
     string = serializer.to_string()
     tiddler = _extract_tiddler('Bar', string)
 
     assert r'''server.content-type="text/x-custom"''' in tiddler
+    assert r'''<pre>lorem ipsum dolor sit amet</pre>''' in tiddler
 
     tiddler = Tiddler('Baz', 'Charlie')
-    tiddler.type = 'None' # possible weirdness in the text serialization and some stores
+    tiddler.type = 'application/x-custom'
+    tiddler.text = 'lorem ipsum dolor sit amet'
     serializer = Serializer('tiddlywebwiki.serialization', environ)
     serializer.object = tiddler
     string = serializer.to_string()
     tiddler = _extract_tiddler('Baz', string)
+    tiddler_text = tiddler.split("<pre>", 1)[1].split("</pre>", 1)[0].strip()
 
-    assert r'''server.content-type=""''' in tiddler
+    assert r'''server.content-type="application/x-custom"''' in tiddler
+    assert tiddler_text.startswith(r'''&lt;html&gt;&lt;a href=''')
+    assert tiddler_text.endswith(r'''&gt;Baz&lt;/a&gt;&lt;/html&gt;''')
 
 
 def _extract_tiddler(title, wiki):
