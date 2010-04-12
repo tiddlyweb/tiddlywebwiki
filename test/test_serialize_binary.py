@@ -32,7 +32,7 @@ def test_serialize_binary():
 
 
     serializer = Serializer('tiddlywebwiki.serialization', {'tiddlyweb.config': config})
-    output = serializer.list_tiddlers(tmpbag)
+    output = ''.join(serializer.list_tiddlers(tmpbag))
 
     # we are expecting an img link to the image tiddler
     assert '&lt;html&gt;&lt;img src="http://0.0.0.0:8080/bags/holder/tiddlers/peermore.png" /&gt;&lt;/html&gt;' in output

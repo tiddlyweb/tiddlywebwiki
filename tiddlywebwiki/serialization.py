@@ -61,7 +61,8 @@ class Serialization(SerializationInterface):
         Take the single tiddler provided and inject it into
         a TiddlyWiki.
         """
-        return self._put_tiddlers_in_tiddlywiki([tiddler], title=tiddler.title)
+        return ''.join(self._put_tiddlers_in_tiddlywiki(
+            [tiddler], title=tiddler.title))
 
     def _no_script(self, url):
         """
@@ -110,14 +111,19 @@ the content of this wiki</a>.
         # split the wiki into the before store and after store
         # sections, put our content in the middle
         tiddlystart, tiddlyfinish = wiki.split(SPLITTER, 2)
-        return tiddlystart + lines + SPLITTER + tiddlyfinish
+        yield tiddlystart
+        for line in lines:
+            yield line
+        yield SPLITTER
+        yield tiddlyfinish
+        return 
 
     def _create_tiddlers(self, title, tiddlers):
         """
         Figure out the content to be pushed into the
         wiki and calculate the title.
         """
-        lines = ''
+        lines = []
         window_title = None
         candidate_title = None
         candidate_subtitle = None
@@ -125,7 +131,7 @@ the content of this wiki</a>.
         found_markup_tiddlers = {}
         tiddler_count = 0
         for tiddler in tiddlers:
-            lines += self._tiddler_as_div(tiddler)
+            lines.append(self._tiddler_as_div(tiddler))
             tiddler_title = tiddler.title
             if tiddler_title == 'WindowTitle':
                 window_title = tiddler.text
@@ -140,7 +146,7 @@ the content of this wiki</a>.
         if tiddler_count == 1:
             default_tiddler = Tiddler('DefaultTiddlers')
             default_tiddler.text = '[[' + tiddler.title + ']]'
-            lines += self._tiddler_as_div(default_tiddler)
+            lines.append(self._tiddler_as_div(default_tiddler))
 
         browsable_url = None
         if tiddler.recipe:
