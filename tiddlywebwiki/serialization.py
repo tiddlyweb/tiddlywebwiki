@@ -149,11 +149,14 @@ the content of this wiki</a>.
             lines.append(self._tiddler_as_div(default_tiddler))
 
         browsable_url = None
-        if tiddler.recipe:
-            workspace = '/recipes/%s/tiddlers' % encode_name(tiddler.recipe)
-        else:
-            workspace = '/bags/%s/tiddlers' % encode_name(tiddler.bag)
-        browsable_url = server_base_url(self.environ) + workspace
+        try:
+            if tiddler.recipe:
+                workspace = '/recipes/%s/tiddlers' % encode_name(tiddler.recipe)
+            else:
+                workspace = '/bags/%s/tiddlers' % encode_name(tiddler.bag)
+            browsable_url = server_base_url(self.environ) + workspace
+        except UnboundLocalError:
+            pass # tiddler is not set because tiddlers was empty
 
         # Turn the title into HTML and then turn it into
         # plain text so it is of a form satisfactory to <title>
