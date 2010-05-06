@@ -1,3 +1,12 @@
+0.28 [TBD]
+
+    * Moved default position of revisions command
+      This is now available via the tiddler toolbar's "more" section.
+    * Added notification on cross-domain restrictions in ImportTiddlers
+    * Improved serialization performance
+    * Added getUserInfo client function
+    * Improved adaptor fidelity
+
 0.27 Fri Apr  9 13:09:18 UTC 2010
 
     * Improved (and restored) wikification in diff view

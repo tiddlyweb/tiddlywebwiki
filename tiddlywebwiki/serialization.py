@@ -116,7 +116,7 @@ the content of this wiki</a>.
             yield line
         yield SPLITTER
         yield tiddlyfinish
-        return 
+        return
 
     def _create_tiddlers(self, title, tiddlers):
         """
