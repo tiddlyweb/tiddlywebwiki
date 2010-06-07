@@ -101,12 +101,11 @@ the content of this wiki</a>.
                 self._no_script(browsable_url))
 
         # replace the markup bits
-        if len(found_markup_tiddlers):
-            for tiddler_title in found_markup_tiddlers:
-                start = '\n<!--%s-START-->\n' % MARKUPS[tiddler_title]
-                finish = '\n<!--%s-END-->\n' % MARKUPS[tiddler_title]
-                wiki = self._replace_chunk(wiki, start, finish,
-                        found_markup_tiddlers[tiddler_title])
+        for tiddler_title in found_markup_tiddlers:
+            start = '\n<!--%s-START-->\n' % MARKUPS[tiddler_title]
+            finish = '\n<!--%s-END-->\n' % MARKUPS[tiddler_title]
+            wiki = self._replace_chunk(wiki, start, finish,
+                    found_markup_tiddlers[tiddler_title])
 
         # split the wiki into the before store and after store
         # sections, put our content in the middle
