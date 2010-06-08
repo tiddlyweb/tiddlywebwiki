@@ -1,3 +1,8 @@
+0.30 [TBD]
+
+    * Disabled username editing to avoid confusion
+    * Improved RevisionsCommandPlugin
+
 0.29 Fri May 14 15:04:40 UTC 2010
 
     * Minor client-side enhancements
