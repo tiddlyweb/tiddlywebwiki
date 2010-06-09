@@ -1,3 +1,7 @@
+0.31 [TBD]
+
+    * Fixed minor bugs in TiddlyWebConfig
+
 0.30 Tue Jun  8 09:54:01 UTC 2010
 
     * Disabled username editing to avoid confusion
