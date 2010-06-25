@@ -1,4 +1,4 @@
-0.32 [TBD]
+0.32 Fri Jun 25 12:33:46 UTC 2010
 
     * Enhanced getStatus handling in TiddlyWebConfig
     * Improved TiddlyWiki API conformance in ServerSideSavingPlugin
