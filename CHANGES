@@ -1,3 +1,9 @@
+0.34 [TBD]
+
+    * Improved client-side support for binary tiddlers
+      tiddlers with a content type starting with "text/" can now be
+      edited directly in TiddlyWiki
+
 0.33 Fri Jul  2 13:32:29 UTC 2010
 
     * Fixed TiddlyWebConfig issue regarding offline/unplugged mode
