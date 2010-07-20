@@ -30,12 +30,11 @@ def test_serialize_binary():
     tmpbag = Bag('tmpbag', tmpbag=True)
     tmpbag.add_tiddlers(get_tiddlers_from_bag(bag))
 
-
     serializer = Serializer('tiddlywebwiki.serialization', {'tiddlyweb.config': config})
     output = ''.join(serializer.list_tiddlers(tmpbag))
 
     # we are expecting an img link to the image tiddler
-    assert '&lt;html&gt;&lt;img src="http://0.0.0.0:8080/bags/holder/tiddlers/peermore.png" /&gt;&lt;/html&gt;' in output
+    assert 'server.content-type="image/png"' in output
 
     # but we want just an html anchor link to the zero
-    assert '&lt;html&gt;&lt;a href="http://0.0.0.0:8080/bags/holder/tiddlers/zero.bin"&gt;zero.bin&lt;/a&gt;&lt;' in output
+    assert 'server.content-type="application/octet-stream"' in output

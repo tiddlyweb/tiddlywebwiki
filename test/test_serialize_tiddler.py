@@ -99,8 +99,6 @@ def test_content_type():
     tiddler_text = tiddler.split("<pre>", 1)[1].split("</pre>", 1)[0].strip()
 
     assert r'''server.content-type="application/x-custom"''' in tiddler
-    assert tiddler_text.startswith(r'''&lt;html&gt;&lt;a href=''')
-    assert tiddler_text.endswith(r'''&gt;Baz&lt;/a&gt;&lt;/html&gt;''')
 
 
 def _extract_tiddler(title, wiki):

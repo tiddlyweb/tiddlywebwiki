@@ -4,6 +4,7 @@ Serialize into a fullblown tiddlywiki wiki.
 
 import html5lib
 from html5lib import treebuilders
+from base64 import b64encode
 
 from tiddlyweb.serializer import NoSerializationError
 from tiddlyweb.serializations import SerializationInterface
@@ -245,16 +246,13 @@ the content of this wiki</a>.
             host = ''
         host = '%s/' % host
 
-        text_type = tiddler.type and tiddler.type.startswith('text/')
-        if tiddler.type and tiddler.type != 'None' and not text_type:
+        if binary_tiddler(tiddler):
             tiddler_output = self._binary_tiddler(tiddler)
-            content_type = tiddler.type
         else:
             tiddler_output = tiddler.text
-            if text_type:
-                content_type = tiddler.type
-            else:
-                content_type = ''
+
+        if tiddler.type == 'None' or not tiddler.type:
+            tiddler.type = ''
 
         return ('<div title="%s" server.title="%s" server.page.revision="%s" '
                 'modifier="%s" creator="%s" server.workspace="bags/%s" '
@@ -273,7 +271,7 @@ the content of this wiki</a>.
                         escape_attribute_value(recipe_name),
                         escape_attribute_value(tiddler.bag),
                         self._tiddler_permissions(tiddler),
-                        content_type,
+                        tiddler.type,
                         tiddler.modified,
                         tiddler.created,
                         escape_attribute_value(self.tags_as(tiddler.tags)),
@@ -318,12 +316,9 @@ the content of this wiki</a>.
         """
         Make the content for a tiddler that has non-wikitext content.
         """
-        if tiddler.type.startswith('image'):
-            return ('\n<html><img src="%s" /></html>\n' %
-                    tiddler_url(self.environ, tiddler))
-        else:
-            return ('\n<html><a href="%s">%s</a></html>\n' %
-                    (tiddler_url(self.environ, tiddler), tiddler.title))
+        # XXX This is memory inefficient for large tiddlers.
+        # But by this time we are _already_ inefficient.
+        return b64encode(tiddler.text)
 
     def _tiddler_fields(self, fields):
         """
@@ -334,3 +329,29 @@ the content of this wiki</a>.
         for key, val in fields.items():
             output.append('%s="%s"' % (key, escape_attribute_value(val)))
         return ' '.join(output)
+
+
+# XXX the following are borrowed from tiddlyweb.util in tiddlyweb
+# 1.1.x. Duplicated here for sake of portability while we wait for
+# 1.1.x to release.
+def binary_tiddler(tiddler):
+    """
+    Return true if this Tiddler has a 'type' which suggests the
+    content of the tiddler is non-textual. This is usuallly used
+    to determine if the tiddler should be base64 encoded.
+    """
+    return (tiddler.type and tiddler.type != 'None'
+            and not pseudo_binary(tiddler.type))
+
+
+def pseudo_binary(content_type):
+    """
+    Return true if the content type should be treated as a pseudo-binary.
+    A pseudo binary is a type of textual content for which (this) TiddlyWeb
+    (instance) has no serialization. TiddlyWeb requires that such content
+    be uploaded encoded in UTF-8.
+    """
+    content_type = content_type.lower()
+    return (content_type.startswith('text/')
+            or content_type.endswith('+xml')
+            )
