@@ -11,6 +11,7 @@ remotes: tiddlywiki
 	./cacher
 
 clean:
+	find . -name "*.pyc" |xargs rm || true
 	rm -r dist || true
 	rm -r build || true
 	rm -r tiddlywebwiki.egg-info || true
