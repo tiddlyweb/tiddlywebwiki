@@ -1,4 +1,4 @@
-0.37 [TBD]
+0.37 Wed Jul 21 11:00:51 BST 2010
 
     * Improved handling of binary tiddlers
       binary tiddlers are now always serialized as base64-encoded data,
