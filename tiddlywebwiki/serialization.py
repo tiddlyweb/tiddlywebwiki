@@ -321,7 +321,7 @@ the content of this wiki</a>.
         limit = self.environ['tiddlyweb.config'].get(
                 'tiddlywebwiki.binary_limit', 0)
         if limit and len(tiddler.text) > limit:
-            if tiddler.type.startswith('image'):
+            if tiddler.type.startswith('image/'):
                 return ('\n<html><img src="%s" /></html>\n' %
                         tiddler_url(self.environ, tiddler))
             else:
