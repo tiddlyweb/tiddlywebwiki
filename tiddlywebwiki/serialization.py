@@ -318,7 +318,17 @@ the content of this wiki</a>.
         """
         # XXX This is memory inefficient for large tiddlers.
         # But by this time we are _already_ inefficient.
-        return b64encode(tiddler.text)
+        limit = self.environ['tiddlyweb.config'].get(
+                'tiddlywebwiki.binary_limit', 0)
+        if limit and len(tiddler.text) > limit:
+            if tiddler.type.startswith('image'):
+                return ('\n<html><img src="%s" /></html>\n' %
+                        tiddler_url(self.environ, tiddler))
+            else:
+                return ('\n<html><a href="%s">%s</a></html>\n' %
+                        (tiddler_url(self.environ, tiddler), tiddler.title))
+        else:
+            return b64encode(tiddler.text)
 
     def _tiddler_fields(self, fields):
         """
