@@ -1,5 +1,19 @@
 """
 Serialize into a fullblown tiddlywiki wiki.
+
+The generated wiki comes from config['base_tiddlywiki'] injected
+with a tiddlywiki div representation of each included tiddler.
+
+For those tiddlers which are considered binary (e.g. contain an
+image, an application, etc) the contents of tiddler.text is sent
+as the base64 encoding of that text. Client side plugins can 
+turn that into a data: style URI and use the content.
+
+If config['tiddlywebwiki.binary_limit'] is set to some integer
+value that value sets a limit above which the base64 content is
+_not_ sent. Instead a link is made back to the server. If 
+tiddler.type matches 'image/' then the link is an <img> tag.
+Otherwise an anchor.
 """
 
 import html5lib
