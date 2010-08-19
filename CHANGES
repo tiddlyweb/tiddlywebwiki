@@ -1,3 +1,11 @@
+0.42 [TBD]
+
+    * Added optional limit for binary tiddlers
+      config['tiddlywebwiki.binary_limit'] determines the number of bytes beyond
+      which a binary tiddler's body is transformed to a reference to the full
+      resource on the server
+      See `pydoc tiddlywebwiki.serialization` for details.
+
 0.41 Wed Aug 18 13:14:32 UTC 2010
 
     * Upgraded TiddyWiki version to release 2.6.1
