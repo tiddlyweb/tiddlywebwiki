@@ -1,4 +1,4 @@
-0.42 [TBD]
+0.42 Thu Aug 19 10:01:37 UTC 2010
 
     * Added optional limit for binary tiddlers
       config['tiddlywebwiki.binary_limit'] determines the number of bytes beyond
