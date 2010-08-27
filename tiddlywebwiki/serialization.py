@@ -16,8 +16,6 @@ tiddler.type matches 'image/' then the link is an <img> tag.
 Otherwise an anchor.
 """
 
-import html5lib
-from html5lib import treebuilders
 from base64 import b64encode
 
 from tiddlyweb.serializer import NoSerializationError
@@ -187,20 +185,14 @@ the content of this wiki</a>.
         text.
         """
         output = wikitext_to_wikklyhtml('', '', unicode(title), self.environ)
-        parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder('dom'))
-        dom = parser.parse(output)
-
-        def _get_text(nodelist):
-            text = ''
-            for node in nodelist:
-                if node.nodeType == node.TEXT_NODE:
-                    text = text + node.data
-                if node.childNodes:
-                    text = text + _get_text(node.childNodes)
-            return text
-
-        title = _get_text(dom.childNodes)
-        return ''.join(title).rstrip().lstrip()
+        rights = output.split('>')
+        lefts = []
+        for chunk in rights:
+            try:
+                lefts.append(chunk[0:chunk.index('<')])
+            except ValueError:
+                lefts.append(chunk)
+        return ''.join(lefts)
 
     def _determine_title(self, title, window_title, candidate_title, candidate_subtitle):
         """
