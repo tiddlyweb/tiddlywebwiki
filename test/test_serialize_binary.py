@@ -1,6 +1,7 @@
 
 from tiddlywebplugins.twimport import import_one
 from tiddlyweb.model.bag import Bag
+from tiddlyweb.model.collections import Tiddlers
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.store import Store
 from tiddlyweb.serializer import Serializer
@@ -34,11 +35,12 @@ def setup_module(module):
 def test_content_type():
     bag = Bag('holder')
     bag = store.get(bag)
-    tmpbag = Bag('tmpbag', tmpbag=True)
-    tmpbag.add_tiddlers(get_tiddlers_from_bag(bag))
+    tiddlers = Tiddlers(store=store)
+    for tiddler in store.list_bag_tiddlers(bag):
+        tiddlers.add(tiddler)
 
     serializer = Serializer('tiddlywebwiki.serialization', {'tiddlyweb.config': config})
-    output = ''.join(serializer.list_tiddlers(tmpbag))
+    output = ''.join(serializer.list_tiddlers(tiddlers))
 
     # we are expecting an img link to the image tiddler
     assert 'server.content-type="image/png"' in output

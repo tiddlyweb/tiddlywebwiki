@@ -24,6 +24,7 @@ from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
         encode_name, html_encode, escape_attribute_value)
+from tiddlyweb.web.handler.tiddler import _tiddler_etag
 from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
 
 
@@ -45,19 +46,6 @@ class Serialization(SerializationInterface):
     and tiddlers. It can also be used to import
     TiddlyWikis into the system.
     """
-
-    def as_bag(self, bag, input_string):
-        """
-        Turn a wiki into a bunch of tiddlers
-        stored in the bag.
-        """
-        try:
-            from tiddlywebplugins.twimport import wiki_string_to_tiddlers
-            tiddlers = wiki_string_to_tiddlers(input_string)
-            bag.add_tiddlers(tiddlers)
-            return bag
-        except ImportError:
-            raise NoSerializationError
 
     def list_tiddlers(self, bag):
         """
@@ -156,7 +144,7 @@ the content of this wiki</a>.
             tiddler_count += 1
 
         if tiddler_count == 1:
-            default_tiddler = Tiddler('DefaultTiddlers')
+            default_tiddler = Tiddler('DefaultTiddlers', '_virtual')
             default_tiddler.text = '[[' + tiddler.title + ']]'
             lines.append(self._tiddler_as_div(default_tiddler))
 
@@ -261,6 +249,7 @@ the content of this wiki</a>.
             tiddler.type = ''
 
         return ('<div title="%s" server.title="%s" server.page.revision="%s" '
+                'server.etag="%s" '
                 'modifier="%s" creator="%s" server.workspace="bags/%s" '
                 'server.type="tiddlyweb" server.host="%s" '
                 'server.recipe="%s" server.bag="%s" server.permissions="%s" '
@@ -270,6 +259,8 @@ the content of this wiki</a>.
                     (escape_attribute_value(tiddler.title),
                         escape_attribute_value(tiddler.title),
                         tiddler.revision,
+                        escape_attribute_value(_tiddler_etag(
+                            self.environ, tiddler)),
                         escape_attribute_value(tiddler.modifier),
                         escape_attribute_value(tiddler.creator),
                         escape_attribute_value(tiddler.bag),

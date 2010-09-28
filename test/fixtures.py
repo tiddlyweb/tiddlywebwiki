@@ -17,45 +17,6 @@ config['server_host'] = {
         'port': '8001',
         }
 
-TiddlerOne = Tiddler('TiddlerOne')
-TiddlerOne.modifier = 'AuthorOne'
-TiddlerOne.text = u'c tiddler one content'
-TiddlerOne.tags = ['tagone', 'tagtwo']
-
-TiddlerTwo = Tiddler('TiddlerTwo')
-TiddlerTwo.modifier = u'AuthorTwo'
-TiddlerTwo.text = u'b tiddler two content'
-
-TiddlerThree = Tiddler('TiddlerThree')
-TiddlerThree.modifier = u'AuthorThree'
-TiddlerThree.text = u'a tiddler three content'
-TiddlerThree.tags = [u'tagone', u'tagthree']
-
-tiddlers = [TiddlerOne, TiddlerTwo, TiddlerThree]
-
-bagone = Bag(name='bagone')
-bagone.add_tiddler(tiddlers[0])
-bagtwo = Bag(name='bagtwo')
-bagtwo.add_tiddler(tiddlers[1])
-bagthree = Bag(name='bagthree')
-bagthree.add_tiddler(tiddlers[2])
-bagfour = Bag(name='bagfour')
-bagfour.add_tiddler(tiddlers[0])
-bagfour.add_tiddler(tiddlers[1])
-bagfour.add_tiddler(tiddlers[2])
-
-recipe_list = [
-        [bagone, u'select=title:TiddlerOne'],
-        [bagtwo, u'select=title:TiddlerTwo'],
-        [bagthree, u'select=tag:tagone;select=tag:tagthree']
-        ]
-
-recipe_list_string = [
-        [u'bagone', u'select=title:TiddlerOne'],
-        [u'bagtwo', u'select=title:TiddlerTwo'],
-        [u'bagthree', u'select=tag:tagone;select=tag:tagthree']
-         ]
-
 
 def _teststore():
     return Store(config['server_store'][0], config['server_store'][1],
@@ -69,9 +30,9 @@ def reset_textstore():
 
 def muchdata(store):
     for bag_numeral in range(30):
-        bag = create_bag(store, bag_numeral)
+        bag = _create_bag(store, bag_numeral)
         for tiddler_numeral in range(10):
-            tiddler = create_tiddler(store, bag, tiddler_numeral)
+            tiddler = _create_tiddler(store, bag, tiddler_numeral)
 
     recipe = Recipe('long')
 
@@ -87,7 +48,7 @@ def muchdata(store):
     store.put(recipe)
 
 
-def create_tiddler(store, bag, numeral):
+def _create_tiddler(store, bag, numeral):
     tiddler = Tiddler('tiddler%s' % numeral)
     tiddler.bag = bag.name
     tiddler.text = u'i am tiddler %s' % numeral
@@ -104,7 +65,7 @@ def create_tiddler(store, bag, numeral):
     store.put(tiddler)
 
 
-def create_bag(store, numeral):
+def _create_bag(store, numeral):
     bag = Bag('bag%s' % numeral)
     store.put(bag)
     return bag

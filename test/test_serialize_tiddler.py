@@ -100,6 +100,14 @@ def test_content_type():
 
     assert r'''server.content-type="application/x-custom"''' in tiddler
 
+def test_server_etag():
+    tiddler = Tiddler('Foo', 'Alpha')
+    serializer = Serializer('tiddlywebwiki.serialization', environ)
+    serializer.object = tiddler
+    string = serializer.to_string()
+    tiddler = _extract_tiddler('Foo', string)
+
+    assert r'''server.etag="&quot;Alpha/Foo/''' in tiddler
 
 def _extract_tiddler(title, wiki):
     """
