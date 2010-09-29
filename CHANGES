@@ -1,3 +1,8 @@
+0.45 [TBD]
+
+    * Improved ETag handling
+    * Performance enhancements
+
 0.44 Fri Aug 27 14:57:32 UTC 2010
 
     * Fixed various adaptor issues
