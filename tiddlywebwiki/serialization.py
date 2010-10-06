@@ -290,7 +290,6 @@ the content of this wiki</a>.
                 store = tiddler.store
                 if store:
                     bag = Bag(tiddler.bag)
-                    bag.skinny = True
                     bag = store.get(bag)
                     perms = bag.policy.user_perms(
                             environ['tiddlyweb.usersign'])
