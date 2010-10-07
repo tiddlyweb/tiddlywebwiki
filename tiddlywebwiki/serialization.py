@@ -22,6 +22,7 @@ from tiddlyweb.serializer import NoSerializationError
 from tiddlyweb.serializations import SerializationInterface
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
+from tiddlyweb.util import binary_tiddler, pseudo_binary
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
         encode_name, html_encode, escape_attribute_value)
 from tiddlyweb.web.handler.tiddler import _tiddler_etag
@@ -335,29 +336,3 @@ the content of this wiki</a>.
         for key, val in fields.items():
             output.append('%s="%s"' % (key, escape_attribute_value(val)))
         return ' '.join(output)
-
-
-# XXX the following are borrowed from tiddlyweb.util in tiddlyweb
-# 1.1.x. Duplicated here for sake of portability while we wait for
-# 1.1.x to release.
-def binary_tiddler(tiddler):
-    """
-    Return true if this Tiddler has a 'type' which suggests the
-    content of the tiddler is non-textual. This is usuallly used
-    to determine if the tiddler should be base64 encoded.
-    """
-    return (tiddler.type and tiddler.type != 'None'
-            and not pseudo_binary(tiddler.type))
-
-
-def pseudo_binary(content_type):
-    """
-    Return true if the content type should be treated as a pseudo-binary.
-    A pseudo binary is a type of textual content for which (this) TiddlyWeb
-    (instance) has no serialization. TiddlyWeb requires that such content
-    be uploaded encoded in UTF-8.
-    """
-    content_type = content_type.lower()
-    return (content_type.startswith('text/')
-            or content_type.endswith('+xml')
-            )
