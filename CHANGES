@@ -1,3 +1,7 @@
+0.47 [TBD]
+
+    * Fixed regressions in adaptor
+
 0.46 Fri Oct  8 10:48:10 UTC 2010
 
     * Ensured bag is used over recipe if possible
