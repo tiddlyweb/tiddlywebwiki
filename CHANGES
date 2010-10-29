@@ -1,3 +1,7 @@
+0.51 [TBD]
+
+    * Fixed IE-specific saving bug in adaptor
+
 0.50 Thu Oct 21 12:41:36 UTC 2010
 
     * Fixed IE-specific bug in adaptor
