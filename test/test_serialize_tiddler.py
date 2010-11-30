@@ -35,7 +35,7 @@ def test_html_attribute_escape_with_recipe():
     assert r'''creator="Chris &quot;sensei&quot; Dent"''' in string
     assert r'''tags="foo [[xxx &quot;yyy&quot; zzz]]"''' in string
     assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
-    assert r'''you may still <a href="http://0.0.0.0:8080/recipes/baz%20%22bar%22%20foo/tiddlers">browse''' in string
+    assert r'''you may still <a href="http://our_test_domain:8001/recipes/baz%20%22bar%22%20foo/tiddlers">browse''' in string
 
 
 def test_html_attribute_escape_with_bag():
@@ -57,7 +57,7 @@ def test_html_attribute_escape_with_bag():
     assert r'''creator="Chris &quot;sensei&quot; Dent"''' in string
     assert r'''tags="foo [[xxx &quot;yyy&quot; zzz]]"''' in string
     assert r'''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
-    assert r'''you may still <a href="http://0.0.0.0:8080/bags/foo%20%22bar%22%20baz/tiddlers">browse''' in string
+    assert r'''you may still <a href="http://our_test_domain:8001/bags/foo%20%22bar%22%20baz/tiddlers">browse''' in string
 
 
 def test_content_type():
