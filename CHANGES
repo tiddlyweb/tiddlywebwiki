@@ -1,3 +1,8 @@
+0.53 [TBD]
+
+    * Improved offline support
+    * Fixed minor bug in adaptor
+
 0.52 Tue Nov 30 11:05:35 UTC 2010
 
     * Fixed revision handling in adaptor
