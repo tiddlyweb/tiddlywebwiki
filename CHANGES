@@ -1,3 +1,7 @@
+0.55 Thu Feb 17 18:48:46 UTC 2011
+
+    * Cache the base_tiddlywiki file at the module level.
+
 0.54 Tue Jan 18 12:35:38 UTC 2011
 
     * Upgraded TiddyWiki version to release 2.6.2
