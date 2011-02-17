@@ -38,6 +38,8 @@ MARKUPS = {
     'MarkupPostBody': 'POST-SCRIPT',
     }
 
+WIKI = ''
+
 
 class Serialization(SerializationInterface):
     """
@@ -221,12 +223,16 @@ the content of this wiki</a>.
         """
         Read base_tiddlywiki from its location.
         """
+        global WIKI
+        if WIKI:
+            return WIKI
         base_tiddlywiki = open(
             self.environ['tiddlyweb.config']['base_tiddlywiki'])
         wiki = base_tiddlywiki.read()
         base_tiddlywiki.close()
         wiki = unicode(wiki, 'utf-8')
-        return wiki
+        WIKI = wiki
+        return WIKI
 
     def _tiddler_as_div(self, tiddler):
         """
