@@ -15,7 +15,7 @@ environ = { 'tiddlyweb.config': config }
 
 
 def test_html_attribute_escape_with_recipe():
-    tiddler = Tiddler('escape "double" quotes in tiddler field values')
+    tiddler = Tiddler('escape "double" quotes & &amp; in <tiddler> field values')
     tiddler.bag = 'foo "bar" baz'
     tiddler.recipe = 'baz "bar" foo'
     tiddler.modifier = 'Chris "sensei" Dent'
@@ -26,8 +26,8 @@ def test_html_attribute_escape_with_recipe():
     serializer.object = tiddler
     string = serializer.to_string()
 
-    assert r'''title="escape &quot;double&quot; quotes in tiddler field values"''' in string
-    assert r'''server.title="escape &quot;double&quot; quotes in tiddler field values"''' in string
+    assert r'''title="escape &quot;double&quot; quotes &amp; &amp;amp; in &lt;tiddler&gt; field values"''' in string
+    assert r'''server.title="escape &quot;double&quot; quotes &amp; &amp;amp; in &lt;tiddler&gt; field values"''' in string
     assert r'''bag="foo &quot;bar&quot; baz"''' in string
     assert r'''recipe="baz &quot;bar&quot; foo"''' in string
     assert r'''server.workspace="bags/foo &quot;bar&quot; baz"''' in string
