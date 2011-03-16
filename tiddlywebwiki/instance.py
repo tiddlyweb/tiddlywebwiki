@@ -16,7 +16,7 @@ instance_config = {
 store_contents = get_tiddler_locations(store_contents,
     'tiddlywebplugins.console')
 store_contents['system'] = [
-    'http://svn.tiddlywiki.org/Trunk/verticals/TiddlyWebWiki/index.recipe'
+    'https://github.com/tiddlyweb/tiddlywebwikiclient/raw/master/index.recipe'
 ]
 
 store_structure = {
