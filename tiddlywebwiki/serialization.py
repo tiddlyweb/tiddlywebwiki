@@ -245,7 +245,7 @@ the content of this wiki</a>.
             host = server_base_url(self.environ)
         except KeyError:
             host = ''
-        host = '%s/' % host
+        host = '%s' % host
 
         if binary_tiddler(tiddler):
             tiddler_output = self._binary_tiddler(tiddler)
