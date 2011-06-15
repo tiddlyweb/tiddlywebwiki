@@ -27,6 +27,7 @@ from tiddlyweb.web.util import (server_base_url, tiddler_url,
         encode_name, html_encode, escape_attribute_value)
 from tiddlyweb.web.handler.tiddler import _tiddler_etag
 from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
+from tiddlyweb.store import StoreError
 
 
 SPLITTER = '</div>\n<!--POST-STOREAREA-->\n'
@@ -296,10 +297,13 @@ the content of this wiki</a>.
             if 'tiddlyweb.usersign' in environ:
                 store = tiddler.store
                 if store:
-                    bag = Bag(tiddler.bag)
-                    bag = store.get(bag)
-                    perms = bag.policy.user_perms(
-                            environ['tiddlyweb.usersign'])
+                    try:
+                        bag = Bag(tiddler.bag)
+                        bag = store.get(bag)
+                        perms = bag.policy.user_perms(
+                                environ['tiddlyweb.usersign'])
+                    except StoreError:
+                        pass
             return perms
 
         perms = []
