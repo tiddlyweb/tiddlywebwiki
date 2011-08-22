@@ -25,7 +25,7 @@ from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.util import binary_tiddler, pseudo_binary
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
         encode_name, html_encode, escape_attribute_value)
-from tiddlyweb.web.handler.tiddler import _tiddler_etag
+from tiddlyweb.web.util import tiddler_etag
 from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
 from tiddlyweb.store import StoreError
 
@@ -267,7 +267,7 @@ the content of this wiki</a>.
                     (escape_attribute_value(tiddler.title),
                         escape_attribute_value(tiddler.title),
                         tiddler.revision,
-                        escape_attribute_value(_tiddler_etag(
+                        escape_attribute_value(tiddler_etag(
                             self.environ, tiddler)),
                         escape_attribute_value(tiddler.modifier),
                         escape_attribute_value(tiddler.creator),
