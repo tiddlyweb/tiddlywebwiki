@@ -94,7 +94,7 @@ the content of this wiki</a>.
         head sections of the file.
         """
 
-        (browsable_url, lines, title,
+        (browsable_url, kept_tiddlers, title,
                 found_markup_tiddlers) = self._create_tiddlers(title, tiddlers)
 
         # load the wiki
@@ -116,8 +116,8 @@ the content of this wiki</a>.
         # sections, put our content in the middle
         tiddlystart, tiddlyfinish = wiki.split(SPLITTER, 2)
         yield tiddlystart
-        for line in lines:
-            yield line
+        for tiddler in kept_tiddlers:
+            yield self._tiddler_as_div(tiddler)
         yield SPLITTER
         yield tiddlyfinish
         return
@@ -127,15 +127,14 @@ the content of this wiki</a>.
         Figure out the content to be pushed into the
         wiki and calculate the title.
         """
-        lines = []
+        kept_tiddlers = []
         window_title = None
         candidate_title = None
         candidate_subtitle = None
         markup_tiddlers = MARKUPS.keys()
         found_markup_tiddlers = {}
-        tiddler_count = 0
         for tiddler in tiddlers:
-            lines.append(self._tiddler_as_div(tiddler))
+            kept_tiddlers.append(tiddler)
             tiddler_title = tiddler.title
             if tiddler_title == 'WindowTitle':
                 window_title = tiddler.text
@@ -145,12 +144,11 @@ the content of this wiki</a>.
                 candidate_subtitle = tiddler.text
             if tiddler_title in markup_tiddlers:
                 found_markup_tiddlers[tiddler_title] = tiddler.text
-            tiddler_count += 1
 
-        if tiddler_count == 1:
+        if len(kept_tiddlers) == 1:
             default_tiddler = Tiddler('DefaultTiddlers', '_virtual')
             default_tiddler.text = '[[' + tiddler.title + ']]'
-            lines.append(self._tiddler_as_div(default_tiddler))
+            kept_tiddlers.append(default_tiddler)
 
         browsable_url = None
         try:
@@ -168,7 +166,7 @@ the content of this wiki</a>.
                 candidate_subtitle)
         title = self._plain_textify_string(title)
 
-        return browsable_url, lines, title, found_markup_tiddlers
+        return browsable_url, kept_tiddlers, title, found_markup_tiddlers
 
     def _plain_textify_string(self, title):
         """
