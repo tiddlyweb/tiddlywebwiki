@@ -46,8 +46,7 @@ def test_get_wiki_with_title():
             method='GET')
 
     assert response['status'] == '200'
-    assert '\n<title>\nWow cow moo\n</title>\n' in content
-    assert 'Wow //cow// moo' in content
+    assert '\n<title>\nWow //cow// moo\n</title>\n' in content
 
     tiddler = Tiddler('SiteSubtitle')
     tiddler.bag = u'bag1'
@@ -59,7 +58,7 @@ def test_get_wiki_with_title():
             method='GET')
 
     assert response['status'] == '200'
-    assert '<title>\nWow cow moo - MooCow\n</title>' in content
+    assert '<title>\nWow //cow// moo - MooCow\n</title>' in content
     assert 'MooCow' in content
 
     tiddler = Tiddler('SiteTitle')

@@ -164,25 +164,8 @@ the content of this wiki</a>.
         # plain text so it is of a form satisfactory to <title>
         title = self._determine_title(title, window_title, candidate_title,
                 candidate_subtitle)
-        title = self._plain_textify_string(title)
 
         return browsable_url, kept_tiddlers, title, found_markup_tiddlers
-
-    def _plain_textify_string(self, title):
-        """
-        Take a string that may be HTML and turn it
-        into plain text by finding all the included
-        text.
-        """
-        output = wikitext_to_wikklyhtml('', '', unicode(title), self.environ)
-        rights = output.split('>')
-        lefts = []
-        for chunk in rights:
-            try:
-                lefts.append(chunk[0:chunk.index('<')])
-            except ValueError:
-                lefts.append(chunk)
-        return ''.join(lefts)
 
     def _determine_title(self, title, window_title, candidate_title, candidate_subtitle):
         """
