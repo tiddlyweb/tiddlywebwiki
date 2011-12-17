@@ -18,15 +18,13 @@ Otherwise an anchor.
 
 from base64 import b64encode
 
-from tiddlyweb.serializer import NoSerializationError
 from tiddlyweb.serializations import SerializationInterface
 from tiddlyweb.model.bag import Bag
 from tiddlyweb.model.tiddler import Tiddler
-from tiddlyweb.util import binary_tiddler, pseudo_binary
+from tiddlyweb.util import binary_tiddler
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
         encode_name, html_encode, escape_attribute_value)
 from tiddlyweb.web.util import tiddler_etag
-from tiddlywebplugins.wikklytextrender import wikitext_to_wikklyhtml
 from tiddlyweb.store import StoreError
 
 
@@ -304,8 +302,6 @@ the content of this wiki</a>.
         """
         Make the content for a tiddler that has non-wikitext content.
         """
-        # XXX This is memory inefficient for large tiddlers.
-        # But by this time we are _already_ inefficient.
         limit = self.environ['tiddlyweb.config'].get(
                 'tiddlywebwiki.binary_limit', 0)
         if limit and len(tiddler.text) > limit:
