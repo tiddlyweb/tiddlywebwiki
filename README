@@ -14,12 +14,12 @@ TiddlyWeb.
 The packages supplements TiddlyWeb by adding:
 
 * useful TiddlyWiki oriented `twanager` commands
-* a twinstance script for creating news TiddlyWiki-enabled
+* a `twinstance` script for creating new TiddlyWiki-enabled
   TiddlyWeb instances
 * the necessary TiddlyWiki plugins to save Tiddlers back to the
   TiddlyWeb server
-* a TiddlyWeb serialization that will turn any collection of
-  Tiddlers into a TiddlyWiki
+* a serialization that will turn any collection of Tiddlers into
+  a TiddlyWiki
 * a "default" recipe to get things started
 
 Once you have installed the package the `twinstance` command will be
