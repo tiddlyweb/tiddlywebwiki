@@ -29,21 +29,25 @@ def setup_module(module):
 
     instance_tiddlers = config['instance_tiddlers']
     for bag, uris in instance_tiddlers.items():
-        # ensure that HTTP URLs are not used -- XXX: this is a temporary workaround until we have proper tests
+        # ensure that HTTP URLs are not used
+        # XXX: this is a temporary workaround until we have proper tests
         for uri in uris:
             if uri.startswith('http'):
-                raise ValueError('must not use HTTP URLs; use cacher for local copies')
-        # adjust relative paths to account for instancer's chdir operation -- XXX: obsolete?
+                raise ValueError(
+                        'must not use HTTP URLs; use cacher for local copies')
+        # adjust relative paths to account for instancer's chdir operation
+        # XXX: obsolete?
         instance_tiddlers[bag] = [
             uri.replace('file:./', 'file:../') for uri in uris
-            ]
+        ]
 
 
 class TestInstance(object):
 
     def setup_method(self, module):
-        env = { 'tiddlyweb.config': config }
-        self.store = Store(config['server_store'][0], config['server_store'][1], environ=env)
+        env = {'tiddlyweb.config': config}
+        self.store = Store(config['server_store'][0],
+                config['server_store'][1], environ=env)
 
     def teardown_method(self, module):
         os.chdir('..')
@@ -52,7 +56,8 @@ class TestInstance(object):
     def test_create_tiddlywebwiki_instance(self):
         spawn(instance_dir, config, instance_module)
 
-        contents = _get_file_contents('../%s/tiddlywebconfig.py' % instance_dir)
+        contents = _get_file_contents('../%s/tiddlywebconfig.py'
+                % instance_dir)
 
         assert "'system_plugins': ['tiddlywebwiki']" in contents
         assert "'twanager_plugins': ['tiddlywebwiki']" in contents

@@ -26,7 +26,7 @@ def muchdata(store):
     for bag_numeral in range(30):
         bag = _create_bag(store, bag_numeral)
         for tiddler_numeral in range(10):
-            tiddler = _create_tiddler(store, bag, tiddler_numeral)
+            _create_tiddler(store, bag, tiddler_numeral)
 
     recipe = Recipe('long')
 
