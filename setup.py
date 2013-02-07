@@ -13,16 +13,15 @@ setup(
     scripts = ['twinstance'],
     packages = find_packages(exclude=['test']),
     install_requires = [
-        'tiddlyweb>=1.2.43',
+        'tiddlyweb>=1.4.3',
         'tiddlywebplugins.instancer>=0.7.13',
         'tiddlywebplugins.utils>=0.15',
         'tiddlywebplugins.wikklytextrender>=0.7',
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
-        'tiddlywebplugins.console>=0.2.3',
-        'html5lib',
-        'wikklytext'],
+        'tiddlywebplugins.console>=0.2.3'
+    ]
     include_package_data = True,
     zip_safe = False
-    )
+)
