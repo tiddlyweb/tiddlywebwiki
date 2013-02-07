@@ -22,7 +22,6 @@ instance_dir = 'test_instance'
 
 def setup_module(module):
     tiddlywebwiki.init(config)
-    tiddlywebwiki.manage.init(config)
     try:
         rmtree(instance_dir)
     except:

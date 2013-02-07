@@ -8,7 +8,7 @@ __version__ = '0.60.0'
 def init(config):
     # These imports must be in init otherwise getting
     # the version number causes cyclic imports to happen.
-    import tiddlywebwiki.manage
+    import tiddlywebplugins.instancer
     import tiddlywebplugins.status
     import tiddlywebplugins.atom
     import tiddlywebplugins.differ
@@ -18,7 +18,7 @@ def init(config):
     from tiddlywebwiki.config import config as twwconfig
 
     merge_config(config, twwconfig)
-    tiddlywebwiki.manage.init(config)
+    tiddlywebplugins.instancer.init(config)
     tiddlywebplugins.status.init(config)
     tiddlywebplugins.atom.init(config)
     tiddlywebplugins.differ.init(config)
