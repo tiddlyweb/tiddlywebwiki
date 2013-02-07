@@ -58,7 +58,7 @@ store_structure = {
         }
     },
     'users': {
-        'administrator': { # XXX: obsolete?
+        'administrator': {  # XXX: obsolete?
             'note': 'system administrator',
             'roles': ['ADMIN']
         }
