@@ -8,6 +8,7 @@ from tiddlyweb.serializer import Serializer
 from tiddlyweb.config import config
 from tiddlywebwiki.config import config as twwconfig
 from tiddlyweb.util import merge_config
+from tiddlyweb.web.util import bag_url
 
 merge_config(config, twwconfig)
 
@@ -36,6 +37,9 @@ def test_content_type():
     bag = Bag('holder')
     bag = store.get(bag)
     tiddlers = Tiddlers(store=store)
+    # duplicate what the handler would do
+    tiddlers.link = bag_url({'tiddlyweb.config': config}, bag,
+            full=False) + '/tiddlers'
     for tiddler in store.list_bag_tiddlers(bag):
         tiddlers.add(tiddler)
 
@@ -50,6 +54,7 @@ def test_content_type():
     assert 'server.content-type="application/octet-stream"' in output
 
     assert 'server.content-type="text/html"' in output
+    assert ('you may still <a href="/bags/holder/tiddlers">browse' in output)
 
 
 def test_does_base64():

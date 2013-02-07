@@ -32,7 +32,6 @@ config = {
             'text/html; charset=UTF-8'],
     },
     'wikitext.default_renderer': 'tiddlywebplugins.wikklytextrender',
-    # XXX the following is, in most cases, redundant
     'wikitext.type_render_map': {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
     }

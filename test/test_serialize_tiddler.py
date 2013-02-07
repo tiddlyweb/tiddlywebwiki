@@ -38,8 +38,10 @@ def test_html_attribute_escape_with_recipe():
     assert 'creator="Chris &quot;sensei&quot; Dent"' in string
     assert 'tags="foo [[xxx &quot;yyy&quot; zzz]]"' in string
     assert '''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
-    assert ('you may still <a href="http://0.0.0.0:8080/recipes/baz%20%22bar'
-        '%22%20foo/tiddlers">browse' in string)
+    # single tiddler's browse link is that tiddler in its bag
+    assert ('you may still <a href="/bags/foo%20%22bar%22%20baz/tiddlers'
+            '/escape%20%22double%22%20quotes%20%26%20%26amp%3B%20in%20%3C'
+            'tiddler%3E%20field%20values">browse' in string)
 
 
 def test_html_attribute_escape_with_bag():
@@ -63,8 +65,10 @@ def test_html_attribute_escape_with_bag():
     assert 'creator="Chris &quot;sensei&quot; Dent"' in string
     assert 'tags="foo [[xxx &quot;yyy&quot; zzz]]"' in string
     assert '''custom="lorem 'ipsum' dolor &quot;sit&quot; amet"''' in string
-    assert ('you may still <a href="http://0.0.0.0:8080/bags/foo%20%22bar%22'
-        '%20baz/tiddlers">browse' in string)
+    # single tiddler's browse link is that tiddler in its bag
+    assert ('you may still <a href="/bags/foo%20%22bar%22%20baz/tiddlers/'
+            'escape%20%22double%22%20quotes%20in%20tiddler%20field%20'
+            'values">browse' in string)
 
 
 def test_content_type():
