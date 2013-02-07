@@ -1,0 +1,6 @@
+tiddler: BinaryTiddlersPlugin.js
+tiddler: DiffFormatter.js
+tiddler: RevisionsCommandPlugin.js
+tiddler: ServerSideSavingPlugin.js
+tiddler: TiddlyWebAdaptor.js
+tiddler: TiddlyWebConfig.js
