@@ -1,9 +1,0 @@
-pre-release checklist
-
-* update version number (tiddlywebwiki/__init__.py)
-* update changelog
-** review commit logs for both this repository and the client-side
-   components at svn.tiddlywiki.org
-* release:
-    $ make release
-    $ make bundle
