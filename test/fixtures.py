@@ -12,13 +12,6 @@ from tiddlyweb.config import config
 from tiddlyweb.store import Store
 
 
-config['server_host'] = {
-        'scheme': 'http',
-        'host': 'our_test_domain',
-        'port': '8001',
-        }
-
-
 def _teststore():
     return Store(config['server_store'][0], config['server_store'][1],
             environ={'tiddlyweb.config': config})
