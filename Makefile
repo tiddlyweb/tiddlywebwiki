@@ -5,6 +5,7 @@ all:
 
 tiddlywiki:
 	mkdir tiddlywebwiki/resources || true
+	# return to retrieving from tiddlywiki.com when v >= 2.7.1
 	cp tiddlywiki/empty.html tiddlywebwiki/resources/empty.html
 
 remotes: tiddlywiki
