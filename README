@@ -32,6 +32,9 @@ start a server and visit the default wiki:
 * Open a web browser to http://0.0.0.0:8080/recipes/default/tiddlers.wiki
   to see the default wiki. Go to http://0.0.0.0:8080/ to browse
   around.
+* If `tiddlywebwiki.friendlywiki` is `True` (the default) in
+  tiddlywebconfig.py then any recipe may be addressed at /{recipe_name}
+  to retrieve the named recipe as a TiddlyWiki.
 
 If you have questions, comments or issues follow the guidance at:
 

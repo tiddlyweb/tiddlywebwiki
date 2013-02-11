@@ -34,5 +34,6 @@ config = {
     'wikitext.default_renderer': 'tiddlywebplugins.wikklytextrender',
     'wikitext.type_render_map': {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
-    }
+    },
+    'tiddlywebwiki.friendlywiki': True
 }

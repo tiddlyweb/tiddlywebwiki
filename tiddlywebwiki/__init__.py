@@ -2,7 +2,19 @@
 A TiddlyWeb plugin providing a multi-user TiddlyWiki environment.
 """
 
-__version__ = '0.60.0'
+__version__ = '0.61.0'
+
+
+from tiddlyweb.web.handler.recipe import get_tiddlers
+ 
+  
+def friendlywiki(environ, start_response):
+    """
+    Reframe the WSGI environment before internally redirecting
+    to a recipe.
+    """
+    environ['tiddlyweb.type'] = 'text/x-tiddlywiki'
+    return get_tiddlers(environ, start_response)
 
 
 def init(config):
@@ -24,3 +36,7 @@ def init(config):
     tiddlywebplugins.differ.init(config)
     tiddlywebplugins.twimport.init(config)
     tiddlywebplugins.console.init(config)
+
+    if 'selector' in config:
+        if config.get('tiddlywebwiki.friendlywiki', True):
+            config['selector'].add('/{recipe_name:segment}', GET=friendlywiki)
