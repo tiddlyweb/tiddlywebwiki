@@ -21,7 +21,7 @@ setup(
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
         'tiddlywebplugins.console>=0.2.3'
-    ]
+    ],
     include_package_data = True,
     zip_safe = False
 )
