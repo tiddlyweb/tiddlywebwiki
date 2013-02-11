@@ -16,7 +16,7 @@ instance_config = {
 store_contents = get_tiddler_locations(store_contents,
     'tiddlywebplugins.console')
 store_contents['system'] = [
-    'https://github.com/tiddlyweb/tiddlywebwikiclient/raw/master/index.recipe'
+    'src/tiddlywebwiki.recipe'
 ]
 
 store_structure = {
@@ -58,7 +58,7 @@ store_structure = {
         }
     },
     'users': {
-        'administrator': { # XXX: obsolete?
+        'administrator': {  # XXX: obsolete?
             'note': 'system administrator',
             'roles': ['ADMIN']
         }

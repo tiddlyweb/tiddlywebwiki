@@ -26,14 +26,13 @@ config = {
     'base_tiddlywiki': BASE_TIDDLYWIKI,
     'extension_types': {
         'wiki': 'text/x-tiddlywiki',
-        },
+    },
     'serializers': {
         'text/x-tiddlywiki': ['tiddlywebwiki.serialization',
             'text/html; charset=UTF-8'],
-        },
+    },
     'wikitext.default_renderer': 'tiddlywebplugins.wikklytextrender',
-    # XXX the following is, in most cases, redundant
     'wikitext.type_render_map': {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
-        }
     }
+}

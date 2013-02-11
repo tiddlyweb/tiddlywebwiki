@@ -10,11 +10,10 @@ from fixtures import muchdata, reset_textstore, _teststore
 
 def setup_module(module):
     from tiddlyweb.web import serve
-    # we have to have a function that returns the callable,
-    # Selector just _is_ the callable
+
     def app_fn():
         return serve.load_app()
-    #wsgi_intercept.debuglevel = 1
+
     httplib2_intercept.install()
     wsgi_intercept.add_wsgi_intercept('our_test_domain', 8001, app_fn)
 
@@ -25,7 +24,8 @@ def setup_module(module):
 
 def test_get_wiki():
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
 
     assert response['status'] == '200'
@@ -42,7 +42,8 @@ def test_get_wiki_with_title():
     store.put(tiddler)
 
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
 
     assert response['status'] == '200'
@@ -54,7 +55,8 @@ def test_get_wiki_with_title():
     store.put(tiddler)
 
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
 
     assert response['status'] == '200'
@@ -66,7 +68,8 @@ def test_get_wiki_with_title():
     store.delete(tiddler)
 
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
 
     assert response['status'] == '200'
@@ -78,7 +81,8 @@ def test_get_wiki_with_title():
     store.put(tiddler)
 
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
 
     assert response['status'] == '200'
@@ -91,7 +95,8 @@ def test_get_wiki_with_title():
     store.put(tiddler)
 
     http = httplib2.Http()
-    response, content = http.request('http://our_test_domain:8001/recipes/long/tiddlers.wiki',
+    response, content = http.request(
+            'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
     assert response['status'] == '200'
     # WindowTitle overrides the SiteTitle created up the stack

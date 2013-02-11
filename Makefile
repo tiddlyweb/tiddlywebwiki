@@ -5,7 +5,7 @@ all:
 
 tiddlywiki:
 	mkdir tiddlywebwiki/resources || true
-	wget http://tiddlywiki.com/empty.html -O tiddlywebwiki/resources/empty.html
+	cp tiddlywiki/empty.html tiddlywebwiki/resources/empty.html
 
 remotes: tiddlywiki
 	./cacher
@@ -15,7 +15,7 @@ clean:
 	rm -r dist || true
 	rm -r build || true
 	rm -r tiddlywebwiki.egg-info || true
-	rm *.bundle || true
+	rm *bundle || true
 	rm -r tiddlywebwiki/resources || true
 	rm -r store tiddlyweb.log || true
 

@@ -6,12 +6,12 @@ with a tiddlywiki div representation of each included tiddler.
 
 For those tiddlers which are considered binary (e.g. contain an
 image, an application, etc) the contents of tiddler.text is sent
-as the base64 encoding of that text. Client side plugins can 
+as the base64 encoding of that text. Client side plugins can
 turn that into a data: style URI and use the content.
 
 If config['tiddlywebwiki.binary_limit'] is set to some integer
 value that value sets a limit above which the base64 content is
-_not_ sent. Instead a link is made back to the server. If 
+_not_ sent. Instead a link is made back to the server. If
 tiddler.type matches 'image/' then the link is an <img> tag.
 Otherwise an anchor.
 """
@@ -20,6 +20,7 @@ from base64 import b64encode
 
 from tiddlyweb.serializations import SerializationInterface
 from tiddlyweb.model.bag import Bag
+from tiddlyweb.model.collections import Tiddlers
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.util import binary_tiddler
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
@@ -35,37 +36,36 @@ MARKUPS = {
     'MarkupPostHead': 'POST-HEAD',
     'MarkupPreBody': 'PRE-BODY',
     'MarkupPostBody': 'POST-SCRIPT',
-    }
+}
 
 WIKI = ''
+DEFAULT_TITLE = 'TiddlyWeb Loading'
 
 
 class Serialization(SerializationInterface):
     """
-    Serialize entities and collections to and from
-    TiddlyWiki representations. This is primarily
-    used to create TiddlyWikis from bags, recipes
-    and tiddlers. It can also be used to import
-    TiddlyWikis into the system.
+    Serialize tiddlers and tiddler collections to TiddlyWiki
+    representations.
     """
 
-    def list_tiddlers(self, bag):
+    def list_tiddlers(self, tiddlers):
         """
         Take the tiddlers from the given bag and inject
         them into a TiddlyWiki.
         """
-        try:
-            return self._put_tiddlers_in_tiddlywiki(bag.list_tiddlers())
-        except AttributeError:
-            return self._put_tiddlers_in_tiddlywiki(bag)
+        return self._put_tiddlers_in_tiddlywiki(tiddlers)
 
     def tiddler_as(self, tiddler):
         """
         Take the single tiddler provided and inject it into
         a TiddlyWiki.
         """
-        return ''.join(self._put_tiddlers_in_tiddlywiki(
-            [tiddler], title=tiddler.title))
+        tiddlers = Tiddlers(title=tiddler.title, bag=tiddler.bag,
+                recipe=tiddler.recipe)
+        tiddlers.add(tiddler)
+        tiddlers.link = tiddler_url(self.environ, tiddler, full=False)
+        # Join with '' to return a string not generator.
+        return ''.join(self._put_tiddlers_in_tiddlywiki(tiddlers))
 
     def _no_script(self, url):
         """
@@ -85,15 +85,15 @@ the content of this wiki</a>.
         else:
             return ''
 
-    def _put_tiddlers_in_tiddlywiki(self, tiddlers, title='TiddlyWeb Loading'):
+    def _put_tiddlers_in_tiddlywiki(self, tiddlers):
         """
         Take the provided tiddlers and inject them into the base_tiddlywiki,
         adjusting content for title, subtite, and the various pre and post
         head sections of the file.
         """
-
-        (browsable_url, kept_tiddlers, title,
-                found_markup_tiddlers) = self._create_tiddlers(title, tiddlers)
+        browsable_url = tiddlers.link
+        (kept_tiddlers, title, markup_tiddlers) = self._create_tiddlers(
+                tiddlers)
 
         # load the wiki
         wiki = self._get_wiki()
@@ -104,11 +104,11 @@ the content of this wiki</a>.
                 self._no_script(browsable_url))
 
         # replace the markup bits
-        for tiddler_title in found_markup_tiddlers:
+        for tiddler_title in markup_tiddlers:
             start = '\n<!--%s-START-->\n' % MARKUPS[tiddler_title]
             finish = '\n<!--%s-END-->\n' % MARKUPS[tiddler_title]
             wiki = self._replace_chunk(wiki, start, finish,
-                    found_markup_tiddlers[tiddler_title])
+                    markup_tiddlers[tiddler_title])
 
         # split the wiki into the before store and after store
         # sections, put our content in the middle
@@ -120,7 +120,7 @@ the content of this wiki</a>.
         yield tiddlyfinish
         return
 
-    def _create_tiddlers(self, title, tiddlers):
+    def _create_tiddlers(self, tiddlers):
         """
         Figure out the content to be pushed into the
         wiki and calculate the title.
@@ -148,24 +148,14 @@ the content of this wiki</a>.
             default_tiddler.text = '[[' + tiddler.title + ']]'
             kept_tiddlers.append(default_tiddler)
 
-        browsable_url = None
-        try:
-            if tiddler.recipe:
-                workspace = '/recipes/%s/tiddlers' % encode_name(tiddler.recipe)
-            else:
-                workspace = '/bags/%s/tiddlers' % encode_name(tiddler.bag)
-            browsable_url = server_base_url(self.environ) + workspace
-        except UnboundLocalError:
-            pass # tiddler is not set because tiddlers was empty
-
-        # Turn the title into HTML and then turn it into
-        # plain text so it is of a form satisfactory to <title>
-        title = self._determine_title(title, window_title, candidate_title,
+        # From the several options for title, choose one.
+        title = self._determine_title(window_title, candidate_title,
                 candidate_subtitle)
 
-        return browsable_url, kept_tiddlers, title, found_markup_tiddlers
+        return kept_tiddlers, title, found_markup_tiddlers
 
-    def _determine_title(self, title, window_title, candidate_title, candidate_subtitle):
+    def _determine_title(self, window_title, candidate_title,
+            candidate_subtitle):
         """
         Create a title for the wiki file from various
         optional inputs.
@@ -178,7 +168,7 @@ the content of this wiki</a>.
             return candidate_title
         if candidate_subtitle:
             return candidate_subtitle
-        return title
+        return DEFAULT_TITLE
 
     def _inject_title(self, wiki, title):
         """
@@ -225,7 +215,6 @@ the content of this wiki</a>.
             host = server_base_url(self.environ)
         except KeyError:
             host = ''
-        host = '%s' % host
 
         if binary_tiddler(tiddler):
             tiddler_output = self._binary_tiddler(tiddler)
@@ -300,7 +289,7 @@ the content of this wiki</a>.
 
     def _binary_tiddler(self, tiddler):
         """
-        Make the content for a tiddler that has non-wikitext content.
+        Make the content for a tiddler that has non-text content.
         """
         limit = self.environ['tiddlyweb.config'].get(
                 'tiddlywebwiki.binary_limit', 0)

@@ -8,13 +8,14 @@ from tiddlyweb.serializer import Serializer
 from tiddlyweb.config import config
 from tiddlywebwiki.config import config as twwconfig
 from tiddlyweb.util import merge_config
-from tiddlyweb.control import get_tiddlers_from_bag
+from tiddlyweb.web.util import bag_url
 
 merge_config(config, twwconfig)
 
 IMAGE = 'test/data/peermore.png'
 ZERO = 'test/data/zero.bin'
 HTML = 'test/data/index.html'
+
 
 def setup_module(module):
     bag = Bag('holder')
@@ -36,10 +37,14 @@ def test_content_type():
     bag = Bag('holder')
     bag = store.get(bag)
     tiddlers = Tiddlers(store=store)
+    # duplicate what the handler would do
+    tiddlers.link = bag_url({'tiddlyweb.config': config}, bag,
+            full=False) + '/tiddlers'
     for tiddler in store.list_bag_tiddlers(bag):
         tiddlers.add(tiddler)
 
-    serializer = Serializer('tiddlywebwiki.serialization', {'tiddlyweb.config': config})
+    serializer = Serializer('tiddlywebwiki.serialization',
+            {'tiddlyweb.config': config})
     output = ''.join(serializer.list_tiddlers(tiddlers))
 
     # we are expecting an img link to the image tiddler
@@ -49,6 +54,8 @@ def test_content_type():
     assert 'server.content-type="application/octet-stream"' in output
 
     assert 'server.content-type="text/html"' in output
+    assert ('you may still <a href="/bags/holder/tiddlers">browse' in output)
+
 
 def test_does_base64():
     serializer = Serializer('tiddlywebwiki.serialization',
@@ -56,20 +63,23 @@ def test_does_base64():
     output = {}
     for title in ['index', 'peermore.png', 'zero.bin']:
         tiddler = store.get(Tiddler(title, 'holder'))
-        output[tiddler.title] = serializer.serialization._tiddler_as_div(tiddler)
+        output[tiddler.title] = (
+                serializer.serialization._tiddler_as_div(tiddler))
 
     assert '&lt;' in output['index']
     assert 'I=</pre>' in output['peermore.png']
     assert 'A==</pre>' in output['zero.bin']
 
+
 def test_does_sizelimit():
-    config['tiddlywebwiki.binary_limit'] = 200 # bytes
+    config['tiddlywebwiki.binary_limit'] = 200  # bytes
     serializer = Serializer('tiddlywebwiki.serialization',
             {'tiddlyweb.config': config})
     output = {}
     for title in ['index', 'peermore.png', 'zero.bin']:
         tiddler = store.get(Tiddler(title, 'holder'))
-        output[tiddler.title] = serializer.serialization._tiddler_as_div(tiddler)
+        output[tiddler.title] = (
+                serializer.serialization._tiddler_as_div(tiddler))
 
     assert '&lt;' in output['index']
     assert 'img src=' in output['peermore.png']
