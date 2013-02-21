@@ -14,7 +14,7 @@ setup(
     packages = find_packages(exclude=['test']),
     install_requires = [
         'tiddlyweb>=1.4.3',
-        'tiddlywebplugins.instancer>=0.7.17',
+        'tiddlywebplugins.imaker'
         'tiddlywebplugins.utils>=0.15',
         'tiddlywebplugins.wikklytextrender>=0.7',
         'tiddlywebplugins.status>=0.5',

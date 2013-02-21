@@ -9,7 +9,7 @@ tiddlywiki:
 	cp tiddlywiki/empty.html tiddlywebwiki/resources/empty.html
 
 remotes: tiddlywiki
-	./cacher
+	twibuilder tiddlywebwiki
 
 clean:
 	find . -name "*.pyc" |xargs rm || true
@@ -18,7 +18,7 @@ clean:
 	rm -r tiddlywebwiki.egg-info || true
 	rm *bundle || true
 	rm -r tiddlywebwiki/resources || true
-	rm -r store tiddlyweb.log || true
+	rm -r store tiddlyweb.log test_instance || true
 
 test: remotes
 	py.test -x test

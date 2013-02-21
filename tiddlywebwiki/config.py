@@ -7,10 +7,6 @@ from TiddlyWeb. This can be an absolute path or relative to the startup
 directory of the server.
 """
 
-from tiddlywebplugins.instancer.util import get_tiddler_locations
-
-from tiddlywebwiki.instance import store_contents
-
 try:
     from pkg_resources import resource_filename
 except ImportError:
@@ -22,7 +18,7 @@ BASE_TIDDLYWIKI = resource_filename(PACKAGE_NAME, 'resources/empty.html')
 
 
 config = {
-    'instance_tiddlers': get_tiddler_locations(store_contents, PACKAGE_NAME),
+    'instance_pkgstores': ['tiddlywebplugins.console', PACKAGE_NAME],
     'base_tiddlywiki': BASE_TIDDLYWIKI,
     'extension_types': {
         'wiki': 'text/x-tiddlywiki',

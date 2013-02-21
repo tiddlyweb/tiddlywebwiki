@@ -4,10 +4,15 @@
 TiddlyWebWiki instantiation
 """
 
+try:
+    import mangler
+except ImportError:
+    pass
+
 import sys
 
 from tiddlyweb.util import std_error_message
-from tiddlywebplugins.instancer.util import spawn
+from tiddlywebplugins.imaker import spawn
 
 from tiddlywebwiki import instance as instance_module
 from tiddlywebwiki.config import config as init_config

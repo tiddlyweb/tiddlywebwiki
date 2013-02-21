@@ -20,7 +20,7 @@ def friendlywiki(environ, start_response):
 def init(config):
     # These imports must be in init otherwise getting
     # the version number causes cyclic imports to happen.
-    import tiddlywebplugins.instancer
+    import tiddlywebplugins.imaker
     import tiddlywebplugins.status
     import tiddlywebplugins.atom
     import tiddlywebplugins.differ
@@ -30,7 +30,7 @@ def init(config):
     from tiddlywebwiki.config import config as twwconfig
 
     merge_config(config, twwconfig)
-    tiddlywebplugins.instancer.init(config)
+    tiddlywebplugins.imaker.init(config)
     tiddlywebplugins.status.init(config)
     tiddlywebplugins.atom.init(config)
     tiddlywebplugins.differ.init(config)
