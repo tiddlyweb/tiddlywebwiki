@@ -2,17 +2,15 @@
 A TiddlyWeb plugin providing a multi-user TiddlyWiki environment.
 """
 
-__version__ = '0.61.0'
+__version__ = '0.61.1'
 
 
-from tiddlyweb.web.handler.recipe import get_tiddlers
- 
-  
 def friendlywiki(environ, start_response):
     """
     Reframe the WSGI environment before internally redirecting
     to a recipe.
     """
+    from tiddlyweb.web.handler.recipe import get_tiddlers
     environ['tiddlyweb.type'] = 'text/x-tiddlywiki'
     return get_tiddlers(environ, start_response)
 
