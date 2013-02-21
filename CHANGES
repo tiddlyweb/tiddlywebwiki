@@ -1,3 +1,7 @@
+0.62 Thu Feb 21 16:05:20 UTC 2013
+
+    * Switch to using imaker for instance creation.
+
 0.61 Mon Feb 11 17:12:10 UTC 2013
 
     * Add 'tiddlywebwiki.friendlywiki' functionality.

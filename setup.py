@@ -20,7 +20,7 @@ setup(
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
-        'tiddlywebplugins.console>=0.2.3'
+        'tiddlywebplugins.console>=0.3.0'
     ],
     include_package_data = True,
     zip_safe = False
