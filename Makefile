@@ -5,8 +5,8 @@ all:
 
 tiddlywiki:
 	mkdir tiddlywebwiki/resources || true
-	# return to retrieving from tiddlywiki.com when v >= 2.7.1
-	cp tiddlywiki/empty.html tiddlywebwiki/resources/empty.html
+	wget http://tiddlywiki.com/empty.html -O tiddlywebwiki/resources/empty.html
+
 
 remotes: tiddlywiki
 	twibuilder tiddlywebwiki
