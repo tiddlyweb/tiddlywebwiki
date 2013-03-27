@@ -18,6 +18,7 @@ var plugin = config.extensions.BinaryTiddlersPlugin = {
 	isWikiText: function(tiddler) {
 		var ctype = tiddler.fields[ctfield];
 		if(ctype) {
+			if (ctype == 'text/x-tiddlywiki') return true;
 			return !this.isBinary(tiddler) && !this.isTextual(ctype);
 		} else {
 			return true;
@@ -59,7 +60,7 @@ var _view = config.macros.view.views.wikified;
 config.macros.view.views.wikified = function(value, place, params, wikifier,
 		paramString, tiddler) {
 	var ctype = tiddler.fields["server.content-type"];
-	if(params[0] == "text" && ctype && !tiddler.tags.contains("systemConfig") && !plugin.isLink(tiddler)) {
+	if(params[0] == "text" && ctype && ctype !== 'text/x-tiddlywiki' && !tiddler.tags.contains("systemConfig") && !plugin.isLink(tiddler)) {
 		var el;
 		if(plugin.isBinary(tiddler)) {
 			var uri = "data:%0;base64,%1".format([ctype, tiddler.text]); // TODO: fallback for legacy browsers
