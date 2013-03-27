@@ -12,13 +12,17 @@
 //{{{
 (function($) {
 
+"use strict";
+
 var ctfield = "server.content-type";
 
 var plugin = config.extensions.BinaryTiddlersPlugin = {
 	isWikiText: function(tiddler) {
 		var ctype = tiddler.fields[ctfield];
 		if(ctype) {
-			if (ctype == 'text/x-tiddlywiki') return true;
+			if (ctype === 'text/x-tiddlywiki') {
+				return true;
+			}
 			return !this.isBinary(tiddler) && !this.isTextual(ctype);
 		} else {
 			return true;
@@ -30,18 +34,18 @@ var plugin = config.extensions.BinaryTiddlersPlugin = {
 		return ctype ? !this.isTextual(ctype) : false;
 	},
 	isTextual: function(ctype) {
-		return ctype.indexOf("text/") == 0
+		return ctype.indexOf("text/") === 0
 			|| this.endsWith(ctype, "+xml")
-			|| ctype == 'application/json'
-			|| ctype == 'application/javascript';
+			|| ctype === 'application/json'
+			|| ctype === 'application/javascript';
 	},
 	endsWith: function(str, suffix) {
 		return str.length >= suffix.length &&
-			str.substr(str.length - suffix.length) == suffix;
+			str.substr(str.length - suffix.length) === suffix;
 	},
-        isLink: function(tiddler) {
-            return this.isBinary(tiddler) && tiddler.text.indexOf("<html>") != -1
-        }
+	isLink: function(tiddler) {
+		return this.isBinary(tiddler) && tiddler.text.indexOf("<html>") !== -1;
+	}
 };
 
 // Disable edit for linked tiddlers (for now)
@@ -60,11 +64,12 @@ var _view = config.macros.view.views.wikified;
 config.macros.view.views.wikified = function(value, place, params, wikifier,
 		paramString, tiddler) {
 	var ctype = tiddler.fields["server.content-type"];
-	if(params[0] == "text" && ctype && ctype !== 'text/x-tiddlywiki' && !tiddler.tags.contains("systemConfig") && !plugin.isLink(tiddler)) {
+	if(params[0] === "text" && ctype && ctype !== 'text/x-tiddlywiki' &&
+			!tiddler.tags.contains("systemConfig") && !plugin.isLink(tiddler)) {
 		var el;
 		if(plugin.isBinary(tiddler)) {
 			var uri = "data:%0;base64,%1".format([ctype, tiddler.text]); // TODO: fallback for legacy browsers
-			if(ctype.indexOf("image/") == 0) {
+			if(ctype.indexOf("image/") === 0) {
 				el = $("<img />").attr("alt", tiddler.title).attr("src", uri);
 			} else {
 				el = $("<a />").attr("href", uri).text(tiddler.title);
@@ -82,7 +87,7 @@ config.macros.view.views.wikified = function(value, place, params, wikifier,
 var _editHandler = config.macros.edit.handler;
 config.macros.edit.handler = function(place, macroName, params, wikifier,
 		paramString, tiddler) {
-	if(params[0] == "text" && plugin.isBinary(tiddler)) {
+	if(params[0] === "text" && plugin.isBinary(tiddler)) {
 		return false;
 	} else {
 		_editHandler.apply(this, arguments);
@@ -95,5 +100,5 @@ Tiddler.prototype.autoLinkWikiWords = function() {
 	return plugin.isWikiText(this) ? _autoLink.apply(this, arguments) : false;
 };
 
-})(jQuery);
+}(jQuery));
 //}}}
