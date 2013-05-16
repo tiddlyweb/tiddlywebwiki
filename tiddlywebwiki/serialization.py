@@ -24,7 +24,7 @@ from tiddlyweb.model.collections import Tiddlers
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.util import binary_tiddler
 from tiddlyweb.web.util import (server_base_url, tiddler_url,
-        encode_name, html_encode, escape_attribute_value)
+        html_encode, escape_attribute_value)
 from tiddlyweb.web.util import tiddler_etag
 from tiddlyweb.store import StoreError
 
