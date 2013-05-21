@@ -31,5 +31,6 @@ config = {
     'wikitext.type_render_map': {
         'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
     },
-    'tiddlywebwiki.friendlywiki': True
+    'tiddlywebwiki.friendlywiki': True,
+    'wsgi_server': 'tiddlywebwiki.serve'
 }

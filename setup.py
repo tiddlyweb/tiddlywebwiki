@@ -13,14 +13,15 @@ setup(
     scripts = ['twinstance'],
     packages = find_packages(exclude=['test']),
     install_requires = [
-        'tiddlyweb>=1.4.3',
+        'tiddlyweb>=1.4.11',
         'tiddlywebplugins.imaker',
         'tiddlywebplugins.utils>=0.15',
         'tiddlywebplugins.wikklytextrender>=0.7',
         'tiddlywebplugins.status>=0.5',
         'tiddlywebplugins.differ',
         'tiddlywebplugins.atom',
-        'tiddlywebplugins.console>=0.3.0'
+        'tiddlywebplugins.console>=0.3.0',
+        'cherrypy',
     ],
     include_package_data = True,
     zip_safe = False
