@@ -1,4 +1,4 @@
-.PHONY: all tiddlywiki remotes clean test dist release pypi peermore makebundle uploadbundle bundle
+.PHONY: all tiddlywiki remotes clean test dist release pypi peermore
 
 all:
 	@echo "No target"
@@ -16,7 +16,6 @@ clean:
 	rm -r dist || true
 	rm -r build || true
 	rm -r tiddlywebwiki.egg-info || true
-	rm *bundle || true
 	rm -r tiddlywebwiki/resources || true
 	rm -r store tiddlyweb.log test_instance || true
 
@@ -34,11 +33,3 @@ pypi:
 peermore:
 	scp -P 8022 dist/tiddlywebwiki-*.gz cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist
 	scp -P 8022 CHANGES cdent@tiddlyweb.peermore.com:public_html/tiddlyweb.peermore.com/dist/CHANGES.tiddlywebwiki
-
-makebundle: clean dist
-	pip bundle tiddlywebwiki-`python setup.py --version`.bundle tiddlywebwiki
-
-uploadbundle:
-	scp -P 8022 *.bundle cdent@heavy.peermore.com:public_html/tiddlyweb.peermore.com/dist
-
-bundle: clean dist makebundle uploadbundle
