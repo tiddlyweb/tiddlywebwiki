@@ -13,7 +13,8 @@ If config['tiddlywebwiki.binary_limit'] is set to some integer
 value that value sets a limit above which the base64 content is
 _not_ sent. Instead a link is made back to the server. If
 tiddler.type matches 'image/' then the link is an <img> tag.
-Otherwise an anchor.
+Otherwise an anchor. If the value is set to -1 a link is always
+made, no matter the size of the binary.
 """
 
 from base64 import b64encode
@@ -293,7 +294,7 @@ the content of this wiki</a>.
         """
         limit = self.environ['tiddlyweb.config'].get(
                 'tiddlywebwiki.binary_limit', 0)
-        if limit and len(tiddler.text) > limit:
+        if (limit == -1 or (limit and len(tiddler.text) > limit)):
             if tiddler.type.startswith('image/'):
                 return ('\n<html><img src="%s" /></html>\n' %
                         tiddler_url(self.environ, tiddler))
