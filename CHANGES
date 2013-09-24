@@ -1,3 +1,7 @@
+0.68 Tue Sep 24 18:01:49 UTC 2013
+
+   * Allow binary_limit value of -1 to always make links.
+
 0.67 Mon Jun 24 07:47:31 UTC 2013
 
    * Update to TiddlyWiki 2.8.1
