@@ -5,7 +5,7 @@ from wsgi_intercept import httplib2_intercept
 
 from tiddlyweb.model.tiddler import Tiddler
 
-from fixtures import muchdata, reset_textstore, _teststore
+from .fixtures import muchdata, reset_textstore, _teststore
 
 
 def setup_module(module):
@@ -27,6 +27,7 @@ def test_get_wiki():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert response['content-type'] == 'text/html; charset=UTF-8'
@@ -45,6 +46,7 @@ def test_get_wiki_with_title():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '\n<title>\nWow //cow// moo\n</title>\n' in content
@@ -58,6 +60,7 @@ def test_get_wiki_with_title():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '<title>\nWow //cow// moo - MooCow\n</title>' in content
@@ -71,6 +74,7 @@ def test_get_wiki_with_title():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '<title>\nMooCow\n</title>' in content
@@ -84,6 +88,7 @@ def test_get_wiki_with_title():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '<!--PRE-HEAD-START-->\nUNIQUE9578\n<!--PRE-HEAD-END-->' in content
@@ -98,6 +103,7 @@ def test_get_wiki_with_title():
     response, content = http.request(
             'http://our_test_domain:8001/recipes/long/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
     assert response['status'] == '200'
     # WindowTitle overrides the SiteTitle created up the stack
     assert '<title>\nA window title\n</title>' in content

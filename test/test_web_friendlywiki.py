@@ -34,6 +34,7 @@ def test_get_wiki():
     response, content = http.request(
             'http://0.0.0.0:8080/recipes/recipeone/tiddlers.wiki',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '!Oh Hai!' in content
@@ -43,6 +44,7 @@ def test_get_friendlywiki():
     response, content = http.request(
             'http://0.0.0.0:8080/recipeone',
             method='GET')
+    content = content.decode('UTF-8')
 
     assert response['status'] == '200'
     assert '!Oh Hai!' in content

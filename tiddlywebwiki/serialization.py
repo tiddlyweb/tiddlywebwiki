@@ -28,6 +28,7 @@ from tiddlyweb.web.util import (server_base_url, tiddler_url,
         html_encode, escape_attribute_value)
 from tiddlyweb.web.util import tiddler_etag
 from tiddlyweb.store import StoreError
+from tiddlyweb.fixups import unicode
 
 
 SPLITTER = '</div>\n<!--POST-STOREAREA-->\n'
@@ -198,7 +199,7 @@ the content of this wiki</a>.
         if WIKI:
             return WIKI
         base_tiddlywiki = open(
-            self.environ['tiddlyweb.config']['base_tiddlywiki'])
+            self.environ['tiddlyweb.config']['base_tiddlywiki'], 'r')
         wiki = base_tiddlywiki.read()
         base_tiddlywiki.close()
         wiki = unicode(wiki, 'utf-8')
@@ -302,7 +303,10 @@ the content of this wiki</a>.
                 return ('\n<html><a href="%s">%s</a></html>\n' %
                         (tiddler_url(self.environ, tiddler), tiddler.title))
         else:
-            return b64encode(tiddler.text)
+            try:
+                return b64encode(tiddler.text).decode('UTF-8')
+            except TypeError:
+                return b64encode(tiddler.text.encode('UTF-8')).decode('UTF-8')
 
     def _tiddler_fields(self, fields):
         """

@@ -27,7 +27,7 @@ def setup_module(module):
     import_one('holder', ZERO, store)
 
     tiddler = Tiddler('index', 'holder')
-    tiddler.text = open(HTML).read().decode('UTF-8')
+    tiddler.text = open(HTML, 'r').read()
     tiddler.type = 'text/html'
     store.put(tiddler)
     module.store = store
@@ -67,8 +67,9 @@ def test_does_base64():
                 serializer.serialization._tiddler_as_div(tiddler))
 
     assert '&lt;' in output['index']
-    assert 'I=</pre>' in output['peermore.png']
-    assert 'A==</pre>' in output['zero.bin']
+    assert '</pre>' in output['peermore.png']
+    assert 'AAAA' in output['zero.bin']
+    assert '</pre>' in output['zero.bin']
 
 
 def test_does_sizelimit():
