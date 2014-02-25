@@ -1,3 +1,7 @@
+0.69 Tue 25 Feb 2014 14:52:27 UTC
+
+   * Remove support for Wikklytext server-side rendering.
+
 0.68 Tue Sep 24 18:01:49 UTC 2013
 
    * Allow binary_limit value of -1 to always make links.
