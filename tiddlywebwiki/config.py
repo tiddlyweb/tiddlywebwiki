@@ -27,10 +27,6 @@ config = {
         'text/x-tiddlywiki': ['tiddlywebwiki.serialization',
             'text/html; charset=UTF-8'],
     },
-    'wikitext.default_renderer': 'tiddlywebplugins.wikklytextrender',
-    'wikitext.type_render_map': {
-        'text/x-tiddlywiki': 'tiddlywebplugins.wikklytextrender',
-    },
     'tiddlywebwiki.friendlywiki': True,
-    'wsgi_server': 'tiddlywebwiki.serve'
+    'wsgi_server': 'tiddlywebplugins.cherrypy'
 }
